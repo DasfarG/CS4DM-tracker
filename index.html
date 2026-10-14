@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Darvin's Curriculum & Master Tracker</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #141c2e;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+
+      --blue: #38bdf8;
+      --green: #34d399;
+      --purple: #c084fc;
+      --amber: #fbbf24;
+      --pink: #f472b6;
+      --rose: #fb7185;
+      --cyan: #22d3ee;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at 15% 15%, #171c32 0%, #090d16 65%, #05070c 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      background: rgba(14, 20, 35, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .brand-title h1 {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .brand-title p {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pill-counter {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: flex;
+      gap: 6px;
+    }
+
+    .pill-counter .val {
+      color: var(--blue);
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover { background: rgba(255, 255, 255, 0.14); }
+
+    .btn-gradient {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      border: none;
+    }
+
+    /* Layout */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 20px;
+      padding: 18px 24px;
+      flex: 1;
+    }
+
+    /* Sidebar Pool */
+    .sidebar {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: calc(100vh - 85px);
+      position: sticky;
+      top: 68px;
+    }
+
+    .search-box {
+      width: 100%;
+      background: rgba(10, 15, 28, 0.7);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      outline: none;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: rgba(10, 15, 28, 0.6);
+      padding: 3px;
+      border-radius: 8px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 5px 0;
+      font-size: 0.73rem;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .tab-btn.active {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    .sidebar-scroll {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding-right: 4px;
+    }
+
+    /* Sidebar Section Divider Headers */
+    .sidebar-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+      padding: 4px 2px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .section-counter {
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      padding: 1px 6px;
+      border-radius: 10px;
+      font-size: 0.68rem;
+    }
+
+    .section-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    /* Course Cards */
+    .card {
+      background: #141c2e;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: grab;
+      user-select: none;
+      transition: all 0.15s;
+    }
+
+    .card:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .card.dragging {
+      opacity: 0.3;
+      cursor: grabbing;
+    }
+
+    .card-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-width: 190px;
+    }
+
+    .card-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #f3f4f6;
+      line-height: 1.25;
+    }
+
+    .card-sub {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .cr-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.08);
+      color: #e5e7eb;
+      padding: 2px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    /* Dashboard Modules */
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .group-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: -6px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .grid-split-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .module-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-top-width: 3px;
+      border-radius: 12px;
+      padding: 12px;
+      min-height: 170px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.15s ease;
+    }
+
+    .module-box.drag-over {
+      background: rgba(30, 41, 59, 0.85);
+      border-style: dashed;
+    }
+
+    .mod-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+
+    .mod-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .mod-cr {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .mod-cr.met {
+      color: var(--green);
+    }
+
+    .drop-zone {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .empty-prompt {
+      height: 100%;
+      min-height: 100px;
+      border: 1px dashed rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(156, 163, 175, 0.4);
+      font-size: 0.74rem;
+    }
+
+    /* Colors */
+    .c-blue { border-top-color: var(--blue); }
+    .c-green { border-top-color: var(--green); }
+    .c-purple { border-top-color: var(--purple); }
+    .c-amber { border-top-color: var(--amber); }
+    .c-pink { border-top-color: var(--pink); }
+    .c-rose { border-top-color: var(--rose); }
+
+    .t-blue { color: var(--blue); }
+    .t-green { color: var(--green); }
+    .t-purple { color: var(--purple); }
+    .t-amber { color: var(--amber); }
+    .t-pink { color: var(--pink); }
+    .t-rose { color: var(--rose); }
+
+    .placed-item {
+      background: rgba(10, 15, 28, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: grab;
+    }
+
+    .placed-item .remove-btn {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+    .placed-item .remove-btn:hover { color: #f87171; }
+
+    footer.credit-reference {
+      background: rgba(17, 24, 39, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-top: 10px;
+    }
+
+    footer.credit-reference a {
+      color: var(--blue);
+      text-decoration: underline;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+
+    .modal-box {
+      background: #111827;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      width: 90%;
+      max-width: 780px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+
+    th, td {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    th { background: rgba(255, 255, 255, 0.05); color: #9ca3af; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <span class="brand-badge">CS4DM</span>
+      <div class="brand-title">
+        <h1>Darvin's Curriculum & Master Tracker</h1>
+        <p>Drag & drop courses · Bauhaus-Universität Weimar (WiSe 2026/27)</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <div class="pill-counter">
+        <span>Progress:</span>
+        <span class="val" id="progressVal">12 / 90 ECTS</span>
+      </div>
+      <button class="btn" onclick="openTimetable()">📅 View WiSe Timetable</button>
+      <button class="btn" onclick="promptAddCourse()">+ Add Course</button>
+      <button class="btn" onclick="resetState()">Reset</button>
+      <button class="btn btn-gradient" onclick="window.print()">Export Plan (PDF)</button>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <!-- Categorized Left Sidebar -->
+    <aside class="sidebar" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="dropBack(event)">
+      <input type="text" id="search" class="search-box" placeholder="🔍 Search catalogue..." oninput="render()" />
+
+      <div class="tabs">
+        <button class="tab-btn active" id="tabAll" onclick="setSem('ALL')">All</button>
+        <button class="tab-btn" id="tabWinter" onclick="setSem('WINTER')">❄️ Winter</button>
+        <button class="tab-btn" id="tabSummer" onclick="setSem('SUMMER')">☀️ Summer</button>
+      </div>
+
+      <div class="sidebar-scroll" id="sidebarContainer">
+        <!-- 1. Taught Courses Pool -->
+        <div>
+          <div class="sidebar-section-header">
+            <span>Courses</span>
+            <span class="section-counter" id="count-taught">0</span>
+          </div>
+          <div class="section-group" id="pool-taught"></div>
+        </div>
+
+        <!-- 2. Academic English Pool -->
+        <div>
+          <div class="sidebar-section-header">
+            <span>Academic English</span>
+            <span class="section-counter" id="count-english">0</span>
+          </div>
+          <div class="section-group" id="pool-english"></div>
+        </div>
+
+        <!-- 3. Projects & Master's Thesis Pool -->
+        <div>
+          <div class="sidebar-section-header">
+            <span>Research & Thesis</span>
+            <span class="section-counter" id="count-research">0</span>
+          </div>
+          <div class="section-group" id="pool-research"></div>
+        </div>
+
+        <!-- 4. Other Languages & Soft Skills Pool -->
+        <div>
+          <div class="sidebar-section-header">
+            <span>Other Languages</span>
+            <span class="section-counter" id="count-otherlang">0</span>
+          </div>
+          <div class="section-group" id="pool-otherlang"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Master Dashboard Modules -->
+    <main class="dashboard">
+      <!-- Courses Row -->
+      <div class="group-label">Courses</div>
+      <div class="grid-4">
+        <div class="module-box c-blue" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'sds')">
+          <div class="mod-head"><span class="mod-title t-blue">Security & Data Science</span><span class="mod-cr" id="cr-sds">0/18 ECTS</span></div>
+          <div class="drop-zone" id="zone-sds"></div>
+        </div>
+        <div class="module-box c-green" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'gis')">
+          <div class="mod-head"><span class="mod-title t-green">Graphical & Interactive</span><span class="mod-cr" id="cr-gis">12/18 ECTS</span></div>
+          <div class="drop-zone" id="zone-gis"></div>
+        </div>
+        <div class="module-box c-purple" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'spec')">
+          <div class="mod-head"><span class="mod-title t-purple">Specialization</span><span class="mod-cr" id="cr-spec">0/12 ECTS</span></div>
+          <div class="drop-zone" id="zone-spec"></div>
+        </div>
+        <div class="module-box c-amber" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'elec')">
+          <div class="mod-head"><span class="mod-title t-amber">Electives</span><span class="mod-cr" id="cr-elec">0/18 ECTS</span></div>
+          <div class="drop-zone" id="zone-elec"></div>
+        </div>
+      </div>
+
+      <!-- Academic English & Research Row -->
+      <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 14px;">
+        <div>
+          <div class="group-label">Academic English</div>
+          <div class="module-box c-blue" style="margin-top: 6px;" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'eng')">
+            <div class="mod-head"><span class="mod-title t-blue">Academic English</span><span class="mod-cr" id="cr-eng">0/4 ECTS</span></div>
+            <div class="drop-zone" id="zone-eng"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="group-label">Research</div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px;">
+            <div class="module-box c-pink" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'rp1')">
+              <div class="mod-head"><span class="mod-title t-pink">Research Project 1</span><span class="mod-cr" id="cr-rp1">0/12 ECTS</span></div>
+              <div class="drop-zone" id="zone-rp1"></div>
+            </div>
+            <div class="module-box c-purple" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'rp2')">
+              <div class="mod-head"><span class="mod-title t-purple">Research Project 2</span><span class="mod-cr" id="cr-rp2">0/12 ECTS</span></div>
+              <div class="drop-zone" id="zone-rp2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Master Thesis & Other Languages Row -->
+      <div class="grid-split-2">
+        <div>
+          <div class="group-label">Master's Thesis</div>
+          <div class="module-box c-rose" style="margin-top: 6px;" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'thesis')">
+            <div class="mod-head"><span class="mod-title t-rose">Master's Thesis & Presentation</span><span class="mod-cr" id="cr-thesis">0/30 ECTS</span></div>
+            <div class="drop-zone" id="zone-thesis"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="group-label">Other Languages & Soft Skills</div>
+          <div class="module-box c-amber" style="margin-top: 6px;" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'lang')">
+            <div class="mod-head"><span class="mod-title t-amber">Language / Soft Skills (Max 6 ECTS)</span><span class="mod-cr" id="cr-lang">0/6 ECTS</span></div>
+            <div class="drop-zone" id="zone-lang"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Academic References -->
+      <footer class="credit-reference">
+        <b>▼ University credit references · checked 14 October 2026</b><br>
+        Academic English Part One and Part Two carry 2 ECTS each (4 ECTS combined). The German semester course carries 3 ECTS; other German course formats have different credits.<br>
+        CS4DM taught modules carry 6 ECTS, research projects carry 12 ECTS each, and the full master's module carries 30 ECTS (6 preparatory research + 21 thesis + 3 defence), according to the 2020 study regulations.<br>
+        <p>Sources: <a href="https://www.uni-weimar.de" target="_blank">English Part One</a> · <a href="https://www.uni-weimar.de" target="_blank">English Part Two</a> · <a href="https://www.uni-weimar.de" target="_blank">German semester courses</a> · <a href="https://www.uni-weimar.de" target="_blank">CS4DM study regulations</a></p>
+        <p>Your 90-ECTS planning target is unchanged. The published degree programme totals 120 ECTS; this tracker target is not a replacement for degree requirements. Credit recognition depends on your applicable examination regulations.</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Timetable Modal -->
+  <div class="modal-overlay" id="timetableModal" onclick="closeTimetable()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="color:#fff;">📅 Darvin’s WiSe 2026/27 Timetable</h3>
+        <span style="cursor:pointer; font-size:1.3rem;" onclick="closeTimetable()">&times;</span>
+      </div>
+      <table>
+        <thead><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr></thead>
+        <tbody>
+          <tr><td><b>09:15–10:45</b></td><td style="color:var(--amber);">German DaF A1.2<br><small>C13A, R201</small></td><td>—</td><td style="color:var(--green);">Spatial Info (L)<br><small>LH B, M13C</small></td><td>—</td><td style="color:var(--green);">VR Lab (Group A)<br><small>VR Lab, B11</small></td></tr>
+          <tr><td><b>13:30–15:00</b></td><td>—</td><td style="color:var(--green);">Ubicomp (L/E)<br><small>SR H, B11</small></td><td>—</td><td>—</td><td style="color:var(--green);">Spatial Info (E)<br><small>LH B, M13C (fn)</small></td></tr>
+          <tr><td><b>15:15–16:45</b></td><td style="color:var(--green);">Ubicomp (L)<br><small>LH, HK7</small></td><td style="color:var(--green);">Virtual Reality (L)<br><small>SR H, B11</small></td><td>—</td><td style="color:var(--blue);">Watermarking (L)<br><small>SR H, B11</small></td><td>—</td></tr>
+          <tr><td><b>17:00–18:30</b></td><td>—</td><td style="color:var(--blue);">Watermarking (E)<br><small>SR H, B11</small></td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Master catalogue categorized by section
+    let CATALOGUE = [
+      // 1. Taught Modules (category: "taught")
+      { id: "c1", name: "Introduction to Machine Learning", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c2", name: "Digital Watermarking & Steganography", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c3", name: "Discrete Optimization", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c4", name: "Advanced Cryptography: Secure Channels", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c5", name: "Spatial Information Systems (GIS)", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c6", name: "Photogrammetric Computer Vision", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c7", name: "Deep Learning for Computer Vision", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c8", name: "Security Engineering", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c9", name: "Formal Methods of Software Engineering", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c10", name: "Computational Social Science", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c11", name: "Virtual Reality", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c12", name: "Ubiquitous Computing", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c13", name: "Online Computation", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c14", name: "HCI Theory and Research Methods", sem: "WINTER", credits: 6, cat: "taught" },
+      { id: "c15", name: "Introduction to Modern Cryptography", sem: "SUMMER", credits: 6, cat: "taught" },
+      { id: "c16", name: "Cryptographic Hash Functions", sem: "SUMMER", credits: 6, cat: "taught" },
+      { id: "c17", name: "Complexity Theory", sem: "SUMMER", credits: 6, cat: "taught" },
+      { id: "c18", name: "Randomized Algorithms", sem: "SUMMER", credits: 6, cat: "taught" },
+      { id: "c19", name: "Search Algorithms", sem: "SUMMER", credits: 6, cat: "taught" },
+      { id: "c20", name: "Web Search and Information Retrieval", sem: "SUMMER", credits: 6, cat: "taught" },
+      { id: "c21", name: "Computer Graphics II: Animation", sem: "SUMMER", credits: 6, cat: "taught" },
+      { id: "c22", name: "Computer Graphics II: Fundamentals", sem: "SUMMER", credits: 6, cat: "taught" },
+      { id: "c23", name: "Image Analysis & Object Recognition", sem: "SUMMER", credits: 6, cat: "taught" },
+      { id: "c24", name: "Visualization", sem: "SUMMER", credits: 6, cat: "taught" },
+      { id: "c25", name: "Usability Engineering", sem: "SUMMER", credits: 6, cat: "taught" },
+      { id: "c26", name: "Physiological Computing", sem: "SUMMER", credits: 6, cat: "taught" },
+
+      // 2. Academic English (category: "english")
+      { id: "e1", name: "Academic English Part One", sem: "WINTER", credits: 2, cat: "english" },
+      { id: "e2", name: "Academic English Part Two", sem: "SUMMER", credits: 2, cat: "english" },
+
+      // 3. Projects & Master Thesis (category: "research")
+      { id: "p1", name: "Research Project 1", sem: "WINTER", credits: 12, cat: "research" },
+      { id: "p2", name: "Research Project 2", sem: "SUMMER", credits: 12, cat: "research" },
+      { id: "th", name: "Master's Thesis & Presentation", sem: "SUMMER", credits: 30, cat: "research" },
+
+      // 4. Other Languages & Soft Skills (category: "otherlang")
+      { id: "l1", name: "German Language Course (DaF A1.2)", sem: "WINTER", credits: 3, cat: "otherlang" },
+      { id: "l2", name: "German Language Course (DaF A2.1)", sem: "SUMMER", credits: 3, cat: "otherlang" }
+    ];
+
+    const LIMITS = { sds: 18, gis: 18, spec: 12, elec: 18, eng: 4, rp1: 12, rp2: 12, thesis: 30, lang: 6 };
+    const DEFAULT_PLACED = { "c11": "gis", "c12": "gis" };
+
+    let userState = JSON.parse(localStorage.getItem("darvin_cat_tracker") || "null");
+    let activeSem = "ALL";
+
+    if (!userState) {
+      userState = { ...DEFAULT_PLACED };
+      save();
+    }
+
+    function save() {
+      localStorage.setItem("darvin_cat_tracker", JSON.stringify(userState));
+      render();
+    }
+
+    function resetState() {
+      if (confirm("Reset to default screenshot courses?")) {
+        userState = { ...DEFAULT_PLACED };
+        save();
+      }
+    }
+
+    function setSem(sem) {
+      activeSem = sem;
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      if (sem === "ALL") document.getElementById("tabAll").classList.add("active");
+      if (sem === "WINTER") document.getElementById("tabWinter").classList.add("active");
+      if (sem === "SUMMER") document.getElementById("tabSummer").classList.add("active");
+      render();
+    }
+
+    /* Drag & Drop */
+    function dragStart(e, id) {
+      e.dataTransfer.setData("text/plain", id);
+      e.currentTarget.classList.add("dragging");
+    }
+
+    function dragEnd(e) {
+      e.currentTarget.classList.remove("dragging");
+    }
+
+    function allowDrop(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add("drag-over");
+    }
+
+    function leaveDrop(e) {
+      e.currentTarget.classList.remove("drag-over");
+    }
+
+    function handleDrop(e, modId) {
+      e.preventDefault();
+      e.currentTarget.classList.remove("drag-over");
+      const id = e.dataTransfer.getData("text/plain");
+      if (id) {
+        userState[id] = modId;
+        save();
+      }
+    }
+
+    function dropBack(e) {
+      e.preventDefault();
+      e.currentTarget.classList.remove("drag-over");
+      const id = e.dataTransfer.getData("text/plain");
+      if (id && userState[id]) {
+        delete userState[id];
+        save();
+      }
+    }
+
+    function removeCourse(id) {
+      delete userState[id];
+      save();
+    }
+
+    function promptAddCourse() {
+      const name = prompt("Course Name:");
+      if (!name) return;
+      const credits = parseInt(prompt("Credits (e.g. 6):", "6") || "6", 10);
+      const sem = prompt("Term (WINTER or SUMMER):", "WINTER").toUpperCase();
+      const cat = prompt("Section (taught, english, research, otherlang):", "taught").toLowerCase();
+      CATALOGUE.push({ id: "custom_" + Date.now(), name, sem, credits, cat });
+      render();
+    }
+
+    function openTimetable() { document.getElementById("timetableModal").style.display = "flex"; }
+    function closeTimetable() { document.getElementById("timetableModal").style.display = "none"; }
+
+    function createCardElement(c) {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.draggable = true;
+      card.ondragstart = (e) => dragStart(e, c.id);
+      card.ondragend = dragEnd;
+      card.innerHTML = `
+        <div class="card-info">
+          <span class="card-title">${c.name}</span>
+          <span class="card-sub">${c.sem === 'WINTER' ? '❄️ Winter Term' : '☀️ Summer Term'}</span>
+        </div>
+        <span class="cr-tag">${c.credits} ECTS</span>
+      `;
+      return card;
+    }
+
+    function render() {
+      const q = document.getElementById("search").value.toLowerCase();
+
+      // Reset sidebar sub-pools
+      const pools = {
+        taught: document.getElementById("pool-taught"),
+        english: document.getElementById("pool-english"),
+        research: document.getElementById("pool-research"),
+        otherlang: document.getElementById("pool-otherlang")
+      };
+
+      for (let key in pools) {
+        pools[key].innerHTML = "";
+      }
+
+      const counts = { taught: 0, english: 0, research: 0, otherlang: 0 };
+
+      // Filter unassigned items
+      const unassigned = CATALOGUE.filter(c => !userState[c.id]);
+      const filtered = unassigned.filter(c => {
+        const matchesQ = c.name.toLowerCase().includes(q);
+        const matchesSem = activeSem === "ALL" || c.sem === activeSem;
+        return matchesQ && matchesSem;
+      });
+
+      filtered.forEach(c => {
+        const targetPool = pools[c.cat] || pools.taught;
+        targetPool.appendChild(createCardElement(c));
+        counts[c.cat] = (counts[c.cat] || 0) + 1;
+      });
+
+      // Update section headers
+      document.getElementById("count-taught").textContent = counts.taught;
+      document.getElementById("count-english").textContent = counts.english;
+      document.getElementById("count-research").textContent = counts.research;
+      document.getElementById("count-otherlang").textContent = counts.otherlang;
+
+      // Render Dashboard Modules
+      let totalAssigned = 0;
+
+      for (let mod in LIMITS) {
+        const zone = document.getElementById(`zone-${mod}`);
+        const counter = document.getElementById(`cr-${mod}`);
+        if (!zone || !counter) continue;
+
+        zone.innerHTML = "";
+        const placedIds = Object.keys(userState).filter(cid => userState[cid] === mod);
+        let currentCredits = 0;
+
+        if (placedIds.length === 0) {
+          zone.innerHTML = `<div class="empty-prompt">Drop courses here</div>`;
+        } else {
+          placedIds.forEach(cid => {
+            const course = CATALOGUE.find(c => c.id === cid);
+            if (!course) return;
+
+            currentCredits += course.credits;
+            if (mod !== "thesis") {
+              totalAssigned += course.credits;
+            }
+
+            const item = document.createElement("div");
+            item.className = "placed-item";
+            item.draggable = true;
+            item.ondragstart = (e) => dragStart(e, course.id);
+            item.ondragend = dragEnd;
+            item.innerHTML = `
+              <span>${course.name}</span>
+              <div style="display:flex; align-items:center;">
+                <span class="cr-tag" style="background:rgba(255,255,255,0.12);">${course.credits} ECTS</span>
+                <span class="remove-btn" onclick="removeCourse('${course.id}')">&times;</span>
+              </div>
+            `;
+            zone.appendChild(item);
+          });
+        }
+
+        counter.textContent = `${currentCredits}/${LIMITS[mod]} ECTS`;
+        if (currentCredits >= LIMITS[mod]) {
+          counter.classList.add("met");
+        } else {
+          counter.classList.remove("met");
+        }
+      }
+
+      document.getElementById("progressVal").textContent = `${totalAssigned} / 90 ECTS`;
+    }
+
+    render();
+  </script>
+</body>
+</html>
