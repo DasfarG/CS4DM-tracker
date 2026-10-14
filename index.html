@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -185,7 +185,6 @@
       padding-right: 4px;
     }
 
-    /* Sidebar Section Divider Headers */
     .sidebar-section-header {
       display: flex;
       justify-content: space-between;
@@ -354,7 +353,7 @@
       font-size: 0.74rem;
     }
 
-    /* Colors */
+    /* Module Header Colors */
     .c-blue { border-top-color: var(--blue); }
     .c-green { border-top-color: var(--green); }
     .c-purple { border-top-color: var(--purple); }
@@ -406,6 +405,7 @@
       text-decoration: underline;
     }
 
+    /* Timetable Modal */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -421,9 +421,18 @@
       background: #111827;
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 20px;
-      width: 90%;
-      max-width: 780px;
+      padding: 22px;
+      width: 92%;
+      max-width: 840px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
     }
 
     table {
@@ -434,11 +443,47 @@
 
     th, td {
       border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 8px 10px;
+      padding: 10px;
       text-align: left;
+      vertical-align: top;
+      width: 17%;
     }
 
-    th { background: rgba(255, 255, 255, 0.05); color: #9ca3af; }
+    th:first-child, td:first-child {
+      width: 15%;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    th { background: rgba(255, 255, 255, 0.05); color: #cbd5e1; }
+
+    .slot-pill {
+      background: rgba(255, 255, 255, 0.06);
+      border-left: 3px solid var(--blue);
+      border-radius: 4px;
+      padding: 4px 6px;
+      font-size: 0.74rem;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+    .slot-pill.green { border-left-color: var(--green); }
+    .slot-pill.amber { border-left-color: var(--amber); }
+    .slot-pill.blue { border-left-color: var(--blue); }
+    .slot-pill small { display: block; color: var(--text-muted); font-size: 0.68rem; margin-top: 2px; }
+
+    .empty-cell {
+      color: rgba(255, 255, 255, 0.15);
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    @media print {
+      header, .sidebar, .btn, .modal-overlay, footer { display: none !important; }
+      .app-layout { grid-template-columns: 1fr; padding: 0; }
+      body { background: #fff !important; color: #000 !important; }
+      .module-box { background: #fff; border: 1px solid #ccc; break-inside: avoid; }
+      .placed-item { background: #f8fafc; border: 1px solid #ddd; color: #000; }
+    }
   </style>
 </head>
 <body>
@@ -448,16 +493,16 @@
       <span class="brand-badge">CS4DM</span>
       <div class="brand-title">
         <h1>Darvin's Curriculum & Master Tracker</h1>
-        <p>Drag & drop courses · Bauhaus-Universität Weimar (WiSe 2026/27)</p>
+        <p>Drag & drop courses · Dynamic timetable sync (WiSe 2026/27)</p>
       </div>
     </div>
 
     <div class="header-actions">
       <div class="pill-counter">
         <span>Progress:</span>
-        <span class="val" id="progressVal">12 / 90 ECTS</span>
+        <span class="val" id="progressVal">0 / 90 ECTS</span>
       </div>
-      <button class="btn" onclick="openTimetable()">📅 View WiSe Timetable</button>
+      <button class="btn" onclick="openTimetable()">📅 View WiSe Timetable (<span id="ttCount">0</span>)</button>
       <button class="btn" onclick="promptAddCourse()">+ Add Course</button>
       <button class="btn" onclick="resetState()">Reset</button>
       <button class="btn btn-gradient" onclick="window.print()">Export Plan (PDF)</button>
@@ -476,7 +521,7 @@
       </div>
 
       <div class="sidebar-scroll" id="sidebarContainer">
-        <!-- 1. Taught Courses Pool -->
+        <!-- Taught Courses Pool -->
         <div>
           <div class="sidebar-section-header">
             <span>Courses</span>
@@ -485,7 +530,7 @@
           <div class="section-group" id="pool-taught"></div>
         </div>
 
-        <!-- 2. Academic English Pool -->
+        <!-- Academic English Pool -->
         <div>
           <div class="sidebar-section-header">
             <span>Academic English</span>
@@ -494,7 +539,7 @@
           <div class="section-group" id="pool-english"></div>
         </div>
 
-        <!-- 3. Projects & Master's Thesis Pool -->
+        <!-- Research & Thesis Pool -->
         <div>
           <div class="sidebar-section-header">
             <span>Research & Thesis</span>
@@ -503,7 +548,7 @@
           <div class="section-group" id="pool-research"></div>
         </div>
 
-        <!-- 4. Other Languages & Soft Skills Pool -->
+        <!-- Other Languages Pool -->
         <div>
           <div class="sidebar-section-header">
             <span>Other Languages</span>
@@ -524,7 +569,7 @@
           <div class="drop-zone" id="zone-sds"></div>
         </div>
         <div class="module-box c-green" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'gis')">
-          <div class="mod-head"><span class="mod-title t-green">Graphical & Interactive</span><span class="mod-cr" id="cr-gis">12/18 ECTS</span></div>
+          <div class="mod-head"><span class="mod-title t-green">Graphical & Interactive</span><span class="mod-cr" id="cr-gis">0/18 ECTS</span></div>
           <div class="drop-zone" id="zone-gis"></div>
         </div>
         <div class="module-box c-purple" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'spec')">
@@ -581,85 +626,156 @@
         </div>
       </div>
 
-      <!-- Footer Academic References -->
+      <!-- Reference Note -->
       <footer class="credit-reference">
         <b>▼ University credit references · checked 14 October 2026</b><br>
-        Academic English Part One and Part Two carry 2 ECTS each (4 ECTS combined). The German semester course carries 3 ECTS; other German course formats have different credits.<br>
-        CS4DM taught modules carry 6 ECTS, research projects carry 12 ECTS each, and the full master's module carries 30 ECTS (6 preparatory research + 21 thesis + 3 defence), according to the 2020 study regulations.<br>
-        <p>Sources: <a href="https://www.uni-weimar.de" target="_blank">English Part One</a> · <a href="https://www.uni-weimar.de" target="_blank">English Part Two</a> · <a href="https://www.uni-weimar.de" target="_blank">German semester courses</a> · <a href="https://www.uni-weimar.de" target="_blank">CS4DM study regulations</a></p>
-        <p>Your 90-ECTS planning target is unchanged. The published degree programme totals 120 ECTS; this tracker target is not a replacement for degree requirements. Credit recognition depends on your applicable examination regulations.</p>
+        Timetable dynamically synchronizes with whatever courses you place on the dashboard. Removing a course clears it from your weekly schedule immediately.<br>
+        CS4DM taught modules carry 6 ECTS, research projects carry 12 ECTS each, and the master's module carries 30 ECTS according to the 2020 study regulations.<br>
+        <p>Your 90-ECTS planning target reflects completed taught coursework and projects; the published degree totals 120 ECTS.</p>
       </footer>
     </main>
   </div>
 
-  <!-- Timetable Modal -->
+  <!-- Dynamic Timetable Modal -->
   <div class="modal-overlay" id="timetableModal" onclick="closeTimetable()">
     <div class="modal-box" onclick="event.stopPropagation()">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 style="color:#fff;">📅 Darvin’s WiSe 2026/27 Timetable</h3>
+      <div class="modal-head">
+        <h3 style="color:#fff;">📅 Darvin’s Enrolled Weekly Timetable (Syncs Live)</h3>
         <span style="cursor:pointer; font-size:1.3rem;" onclick="closeTimetable()">&times;</span>
       </div>
-      <table>
-        <thead><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr></thead>
-        <tbody>
-          <tr><td><b>09:15–10:45</b></td><td style="color:var(--amber);">German DaF A1.2<br><small>C13A, R201</small></td><td>—</td><td style="color:var(--green);">Spatial Info (L)<br><small>LH B, M13C</small></td><td>—</td><td style="color:var(--green);">VR Lab (Group A)<br><small>VR Lab, B11</small></td></tr>
-          <tr><td><b>13:30–15:00</b></td><td>—</td><td style="color:var(--green);">Ubicomp (L/E)<br><small>SR H, B11</small></td><td>—</td><td>—</td><td style="color:var(--green);">Spatial Info (E)<br><small>LH B, M13C (fn)</small></td></tr>
-          <tr><td><b>15:15–16:45</b></td><td style="color:var(--green);">Ubicomp (L)<br><small>LH, HK7</small></td><td style="color:var(--green);">Virtual Reality (L)<br><small>SR H, B11</small></td><td>—</td><td style="color:var(--blue);">Watermarking (L)<br><small>SR H, B11</small></td><td>—</td></tr>
-          <tr><td><b>17:00–18:30</b></td><td>—</td><td style="color:var(--blue);">Watermarking (E)<br><small>SR H, B11</small></td><td>—</td><td>—</td><td>—</td></tr>
+      <table id="dynamicTimetable">
+        <thead>
+          <tr>
+            <th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th>
+          </tr>
+        </thead>
+        <tbody id="timetableBody">
+          <!-- Populated dynamically via JS -->
         </tbody>
       </table>
     </div>
   </div>
 
   <script>
-    // Master catalogue categorized by section
+    // Master catalogue with actual schedules attached to courses
     let CATALOGUE = [
-      // 1. Taught Modules (category: "taught")
-      { id: "c1", name: "Introduction to Machine Learning", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c2", name: "Digital Watermarking & Steganography", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c3", name: "Discrete Optimization", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c4", name: "Advanced Cryptography: Secure Channels", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c5", name: "Spatial Information Systems (GIS)", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c6", name: "Photogrammetric Computer Vision", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c7", name: "Deep Learning for Computer Vision", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c8", name: "Security Engineering", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c9", name: "Formal Methods of Software Engineering", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c10", name: "Computational Social Science", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c11", name: "Virtual Reality", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c12", name: "Ubiquitous Computing", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c13", name: "Online Computation", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c14", name: "HCI Theory and Research Methods", sem: "WINTER", credits: 6, cat: "taught" },
-      { id: "c15", name: "Introduction to Modern Cryptography", sem: "SUMMER", credits: 6, cat: "taught" },
-      { id: "c16", name: "Cryptographic Hash Functions", sem: "SUMMER", credits: 6, cat: "taught" },
-      { id: "c17", name: "Complexity Theory", sem: "SUMMER", credits: 6, cat: "taught" },
-      { id: "c18", name: "Randomized Algorithms", sem: "SUMMER", credits: 6, cat: "taught" },
-      { id: "c19", name: "Search Algorithms", sem: "SUMMER", credits: 6, cat: "taught" },
-      { id: "c20", name: "Web Search and Information Retrieval", sem: "SUMMER", credits: 6, cat: "taught" },
-      { id: "c21", name: "Computer Graphics II: Animation", sem: "SUMMER", credits: 6, cat: "taught" },
-      { id: "c22", name: "Computer Graphics II: Fundamentals", sem: "SUMMER", credits: 6, cat: "taught" },
-      { id: "c23", name: "Image Analysis & Object Recognition", sem: "SUMMER", credits: 6, cat: "taught" },
-      { id: "c24", name: "Visualization", sem: "SUMMER", credits: 6, cat: "taught" },
-      { id: "c25", name: "Usability Engineering", sem: "SUMMER", credits: 6, cat: "taught" },
-      { id: "c26", name: "Physiological Computing", sem: "SUMMER", credits: 6, cat: "taught" },
+      // Taught Courses with lecture/lab schedules
+      { 
+        id: "c11", 
+        name: "Virtual Reality", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught",
+        slots: [
+          { day: "Tue", time: "15:15–16:45", title: "Virtual Reality (L)", loc: "SR H, B11", color: "green" },
+          { day: "Fri", time: "09:15–10:45", title: "VR Lab (Group A)", loc: "VR Lab, B11", color: "green" }
+        ]
+      },
+      { 
+        id: "c12", 
+        name: "Ubiquitous Computing", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught",
+        slots: [
+          { day: "Mon", time: "15:15–16:45", title: "Ubicomp (L)", loc: "LH, Haußknechtstr. 7", color: "green" },
+          { day: "Tue", time: "13:30–15:00", title: "Ubicomp (L/E)", loc: "SR H, B11", color: "green" }
+        ]
+      },
+      { 
+        id: "c2", 
+        name: "Digital Watermarking & Steganography", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught",
+        slots: [
+          { day: "Thu", time: "15:15–16:45", title: "Watermarking (L)", loc: "SR H, B11", color: "blue" },
+          { day: "Tue", time: "17:00–18:30", title: "Watermarking (E)", loc: "SR H, B11", color: "blue" }
+        ]
+      },
+      { 
+        id: "c5", 
+        name: "Spatial Information Systems (GIS)", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught",
+        slots: [
+          { day: "Wed", time: "09:15–10:45", title: "Spatial Info / GIS (L)", loc: "LH B, C13C", color: "green" },
+          { day: "Fri", time: "13:30–15:00", title: "Spatial Info / GIS (E)", loc: "LH B, C13C (fn)", color: "green" }
+        ]
+      },
+      { 
+        id: "c1", 
+        name: "Introduction to Machine Learning", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught",
+        slots: [
+          { day: "Wed", time: "11:00–12:30", title: "Intro to ML (L)", loc: "LH A, Haußknechtstr.", color: "blue" }
+        ]
+      },
+      { id: "c3", name: "Discrete Optimization", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
+      { id: "c4", name: "Advanced Cryptography: Secure Channels", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
+      { id: "c6", name: "Photogrammetric Computer Vision", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
+      { id: "c7", name: "Deep Learning for Computer Vision", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
+      { id: "c8", name: "Security Engineering", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
+      { id: "c9", name: "Formal Methods of Software Engineering", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
+      { id: "c10", name: "Computational Social Science", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
+      { id: "c13", name: "Online Computation", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
+      { id: "c14", name: "HCI Theory and Research Methods", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
 
-      // 2. Academic English (category: "english")
-      { id: "e1", name: "Academic English Part One", sem: "WINTER", credits: 2, cat: "english" },
-      { id: "e2", name: "Academic English Part Two", sem: "SUMMER", credits: 2, cat: "english" },
+      // Summer Courses
+      { id: "c15", name: "Introduction to Modern Cryptography", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
+      { id: "c16", name: "Cryptographic Hash Functions", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
+      { id: "c17", name: "Complexity Theory", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
+      { id: "c18", name: "Randomized Algorithms", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
+      { id: "c19", name: "Search Algorithms", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
+      { id: "c20", name: "Web Search and Information Retrieval", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
+      { id: "c21", name: "Computer Graphics II: Animation", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
+      { id: "c22", name: "Computer Graphics II: Fundamentals", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
+      { id: "c23", name: "Image Analysis & Object Recognition", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
+      { id: "c24", name: "Visualization", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
+      { id: "c25", name: "Usability Engineering", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
+      { id: "c26", name: "Physiological Computing", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
 
-      // 3. Projects & Master Thesis (category: "research")
-      { id: "p1", name: "Research Project 1", sem: "WINTER", credits: 12, cat: "research" },
-      { id: "p2", name: "Research Project 2", sem: "SUMMER", credits: 12, cat: "research" },
-      { id: "th", name: "Master's Thesis & Presentation", sem: "SUMMER", credits: 30, cat: "research" },
+      // Academic English
+      { 
+        id: "e1", 
+        name: "Academic English Part One", 
+        sem: "WINTER", 
+        credits: 2, 
+        cat: "english",
+        slots: [
+          { day: "Wed", time: "17:00–18:30", title: "Academic English I", loc: "Coudraystr. 13A", color: "blue" }
+        ]
+      },
+      { id: "e2", name: "Academic English Part Two", sem: "SUMMER", credits: 2, cat: "english", slots: [] },
 
-      // 4. Other Languages & Soft Skills (category: "otherlang")
-      { id: "l1", name: "German Language Course (DaF A1.2)", sem: "WINTER", credits: 3, cat: "otherlang" },
-      { id: "l2", name: "German Language Course (DaF A2.1)", sem: "SUMMER", credits: 3, cat: "otherlang" }
+      // Other Languages
+      { 
+        id: "l1", 
+        name: "German Language Course (DaF A1.2)", 
+        sem: "WINTER", 
+        credits: 3, 
+        cat: "otherlang",
+        slots: [
+          { day: "Mon", time: "09:15–10:45", title: "German DaF A1.2", loc: "C13A, Room 201", color: "amber" }
+        ]
+      },
+      { id: "l2", name: "German Language Course (DaF A2.1)", sem: "SUMMER", credits: 3, cat: "otherlang", slots: [] },
+
+      // Research & Thesis
+      { id: "p1", name: "Research Project 1", sem: "WINTER", credits: 12, cat: "research", slots: [] },
+      { id: "p2", name: "Research Project 2", sem: "SUMMER", credits: 12, cat: "research", slots: [] },
+      { id: "th", name: "Master's Thesis & Presentation", sem: "SUMMER", credits: 30, cat: "research", slots: [] }
     ];
 
     const LIMITS = { sds: 18, gis: 18, spec: 12, elec: 18, eng: 4, rp1: 12, rp2: 12, thesis: 30, lang: 6 };
+    
+    // Default initial enrolled courses from your screenshot
     const DEFAULT_PLACED = { "c11": "gis", "c12": "gis" };
 
-    let userState = JSON.parse(localStorage.getItem("darvin_cat_tracker") || "null");
+    let userState = JSON.parse(localStorage.getItem("darvin_sync_tracker") || "null");
     let activeSem = "ALL";
 
     if (!userState) {
@@ -668,7 +784,7 @@
     }
 
     function save() {
-      localStorage.setItem("darvin_cat_tracker", JSON.stringify(userState));
+      localStorage.setItem("darvin_sync_tracker", JSON.stringify(userState));
       render();
     }
 
@@ -738,12 +854,79 @@
       const credits = parseInt(prompt("Credits (e.g. 6):", "6") || "6", 10);
       const sem = prompt("Term (WINTER or SUMMER):", "WINTER").toUpperCase();
       const cat = prompt("Section (taught, english, research, otherlang):", "taught").toLowerCase();
-      CATALOGUE.push({ id: "custom_" + Date.now(), name, sem, credits, cat });
+      CATALOGUE.push({ id: "custom_" + Date.now(), name, sem, credits, cat, slots: [] });
       render();
     }
 
-    function openTimetable() { document.getElementById("timetableModal").style.display = "flex"; }
-    function closeTimetable() { document.getElementById("timetableModal").style.display = "none"; }
+    function openTimetable() {
+      renderTimetable();
+      document.getElementById("timetableModal").style.display = "flex";
+    }
+
+    function closeTimetable() {
+      document.getElementById("timetableModal").style.display = "none";
+    }
+
+    /* Dynamic Timetable Builder */
+    const TIME_PERIODS = [
+      "09:15–10:45",
+      "11:00–12:30",
+      "13:30–15:00",
+      "15:15–16:45",
+      "17:00–18:30"
+    ];
+
+    const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+
+    function renderTimetable() {
+      const tbody = document.getElementById("timetableBody");
+      tbody.innerHTML = "";
+
+      // Gather active courses placed anywhere in userState
+      const placedCourseIds = Object.keys(userState);
+      const activeCourses = CATALOGUE.filter(c => placedCourseIds.includes(c.id));
+
+      // Collect all active slot schedules
+      const activeSlots = [];
+      activeCourses.forEach(course => {
+        if (course.slots && course.slots.length > 0) {
+          course.slots.forEach(s => activeSlots.push(s));
+        }
+      });
+
+      // Populate timetable grid
+      TIME_PERIODS.forEach(time => {
+        const tr = document.createElement("tr");
+
+        // Time column
+        const tdTime = document.createElement("td");
+        tdTime.textContent = time;
+        tr.appendChild(tdTime);
+
+        // Days columns (Mon - Fri)
+        DAYS.forEach(day => {
+          const tdDay = document.createElement("td");
+          const matchingSlots = activeSlots.filter(s => s.day === day && s.time === time);
+
+          if (matchingSlots.length === 0) {
+            tdDay.innerHTML = `<span class="empty-cell">—</span>`;
+          } else {
+            matchingSlots.forEach(s => {
+              const pill = document.createElement("div");
+              pill.className = `slot-pill ${s.color || 'blue'}`;
+              pill.innerHTML = `
+                <b>${s.title}</b>
+                <small>📍 ${s.loc}</small>
+              `;
+              tdDay.appendChild(pill);
+            });
+          }
+          tr.appendChild(tdDay);
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
 
     function createCardElement(c) {
       const card = document.createElement("div");
@@ -778,7 +961,7 @@
 
       const counts = { taught: 0, english: 0, research: 0, otherlang: 0 };
 
-      // Filter unassigned items
+      // Filter unplaced items
       const unassigned = CATALOGUE.filter(c => !userState[c.id]);
       const filtered = unassigned.filter(c => {
         const matchesQ = c.name.toLowerCase().includes(q);
@@ -792,7 +975,7 @@
         counts[c.cat] = (counts[c.cat] || 0) + 1;
       });
 
-      // Update section headers
+      // Update counters
       document.getElementById("count-taught").textContent = counts.taught;
       document.getElementById("count-english").textContent = counts.english;
       document.getElementById("count-research").textContent = counts.research;
@@ -800,6 +983,7 @@
 
       // Render Dashboard Modules
       let totalAssigned = 0;
+      let scheduledCount = 0;
 
       for (let mod in LIMITS) {
         const zone = document.getElementById(`zone-${mod}`);
@@ -820,6 +1004,10 @@
             currentCredits += course.credits;
             if (mod !== "thesis") {
               totalAssigned += course.credits;
+            }
+
+            if (course.slots && course.slots.length > 0) {
+              scheduledCount++;
             }
 
             const item = document.createElement("div");
@@ -847,6 +1035,12 @@
       }
 
       document.getElementById("progressVal").textContent = `${totalAssigned} / 90 ECTS`;
+      document.getElementById("ttCount").textContent = scheduledCount;
+
+      // If timetable is currently open, refresh it in real time
+      if (document.getElementById("timetableModal").style.display === "flex") {
+        renderTimetable();
+      }
     }
 
     render();
