@@ -211,6 +211,7 @@
       display: flex;
       flex-direction: column;
       gap: 7px;
+      min-height: 20px;
     }
 
     /* Course Cards */
@@ -682,7 +683,7 @@
   </div>
 
   <script>
-    let CATALOGUE = [
+    const CATALOGUE = [
       { 
         id: "c11", 
         name: "Virtual Reality", 
@@ -746,6 +747,8 @@
       { id: "c10", name: "Computational Social Science", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
       { id: "c13", name: "Online Computation", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
       { id: "c14", name: "HCI Theory and Research Methods", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
+
+      // Summer Courses
       { id: "c15", name: "Introduction to Modern Cryptography", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
       { id: "c16", name: "Cryptographic Hash Functions", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
       { id: "c17", name: "Complexity Theory", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
@@ -758,9 +761,302 @@
       { id: "c24", name: "Visualization", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
       { id: "c25", name: "Usability Engineering", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
       { id: "c26", name: "Physiological Computing", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
+
+      // Academic English
       { 
         id: "e1", 
         name: "Academic English Part One", 
         sem: "WINTER", 
         credits: 2, 
-        cat
+        cat: "english",
+        slots: [
+          { day: "Wed", time: "17:00–18:30", title: "Academic English I", loc: "Coudraystr. 13A", color: "blue" }
+        ]
+      },
+      { id: "e2", name: "Academic English Part Two", sem: "SUMMER", credits: 2, cat: "english", slots: [] },
+
+      // Other Languages
+      { 
+        id: "l1", 
+        name: "German Language Course (DaF A1.2)", 
+        sem: "WINTER", 
+        credits: 3, 
+        cat: "otherlang",
+        slots: [
+          { day: "Mon", time: "09:15–10:45", title: "German DaF A1.2", loc: "C13A, Room 201", color: "amber" }
+        ]
+      },
+      { id: "l2", name: "German Language Course (DaF A2.1)", sem: "SUMMER", credits: 3, cat: "otherlang", slots: [] },
+
+      // Research & Thesis
+      { id: "p1", name: "Research Project 1", sem: "WINTER", credits: 12, cat: "research", slots: [] },
+      { id: "p2", name: "Research Project 2", sem: "SUMMER", credits: 12, cat: "research", slots: [] },
+      { id: "th", name: "Master's Thesis & Presentation", sem: "SUMMER", credits: 30, cat: "research", slots: [] }
+    ];
+
+    const LIMITS = { sds: 18, gis: 18, spec: 12, elec: 18, eng: 4, rp1: 12, rp2: 12, thesis: 30, lang: 6 };
+    const DEFAULT_PLACED = { "c11": "gis", "c12": "gis" };
+
+    let userState = null;
+    let activeSem = "ALL";
+
+    try {
+      userState = JSON.parse(localStorage.getItem("darvin_sync_tracker_v3"));
+    } catch (e) {
+      userState = null;
+    }
+
+    if (!userState || Object.keys(userState).length === 0) {
+      userState = { ...DEFAULT_PLACED };
+    }
+
+    function save() {
+      localStorage.setItem("darvin_sync_tracker_v3", JSON.stringify(userState));
+      render();
+    }
+
+    function resetState() {
+      if (confirm("Reset to default screenshot courses?")) {
+        userState = { ...DEFAULT_PLACED };
+        save();
+      }
+    }
+
+    function setSem(sem) {
+      activeSem = sem;
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      const targetTab = document.getElementById(sem === "ALL" ? "tabAll" : sem === "WINTER" ? "tabWinter" : "tabSummer");
+      if (targetTab) targetTab.classList.add("active");
+      render();
+    }
+
+    /* Drag & Drop */
+    function dragStart(e, id) {
+      e.dataTransfer.setData("text/plain", id);
+      e.currentTarget.classList.add("dragging");
+    }
+
+    function dragEnd(e) {
+      e.currentTarget.classList.remove("dragging");
+    }
+
+    function allowDrop(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add("drag-over");
+    }
+
+    function leaveDrop(e) {
+      e.currentTarget.classList.remove("drag-over");
+    }
+
+    function handleDrop(e, modId) {
+      e.preventDefault();
+      e.currentTarget.classList.remove("drag-over");
+      const id = e.dataTransfer.getData("text/plain");
+      if (id) {
+        userState[id] = modId;
+        save();
+      }
+    }
+
+    function dropBack(e) {
+      e.preventDefault();
+      e.currentTarget.classList.remove("drag-over");
+      const id = e.dataTransfer.getData("text/plain");
+      if (id && userState[id]) {
+        delete userState[id];
+        save();
+      }
+    }
+
+    function removeCourse(id) {
+      delete userState[id];
+      save();
+    }
+
+    function promptAddCourse() {
+      const name = prompt("Course Name:");
+      if (!name) return;
+      const credits = parseInt(prompt("Credits (e.g. 6):", "6") || "6", 10);
+      const sem = (prompt("Term (WINTER or SUMMER):", "WINTER") || "WINTER").toUpperCase();
+      const cat = (prompt("Section (taught, english, research, otherlang):", "taught") || "taught").toLowerCase();
+      CATALOGUE.push({ id: "custom_" + Date.now(), name, sem, credits, cat, slots: [] });
+      render();
+    }
+
+    function openTimetable() {
+      renderTimetable();
+      document.getElementById("timetableModal").style.display = "flex";
+    }
+
+    function closeTimetable() {
+      document.getElementById("timetableModal").style.display = "none";
+    }
+
+    const TIME_PERIODS = ["09:15–10:45", "11:00–12:30", "13:30–15:00", "15:15–16:45", "17:00–18:30"];
+    const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+
+    function renderTimetable() {
+      const tbody = document.getElementById("timetableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      const placedCourseIds = Object.keys(userState);
+      const activeCourses = CATALOGUE.filter(c => placedCourseIds.includes(c.id));
+
+      const activeSlots = [];
+      activeCourses.forEach(course => {
+        if (course.slots && course.slots.length > 0) {
+          course.slots.forEach(s => activeSlots.push(s));
+        }
+      });
+
+      TIME_PERIODS.forEach(time => {
+        const tr = document.createElement("tr");
+        const tdTime = document.createElement("td");
+        tdTime.textContent = time;
+        tr.appendChild(tdTime);
+
+        DAYS.forEach(day => {
+          const tdDay = document.createElement("td");
+          const matchingSlots = activeSlots.filter(s => s.day === day && s.time === time);
+
+          if (matchingSlots.length === 0) {
+            tdDay.innerHTML = `<span class="empty-cell">—</span>`;
+          } else {
+            matchingSlots.forEach(s => {
+              const pill = document.createElement("div");
+              pill.className = `slot-pill ${s.color || 'blue'}`;
+              pill.innerHTML = `<b>${s.title}</b><small>📍 ${s.loc}</small>`;
+              tdDay.appendChild(pill);
+            });
+          }
+          tr.appendChild(tdDay);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    function createCardElement(c) {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.draggable = true;
+      card.ondragstart = (e) => dragStart(e, c.id);
+      card.ondragend = dragEnd;
+      card.innerHTML = `
+        <div class="card-info">
+          <span class="card-title">${c.name}</span>
+          <span class="card-sub">${c.sem === 'WINTER' ? '❄️ Winter Term' : '☀️ Summer Term'}</span>
+        </div>
+        <span class="cr-tag">${c.credits} ECTS</span>
+      `;
+      return card;
+    }
+
+    function render() {
+      const searchEl = document.getElementById("search");
+      const q = searchEl ? searchEl.value.toLowerCase() : "";
+
+      const pools = {
+        taught: document.getElementById("pool-taught"),
+        english: document.getElementById("pool-english"),
+        research: document.getElementById("pool-research"),
+        otherlang: document.getElementById("pool-otherlang")
+      };
+
+      for (let key in pools) {
+        if (pools[key]) pools[key].innerHTML = "";
+      }
+
+      const counts = { taught: 0, english: 0, research: 0, otherlang: 0 };
+
+      const unassigned = CATALOGUE.filter(c => !userState[c.id]);
+      const filtered = unassigned.filter(c => {
+        const matchesQ = c.name.toLowerCase().includes(q);
+        const matchesSem = activeSem === "ALL" || c.sem === activeSem;
+        return matchesQ && matchesSem;
+      });
+
+      filtered.forEach(c => {
+        const catKey = pools[c.cat] ? c.cat : "taught";
+        if (pools[catKey]) {
+          pools[catKey].appendChild(createCardElement(c));
+          counts[catKey] = (counts[catKey] || 0) + 1;
+        }
+      });
+
+      const elCountTaught = document.getElementById("count-taught");
+      const elCountEnglish = document.getElementById("count-english");
+      const elCountResearch = document.getElementById("count-research");
+      const elCountOtherlang = document.getElementById("count-otherlang");
+
+      if (elCountTaught) elCountTaught.textContent = counts.taught;
+      if (elCountEnglish) elCountEnglish.textContent = counts.english;
+      if (elCountResearch) elCountResearch.textContent = counts.research;
+      if (elCountOtherlang) elCountOtherlang.textContent = counts.otherlang;
+
+      let totalAssigned = 0;
+      let scheduledCount = 0;
+
+      for (let mod in LIMITS) {
+        const zone = document.getElementById(`zone-${mod}`);
+        const counter = document.getElementById(`cr-${mod}`);
+        if (!zone || !counter) continue;
+
+        zone.innerHTML = "";
+        const placedIds = Object.keys(userState).filter(cid => userState[cid] === mod);
+        let currentCredits = 0;
+
+        if (placedIds.length === 0) {
+          zone.innerHTML = `<div class="empty-prompt">Drop courses here</div>`;
+        } else {
+          placedIds.forEach(cid => {
+            const course = CATALOGUE.find(c => c.id === cid);
+            if (!course) return;
+
+            currentCredits += course.credits;
+            if (mod !== "thesis") totalAssigned += course.credits;
+            if (course.slots && course.slots.length > 0) scheduledCount++;
+
+            const item = document.createElement("div");
+            item.className = "placed-item";
+            item.draggable = true;
+            item.ondragstart = (e) => dragStart(e, course.id);
+            item.ondragend = dragEnd;
+            item.innerHTML = `
+              <span>${course.name}</span>
+              <div style="display:flex; align-items:center;">
+                <span class="cr-tag" style="background:rgba(255,255,255,0.12);">${course.credits} ECTS</span>
+                <span class="remove-btn" onclick="removeCourse('${course.id}')">&times;</span>
+              </div>
+            `;
+            zone.appendChild(item);
+          });
+        }
+
+        counter.textContent = `${currentCredits}/${LIMITS[mod]} ECTS`;
+        if (currentCredits >= LIMITS[mod]) counter.classList.add("met");
+        else counter.classList.remove("met");
+      }
+
+      const progressEl = document.getElementById("progressVal");
+      const ttCountEl = document.getElementById("ttCount");
+
+      if (progressEl) progressEl.textContent = `${totalAssigned} / 90 ECTS`;
+      if (ttCountEl) ttCountEl.textContent = scheduledCount;
+
+      const modal = document.getElementById("timetableModal");
+      if (modal && modal.style.display === "flex") {
+        renderTimetable();
+      }
+    }
+
+    // Run render safely once the entire document is ready
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", render);
+    } else {
+      render();
+    }
+  </script>
+</body>
+</html>
