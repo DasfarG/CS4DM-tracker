@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Darvin's Curriculum & Master Tracker</title>
+  <title>Darvin's Curriculum & Master Tracker — CS4DM</title>
   <style>
     :root {
       --bg: #070913;
-      --card-surface: rgba(18, 24, 43, 0.7);
-      --card-surface-hover: rgba(26, 34, 60, 0.85);
-      --border-subtle: rgba(255, 255, 255, 0.07);
-      --border-focus: rgba(255, 255, 255, 0.18);
+      --card-surface: rgba(18, 24, 43, 0.75);
+      --card-surface-hover: rgba(26, 34, 60, 0.88);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(255, 255, 255, 0.2);
       --text: #f8fafc;
-      --text-muted: #94a3b8;
+      --text-muted: #94a3af;
 
-      /* Refined Glowing Accents */
       --sds: #38bdf8;
       --gis: #34d399;
       --spec: #a78bfa;
@@ -24,367 +23,145 @@
       --accent-grad: linear-gradient(135deg, #4f46e5, #9333ea);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: radial-gradient(circle at 10% 10%, #151632 0%, #070913 60%, #030408 100%); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
 
-    body {
-      background: radial-gradient(circle at 10% 10%, #151632 0%, #070913 60%, #030408 100%);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Top Navigation Bar */
-    header {
-      background: rgba(10, 14, 26, 0.8);
-      backdrop-filter: blur(20px);
+    .top-system-strip {
+      background: rgba(15, 23, 42, 0.95);
       border-bottom: 1px solid var(--border-subtle);
-      padding: 14px 32px;
+      padding: 6px 32px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand-badge {
-      background: var(--accent-grad);
-      padding: 4px 10px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      color: #fff;
-      box-shadow: 0 0 16px rgba(147, 51, 234, 0.35);
-    }
-
-    .brand-title h1 {
-      font-size: 1.08rem;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: -0.2px;
-    }
-
-    .brand-title p {
-      font-size: 0.73rem;
+      font-size: 0.74rem;
       color: var(--text-muted);
     }
 
-    .header-actions {
+    .link-container {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .pill-counter {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-subtle);
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      display: flex;
-      gap: 6px;
-    }
-
-    .pill-counter .val {
+    .live-link-tag {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
       color: var(--sds);
-      text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
-    }
-
-    .btn {
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid var(--border-subtle);
-      background: rgba(255, 255, 255, 0.05);
-      color: #f1f5f9;
-      transition: all 0.2s ease;
-    }
-
-    .btn:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: var(--border-focus);
-      transform: translateY(-1px);
-    }
-
-    .btn-gradient {
-      background: var(--accent-grad);
-      border: none;
-      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
-    }
-
-    .btn-gradient:hover {
-      box-shadow: 0 4px 16px rgba(147, 51, 234, 0.45);
-    }
-
-    /* Layout */
-    .app-layout {
-      display: grid;
-      grid-template-columns: 310px 1fr;
-      gap: 22px;
-      padding: 20px 32px;
-      flex: 1;
-    }
-
-    /* Sidebar Course Pool */
-    .sidebar {
-      background: var(--card-surface);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      height: calc(100vh - 90px);
-      position: sticky;
-      top: 75px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    }
-
-    .search-box {
-      width: 100%;
-      background: rgba(7, 9, 19, 0.75);
-      border: 1px solid var(--border-subtle);
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .search-box:focus {
-      border-color: #6366f1;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 4px;
-      background: rgba(7, 9, 19, 0.6);
-      padding: 3px;
-      border-radius: 8px;
-    }
-
-    .tab-btn {
-      flex: 1;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      padding: 6px 0;
-      font-size: 0.73rem;
-      font-weight: 700;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: all 0.2s;
-    }
-
-    .tab-btn.active {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-    }
-
-    .sidebar-scroll {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      padding-right: 4px;
-    }
-
-    .sidebar-section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: #cbd5e1;
-      letter-spacing: 0.6px;
-      padding: 4px 2px;
-      border-bottom: 1px solid var(--border-subtle);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-    }
-
-    .section-counter {
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-muted);
-      padding: 1px 7px;
-      border-radius: 10px;
-      font-size: 0.68rem;
-    }
-
-    .section-group {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      min-height: 10px;
-    }
-
-    /* Course Cards */
-    .card {
-      background: rgba(13, 18, 32, 0.8);
-      border: 1px solid var(--border-subtle);
-      border-radius: 9px;
-      padding: 9px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: grab;
-      user-select: none;
-      transition: all 0.18s ease;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    }
-
-    .card:hover {
-      border-color: var(--border-focus);
-      background: rgba(21, 28, 48, 0.95);
-      transform: translateY(-1px);
-    }
-
-    .card.dragging {
-      opacity: 0.3;
-      cursor: grabbing;
-    }
-
-    .card-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      max-width: 190px;
-    }
-
-    .card-title {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: #f3f4f6;
-      line-height: 1.25;
-    }
-
-    .card-sub {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .cr-tag {
-      font-size: 0.72rem;
-      font-weight: 800;
-      background: rgba(255, 255, 255, 0.06);
-      color: #e2e8f0;
       padding: 2px 8px;
       border-radius: 6px;
-      white-space: nowrap;
+      font-family: monospace;
+      text-decoration: none;
     }
 
-    /* Dashboard Modules */
-    .dashboard {
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.68rem;
+    }
+    .copy-btn:hover { background: rgba(255, 255, 255, 0.15); }
+
+    header {
+      background: rgba(10, 14, 26, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-badge { background: var(--accent-grad); padding: 5px 11px; border-radius: 8px; font-size: 0.8rem; font-weight: 800; color: #fff; box-shadow: 0 0 16px rgba(147, 51, 234, 0.35); }
+    .brand-title h1 { font-size: 1.1rem; font-weight: 700; color: #fff; }
+    .brand-title p { font-size: 0.74rem; color: var(--text-muted); }
+
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+    .pill-counter { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); padding: 6px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; display: flex; gap: 6px; }
+    .pill-counter .val { color: var(--sds); }
+
+    .conflict-pill {
+      padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 6px;
+      background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399;
+    }
+    .conflict-pill.has-conflict {
+      background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4); color: #f87171;
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+    .btn {
+      padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.05); color: #f1f5f9; transition: all 0.2s ease;
+    }
+    .btn:hover { background: rgba(255, 255, 255, 0.12); border-color: var(--border-focus); transform: translateY(-1px); }
+    .btn-gradient { background: var(--accent-grad); border: none; box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3); }
+
+    .view-switcher {
       display: flex;
-      flex-direction: column;
-      gap: 16px;
+      gap: 6px;
+      background: rgba(10, 14, 26, 0.6);
+      padding: 6px 32px;
+      border-bottom: 1px solid var(--border-subtle);
     }
-
-    .group-label {
-      font-size: 0.8rem;
-      font-weight: 700;
+    .view-btn {
+      border: 1px solid transparent;
+      background: transparent;
       color: var(--text-muted);
-      margin-bottom: -6px;
-      letter-spacing: 0.2px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .view-btn.active {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-color: var(--border-subtle);
     }
 
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
+    .app-layout { display: grid; grid-template-columns: 310px 1fr; gap: 22px; padding: 20px 32px; flex: 1; }
+    .sidebar {
+      background: var(--card-surface); backdrop-filter: blur(16px); border: 1px solid var(--border-subtle);
+      border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; height: calc(100vh - 140px);
+      position: sticky; top: 125px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
+    .search-box { width: 100%; background: rgba(7, 9, 19, 0.75); border: 1px solid var(--border-subtle); color: #fff; padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; outline: none; }
+    .tabs { display: flex; gap: 4px; background: rgba(7, 9, 19, 0.6); padding: 3px; border-radius: 8px; }
+    .tab-btn { flex: 1; border: none; background: transparent; color: var(--text-muted); padding: 6px 0; font-size: 0.73rem; font-weight: 700; cursor: pointer; border-radius: 6px; }
+    .tab-btn.active { background: rgba(255, 255, 255, 0.1); color: #fff; }
 
-    .grid-split-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
+    .sidebar-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-right: 4px; }
+    .sidebar-section-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; font-weight: 800; color: #cbd5e1; letter-spacing: 0.6px; padding: 4px 2px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 6px; text-transform: uppercase; }
+    .section-counter { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); padding: 1px 7px; border-radius: 10px; font-size: 0.68rem; }
+    .section-group { display: flex; flex-direction: column; gap: 7px; min-height: 10px; }
+
+    .card {
+      background: rgba(13, 18, 32, 0.8); border: 1px solid var(--border-subtle); border-radius: 9px; padding: 9px 12px;
+      display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; transition: all 0.18s ease;
     }
+    .card:hover { border-color: var(--border-focus); background: rgba(21, 28, 48, 0.95); transform: translateY(-1px); }
+    .card.dragging { opacity: 0.3; cursor: grabbing; }
+    .card-info { display: flex; flex-direction: column; gap: 2px; max-width: 190px; }
+    .card-title { font-size: 0.78rem; font-weight: 600; color: #f3f4f6; line-height: 1.25; }
+    .card-sub { font-size: 0.68rem; color: var(--text-muted); font-weight: 500; }
+    .cr-tag { font-size: 0.72rem; font-weight: 800; background: rgba(255, 255, 255, 0.06); color: #e2e8f0; padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+
+    .dashboard { display: flex; flex-direction: column; gap: 16px; }
+    .group-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: -6px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .grid-split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
     .module-box {
-      background: var(--card-surface);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border-subtle);
-      border-top-width: 3px;
-      border-radius: 14px;
-      padding: 12px;
-      min-height: 170px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      transition: all 0.2s ease;
+      background: var(--card-surface); backdrop-filter: blur(16px); border: 1px solid var(--border-subtle);
+      border-top-width: 3px; border-radius: 14px; padding: 12px; min-height: 170px; display: flex; flex-direction: column;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); transition: all 0.2s ease;
     }
+    .module-box.drag-over { background: var(--card-surface-hover); border-color: #8b5cf6; border-style: dashed; }
+    .mod-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 8px; }
+    .mod-title { font-size: 0.8rem; font-weight: 700; }
+    .mod-cr { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); }
+    .mod-cr.met { color: var(--gis); text-shadow: 0 0 10px rgba(52, 211, 153, 0.4); }
+    .drop-zone { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .empty-prompt { height: 100%; min-height: 100px; border: 1px dashed rgba(255, 255, 255, 0.07); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: rgba(148, 163, 184, 0.4); font-size: 0.74rem; }
 
-    .module-box.drag-over {
-      background: var(--card-surface-hover);
-      border-color: #8b5cf6;
-      border-style: dashed;
-    }
-
-    .mod-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border-subtle);
-      margin-bottom: 8px;
-    }
-
-    .mod-title {
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    .mod-cr {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .mod-cr.met {
-      color: var(--gis);
-      text-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
-    }
-
-    .drop-zone {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .empty-prompt {
-      height: 100%;
-      min-height: 100px;
-      border: 1px dashed rgba(255, 255, 255, 0.07);
-      border-radius: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(148, 163, 184, 0.4);
-      font-size: 0.74rem;
-    }
-
-    /* Color Trims */
     .c-blue { border-top-color: var(--sds); }
     .c-green { border-top-color: var(--gis); }
     .c-purple { border-top-color: var(--spec); }
@@ -400,175 +177,139 @@
     .t-rose { color: var(--thesis); }
 
     .placed-item {
-      background: rgba(9, 13, 24, 0.9);
-      border: 1px solid var(--border-subtle);
-      border-radius: 7px;
-      padding: 7px 10px;
-      font-size: 0.76rem;
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: grab;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+      background: rgba(9, 13, 24, 0.9); border: 1px solid var(--border-subtle); border-radius: 7px; padding: 7px 10px;
+      font-size: 0.76rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
     }
+    .placed-item .remove-btn { color: var(--text-muted); font-size: 0.85rem; cursor: pointer; margin-left: 6px; }
+    .placed-item .remove-btn:hover { color: #fb7185; }
 
-    .placed-item .remove-btn {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      cursor: pointer;
-      margin-left: 6px;
-      transition: color 0.15s;
-    }
-
-    .placed-item .remove-btn:hover {
-      color: #fb7185;
-    }
-
-    /* Accordion Details */
-    details.credit-reference {
-      background: rgba(14, 18, 32, 0.6);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      line-height: 1.45;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-
-    details.credit-reference summary {
-      list-style: none;
-      font-weight: 700;
-      color: #cbd5e1;
-      outline: none;
-      user-select: none;
-    }
-
-    details.credit-reference summary::-webkit-details-marker {
+    .notebook-view {
       display: none;
+      flex-direction: column;
+      gap: 20px;
+      padding: 24px 32px;
+      flex: 1;
     }
 
-    details.credit-reference[open] summary {
-      margin-bottom: 8px;
-      border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 6px;
+    .notebook-card {
+      background: var(--card-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 20px;
     }
 
-    .ref-content p {
-      margin-top: 4px;
-    }
-
-    .ref-content a {
-      color: var(--sds);
-      text-decoration: underline;
-    }
-
-    /* Timetable Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 200;
-    }
-
-    .modal-box {
-      background: #0f1526;
-      border: 1px solid var(--border-focus);
-      border-radius: 16px;
-      padding: 24px;
-      width: 92%;
-      max-width: 840px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    }
-
-    table {
+    .nb-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
+      margin-top: 10px;
     }
 
-    th, td {
+    .nb-table th, .nb-table td {
       border: 1px solid var(--border-subtle);
-      padding: 10px;
+      padding: 10px 14px;
       text-align: left;
-      vertical-align: top;
-      width: 17%;
     }
 
-    th:first-child, td:first-child {
-      width: 15%;
-      font-weight: 700;
-      color: #94a3b8;
+    .nb-table th { background: rgba(255, 255, 255, 0.04); color: #cbd5e1; }
+
+    .scratchpad-area {
+      width: 100%;
+      min-height: 120px;
+      background: rgba(7, 9, 19, 0.75);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px;
+      color: #f1f5f9;
+      font-size: 0.82rem;
+      outline: none;
+      resize: vertical;
+      font-family: monospace;
+      margin-top: 8px;
+    }
+    .scratchpad-area:focus { border-color: #6366f1; }
+
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
+      display: none; justify-content: center; align-items: center; z-index: 200;
+    }
+    .modal-box {
+      background: #0f1526; border: 1px solid var(--border-focus); border-radius: 16px; padding: 24px;
+      width: 92%; max-width: 860px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+    .overview-modal-box {
+      background: #111728; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 26px;
+      width: 90%; max-width: 580px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); position: relative;
     }
 
-    th {
-      background: rgba(255, 255, 255, 0.04);
-      color: #cbd5e1;
-    }
+    table.timetable-grid { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    table.timetable-grid th, table.timetable-grid td { border: 1px solid var(--border-subtle); padding: 10px; text-align: left; vertical-align: top; width: 17%; }
+    table.timetable-grid th:first-child, table.timetable-grid td:first-child { width: 15%; font-weight: 700; color: #94a3b8; }
+    table.timetable-grid th { background: rgba(255, 255, 255, 0.04); color: #cbd5e1; }
 
     .slot-pill {
-      background: rgba(255, 255, 255, 0.05);
-      border-left: 3px solid var(--sds);
-      border-radius: 4px;
-      padding: 5px 7px;
-      font-size: 0.74rem;
-      line-height: 1.3;
-      margin-bottom: 4px;
+      background: rgba(255, 255, 255, 0.05); border-left: 3px solid var(--sds); border-radius: 4px; padding: 5px 7px;
+      font-size: 0.74rem; line-height: 1.3; margin-bottom: 4px;
     }
-
     .slot-pill.green { border-left-color: var(--gis); }
     .slot-pill.amber { border-left-color: var(--elec); }
     .slot-pill.blue { border-left-color: var(--sds); }
     .slot-pill small { display: block; color: var(--text-muted); font-size: 0.68rem; margin-top: 2px; }
 
-    .empty-cell {
-      color: rgba(255, 255, 255, 0.15);
-      font-size: 0.75rem;
-      text-align: center;
-    }
+    td.conflict-cell { background: rgba(239, 68, 68, 0.12) !important; border: 1px solid rgba(239, 68, 68, 0.4) !important; }
+    .conflict-tag { background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 2px 5px; border-radius: 4px; display: inline-block; margin-bottom: 5px; }
+    .empty-cell { color: rgba(255, 255, 255, 0.15); font-size: 0.75rem; text-align: center; }
 
-    @media print {
-      header, .sidebar, .btn, .modal-overlay, details { display: none !important; }
-      .app-layout { grid-template-columns: 1fr; padding: 0; }
-      body { background: #fff !important; color: #000 !important; }
-      .module-box { background: #fff; border: 1px solid #ccc; break-inside: avoid; }
-      .placed-item { background: #f8fafc; border: 1px solid #ddd; color: #000; }
-    }
+    .ov-badge { display: inline-block; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; margin-right: 6px; }
+    .ov-desc { font-size: 0.83rem; line-height: 1.55; color: #cbd5e1; margin: 14px 0; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle); }
+    .ov-schedule { font-size: 0.78rem; color: #94a3b8; margin-bottom: 18px; }
+    .ov-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; border-top: 1px solid var(--border-subtle); padding-top: 14px; }
   </style>
 </head>
 <body>
+
+  <div class="top-system-strip">
+    <div class="link-container">
+      <span>🔗 Live Tracker Repository URL:</span>
+      <a class="live-link-tag" id="liveUrlLink" href="https://dasfarg.github.io/CS4DM-tracker/" target="_blank">https://dasfarg.github.io/CS4DM-tracker/</a>
+      <button class="copy-btn" onclick="copyLiveUrl()">📋 Copy Link</button>
+    </div>
+    <div style="display:flex; gap:16px;">
+      <span>Term: <b>WiSe 2026/27</b></span>
+      <span>Bauhaus-Universität Weimar</span>
+    </div>
+  </div>
 
   <header>
     <div class="brand">
       <span class="brand-badge">CS4DM</span>
       <div class="brand-title">
         <h1>Darvin's Curriculum & Master Tracker</h1>
-        <p>Drag & drop courses · Dynamic timetable sync (WiSe 2026/27)</p>
+        <p>Interactive Study Dashboard · Click any course for full syllabus & location</p>
       </div>
     </div>
 
     <div class="header-actions">
+      <div class="conflict-pill" id="conflictPill"><span>✓ No Conflicts</span></div>
       <button class="btn" id="targetBtn" onclick="toggleTarget()">🎯 Mode: 120 ECTS (Degree)</button>
       <div class="pill-counter">
         <span>Progress:</span>
-        <span class="val" id="progressVal">12 / 120 ECTS</span>
+        <span class="val" id="progressVal">30 / 120 ECTS</span>
       </div>
-      <button class="btn" onclick="openTimetable()">📅 View WiSe Timetable (<span id="ttCount">2</span>)</button>
+      <button class="btn" onclick="openTimetable()">📅 View WiSe Timetable (<span id="ttCount">5</span>)</button>
+      <button class="btn" onclick="exportICalendar()">📥 Export .ics</button>
       <button class="btn" onclick="promptAddCourse()">+ Add Course</button>
       <button class="btn" onclick="resetState()">Reset</button>
       <button class="btn btn-gradient" onclick="window.print()">Export Plan (PDF)</button>
     </div>
   </header>
 
-  <div class="app-layout">
+  <div class="view-switcher">
+    <button class="view-btn active" id="btnViewBoard" onclick="switchMainView('board')">📊 Curriculum Board</button>
+    <button class="view-btn" id="btnViewNotebook" onclick="switchMainView('notebook')">📖 Notebook & Master Schedule</button>
+  </div>
+
+  <div class="app-layout" id="boardView">
     <aside class="sidebar" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="dropBack(event)">
       <input type="text" id="search" class="search-box" placeholder="🔍 Search catalogue..." oninput="render()" />
 
@@ -614,14 +355,14 @@
     </aside>
 
     <main class="dashboard">
-      <div class="group-label">Courses</div>
+      <div class="group-label">Courses (Taught Modules)</div>
       <div class="grid-4">
         <div class="module-box c-blue" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'sds')">
           <div class="mod-head"><span class="mod-title t-blue">Security & Data Science</span><span class="mod-cr" id="cr-sds">0/18 ECTS</span></div>
           <div class="drop-zone" id="zone-sds"></div>
         </div>
         <div class="module-box c-green" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'gis')">
-          <div class="mod-head"><span class="mod-title t-green">Graphical & Interactive</span><span class="mod-cr" id="cr-gis">12/18 ECTS</span></div>
+          <div class="mod-head"><span class="mod-title t-green">Graphical & Interactive</span><span class="mod-cr" id="cr-gis">0/18 ECTS</span></div>
           <div class="drop-zone" id="zone-gis"></div>
         </div>
         <div class="module-box c-purple" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'spec')">
@@ -644,7 +385,7 @@
         </div>
 
         <div>
-          <div class="group-label">Research</div>
+          <div class="group-label">Research Projects</div>
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px;">
             <div class="module-box c-pink" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'rp1')">
               <div class="mod-head"><span class="mod-title t-pink">Research Project 1</span><span class="mod-cr" id="cr-rp1">0/12 ECTS</span></div>
@@ -675,25 +416,82 @@
           </div>
         </div>
       </div>
-
-      <details class="credit-reference" open>
-        <summary><b>▼ University credit references · checked 14 October 2026</b></summary>
-        <div class="ref-content">
-          Total published degree programme requires <b>120 ECTS</b> (90 ECTS taught coursework & projects + 30 ECTS Master's thesis module).<br>
-          CS4DM taught modules carry 6 ECTS, research projects carry 12 ECTS each, and the master's module carries 30 ECTS (6 preparatory research + 21 thesis + 3 defence), according to the 2020 study regulations.<br>
-          <p>Academic English Part One and Part Two carry 2 ECTS each (4 ECTS combined). The German semester course carries 3 ECTS.</p>
-        </div>
-      </details>
     </main>
+  </div>
+
+  <div class="notebook-view" id="notebookView">
+    <div class="notebook-card">
+      <h2 style="font-size: 1.15rem; color:#fff; margin-bottom: 6px;">📅 Active WiSe 2026/27 Course Schedule & Room Guide</h2>
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px;">Master directory of currently enrolled classes, room numbers, and meeting hours.</p>
+      
+      <table class="nb-table">
+        <thead>
+          <tr>
+            <th>Course Name</th>
+            <th>Type</th>
+            <th>Time Slot</th>
+            <th>Building & Room</th>
+            <th>Credits</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody id="notebookTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="notebook-card">
+      <h3 style="font-size: 1rem; color:#fff; margin-bottom: 4px;">📝 Study Notes & Scratchpad</h3>
+      <p style="font-size: 0.76rem; color: var(--text-muted);">Jot down assignment deadlines, lab passwords, or thesis ideas. Automatically saved in your browser.</p>
+      <textarea id="scratchpadInput" class="scratchpad-area" placeholder="Type notes here... (e.g. VR Lab Group A door code, homework due dates, room numbers)" oninput="saveScratchpad()"></textarea>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="overviewModal" onclick="closeOverview()">
+    <div class="overview-modal-box" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+        <div>
+          <h2 id="ovTitle" style="font-size: 1.15rem; color:#fff; font-weight:700;">Course Overview</h2>
+          <div style="margin-top:6px;">
+            <span class="ov-badge" id="ovSemBadge" style="background:rgba(56,189,248,0.15); color:var(--sds);">Winter</span>
+            <span class="ov-badge" id="ovCreditsBadge" style="background:rgba(255,255,255,0.08); color:#e2e8f0;">6 ECTS</span>
+            <span class="ov-badge" id="ovStatusBadge" style="background:rgba(52,211,153,0.15); color:var(--gis);">Enrolled</span>
+          </div>
+        </div>
+        <span style="cursor:pointer; font-size:1.4rem; color:var(--text-muted);" onclick="closeOverview()">&times;</span>
+      </div>
+
+      <div class="ov-desc" id="ovDesc">Loading course description...</div>
+
+      <div class="ov-schedule">
+        <b style="color:#e2e8f0;">🗓 Weekly Sessions:</b>
+        <div id="ovSlots" style="margin-top:5px; line-height:1.4;">No set fixed timetable slots.</div>
+      </div>
+
+      <div class="ov-actions">
+        <select id="quickAssignSelect" class="btn" style="background:#090d16; outline:none;">
+          <option value="sds">Move to Security & Data Science</option>
+          <option value="gis">Move to Graphical & Interactive</option>
+          <option value="spec">Move to Specialization</option>
+          <option value="elec">Move to Electives</option>
+          <option value="eng">Move to Academic English</option>
+          <option value="rp1">Move to Research Project 1</option>
+          <option value="rp2">Move to Research Project 2</option>
+          <option value="thesis">Move to Master's Thesis</option>
+          <option value="lang">Move to Other Languages</option>
+        </select>
+        <button class="btn btn-gradient" id="ovAssignBtn" onclick="applyQuickAssign()">Assign</button>
+        <button class="btn" id="ovRemoveBtn" style="color:#f87171;" onclick="applyQuickRemove()">Remove</button>
+      </div>
+    </div>
   </div>
 
   <div class="modal-overlay" id="timetableModal" onclick="closeTimetable()">
     <div class="modal-box" onclick="event.stopPropagation()">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 style="color:#fff;">📅 Darvin’s Enrolled Weekly Timetable (Syncs Live)</h3>
+        <h3 style="color:#fff;">📅 Darvin’s Enrolled Weekly Timetable</h3>
         <span style="cursor:pointer; font-size:1.3rem;" onclick="closeTimetable()">&times;</span>
       </div>
-      <table id="dynamicTimetable">
+      <table class="timetable-grid" id="dynamicTimetable">
         <thead><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr></thead>
         <tbody id="timetableBody"></tbody>
       </table>
@@ -702,67 +500,126 @@
 
   <script>
     const CATALOGUE = [
-      { id: "c11", name: "Virtual Reality", sem: "WINTER", credits: 6, cat: "taught", slots: [{ day: "Tue", time: "15:15–16:45", title: "Virtual Reality (L)", loc: "SR H, B11", color: "green" }, { day: "Fri", time: "09:15–10:45", title: "VR Lab (Group A)", loc: "VR Lab, B11", color: "green" }] },
-      { id: "c12", name: "Ubiquitous Computing", sem: "WINTER", credits: 6, cat: "taught", slots: [{ day: "Mon", time: "15:15–16:45", title: "Ubicomp (L)", loc: "LH, Haußknechtstr. 7", color: "green" }, { day: "Tue", time: "13:30–15:00", title: "Ubicomp (L/E)", loc: "SR H, B11", color: "green" }] },
-      { id: "c2", name: "Digital Watermarking & Steganography", sem: "WINTER", credits: 6, cat: "taught", slots: [{ day: "Thu", time: "15:15–16:45", title: "Watermarking (L)", loc: "SR H, B11", color: "blue" }, { day: "Tue", time: "17:00–18:30", title: "Watermarking (E)", loc: "SR H, B11", color: "blue" }] },
-      { id: "c5", name: "Spatial Information Systems (GIS)", sem: "WINTER", credits: 6, cat: "taught", slots: [{ day: "Wed", time: "09:15–10:45", title: "Spatial Info / GIS (L)", loc: "LH B, C13C", color: "green" }, { day: "Fri", time: "13:30–15:00", title: "Spatial Info / GIS (E)", loc: "LH B, C13C (fn)", color: "green" }] },
-      { id: "c1", name: "Introduction to Machine Learning", sem: "WINTER", credits: 6, cat: "taught", slots: [{ day: "Wed", time: "11:00–12:30", title: "Intro to ML (L)", loc: "LH A, Haußknechtstr.", color: "blue" }] },
-      { id: "c3", name: "Discrete Optimization", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
-      { id: "c4", name: "Advanced Cryptography: Secure Channels", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
-      { id: "c6", name: "Photogrammetric Computer Vision", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
-      { id: "c7", name: "Deep Learning for Computer Vision", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
-      { id: "c8", name: "Security Engineering", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
-      { id: "c9", name: "Formal Methods of Software Engineering", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
-      { id: "c10", name: "Computational Social Science", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
-      { id: "c13", name: "Online Computation", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
-      { id: "c14", name: "HCI Theory and Research Methods", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
-      { id: "c15", name: "Introduction to Modern Cryptography", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-      { id: "c16", name: "Cryptographic Hash Functions", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-      { id: "c17", name: "Complexity Theory", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-      { id: "c18", name: "Randomized Algorithms", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-      { id: "c19", name: "Search Algorithms", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-      { id: "c20", name: "Web Search and Information Retrieval", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-      { id: "c21", name: "Computer Graphics II: Animation", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-      { id: "c22", name: "Computer Graphics II: Fundamentals", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-      { id: "c23", name: "Image Analysis & Object Recognition", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-      { id: "c24", name: "Visualization", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-      { id: "c25", name: "Usability Engineering", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-      { id: "c26", name: "Physiological Computing", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-      { id: "e1", name: "Academic English Part One", sem: "WINTER", credits: 2, cat: "english", slots: [{ day: "Wed", time: "17:00–18:30", title: "Academic English I", loc: "Coudraystr. 13A", color: "blue" }] },
-      { id: "e2", name: "Academic English Part Two", sem: "SUMMER", credits: 2, cat: "english", slots: [] },
-      { id: "l1", name: "German Language Course (DaF A1.2)", sem: "WINTER", credits: 3, cat: "otherlang", slots: [{ day: "Mon", time: "09:15–10:45", title: "German DaF A1.2", loc: "C13A, Room 201", color: "amber" }] },
-      { id: "l2", name: "German Language Course (DaF A2.1)", sem: "SUMMER", credits: 3, cat: "otherlang", slots: [] },
-      { id: "p1", name: "Research Project 1", sem: "WINTER", credits: 12, cat: "research", slots: [] },
-      { id: "p2", name: "Research Project 2", sem: "SUMMER", credits: 12, cat: "research", slots: [] },
-      { id: "th", name: "Master's Thesis & Presentation", sem: "SUMMER", credits: 30, cat: "research", slots: [] }
+      { 
+        id: "c11", 
+        name: "Virtual Reality", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught",
+        desc: "Foundations of immersive virtual environments, 3D graphics rendering pipeline, real-time spatial tracking, interaction techniques, spatial audio, and VR lab exercises.",
+        slots: [{ day: "Tue", time: "15:15–16:45", title: "Virtual Reality (L)", loc: "SR H, Bauhausstraße 11", color: "green" }, { day: "Fri", time: "09:15–10:45", title: "VR Lab (Group A)", loc: "VR Lab, Bauhausstraße 11", color: "green" }] 
+      },
+      { 
+        id: "c12", 
+        name: "Ubiquitous Computing", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught",
+        desc: "Pervasive computing architectures, sensor technologies, IoT infrastructure, contextual adaptation, and novel tangible user interfaces.",
+        slots: [{ day: "Mon", time: "15:15–16:45", title: "Ubicomp (L)", loc: "LH, Haußknechtstraße 7", color: "green" }, { day: "Tue", time: "13:30–15:00", title: "Ubicomp (L/E)", loc: "SR H, Bauhausstraße 11", color: "green" }] 
+      },
+      { 
+        id: "c2", 
+        name: "Digital Watermarking & Steganography", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught",
+        desc: "Information hiding algorithms in digital media (images, audio, video), robust watermarking, fingerprinting, steganalysis, and media forensics.",
+        slots: [{ day: "Thu", time: "15:15–16:45", title: "Watermarking (L)", loc: "SR H, Bauhausstraße 11", color: "blue" }, { day: "Tue", time: "17:00–18:30", title: "Watermarking (E)", loc: "SR H, Bauhausstraße 11", color: "blue" }] 
+      },
+      { 
+        id: "c5", 
+        name: "Spatial Information Systems (GIS)", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught",
+        desc: "Geospatial data representations, coordinate systems, spatial indexing, spatial database queries, vector/raster GIS processing, and terrain analysis.",
+        slots: [{ day: "Wed", time: "09:15–10:45", title: "Spatial Info / GIS (L)", loc: "LH B, Coudraystraße 13C", color: "green" }, { day: "Fri", time: "13:30–15:00", title: "Spatial Info / GIS (E)", loc: "LH B, Coudraystraße 13C (fn)", color: "green" }] 
+      },
+      { 
+        id: "l1", 
+        name: "German Language Course (DaF A1.2)", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "otherlang",
+        desc: "German language instruction focusing on daily communication, grammar foundations, and academic life in Weimar.",
+        slots: [{ day: "Mon", time: "09:15–10:45", title: "German DaF A1.2", loc: "Coudraystraße 13A, Room 201", color: "amber" }] 
+      },
+      { 
+        id: "c1", 
+        name: "Introduction to Machine Learning", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught",
+        desc: "Supervised and unsupervised learning algorithms, regularized linear models, decision trees, support vector machines, clustering, and neural networks.",
+        slots: [{ day: "Wed", time: "11:00–12:30", title: "Intro to ML (L)", loc: "LH A, Haußknechtstr.", color: "blue" }] 
+      },
+      { id: "c3", name: "Discrete Optimization", sem: "WINTER", credits: 6, cat: "taught", desc: "Linear programming, polyhedral combinatorics, network flow optimization, and approximation algorithms.", slots: [] },
+      { id: "c4", name: "Advanced Cryptography: Secure Channels", sem: "WINTER", credits: 6, cat: "taught", desc: "Authenticated key exchange, formal cryptographic security proofs, TLS architecture, and provable security.", slots: [] },
+      { id: "c6", name: "Photogrammetric Computer Vision", sem: "WINTER", credits: 6, cat: "taught", desc: "Epipolar geometry, bundle adjustment, multi-view stereo, and 3D dense scene reconstruction.", slots: [] },
+      { id: "c7", name: "Deep Learning for Computer Vision", sem: "WINTER", credits: 6, cat: "taught", desc: "Deep neural networks, CNNs, vision transformers, semantic segmentation, and generative models.", slots: [] },
+      { id: "c8", name: "Security Engineering", sem: "WINTER", credits: 6, cat: "taught", desc: "Threat modeling, secure software design principles, authentication protocols, and system defenses.", slots: [] },
+      { id: "c9", name: "Formal Methods of Software Engineering", sem: "WINTER", credits: 6, cat: "taught", desc: "Rigorous formal verification, model checking, and logic-based correctness proofs for critical software.", slots: [] },
+      { id: "c10", name: "Computational Social Science", sem: "WINTER", credits: 6, cat: "taught", desc: "Large-scale human behavior modeling, graph algorithms, and social network analysis.", slots: [] },
+      { id: "c13", name: "Online Computation", sem: "WINTER", credits: 6, cat: "taught", desc: "Competitive analysis and algorithm design for real-time problems with incomplete future input information.", slots: [] },
+      { id: "c14", name: "HCI Theory and Research Methods", sem: "WINTER", credits: 6, cat: "taught", desc: "Quantitative and qualitative research design, statistical hypothesis testing, and user testing in HCI.", slots: [] },
+      { id: "c15", name: "Introduction to Modern Cryptography", sem: "SUMMER", credits: 6, cat: "taught", desc: "Computational security definitions, public key cryptosystems (RSA, ECC), and zero-knowledge proofs.", slots: [] },
+      { id: "c16", name: "Cryptographic Hash Functions", sem: "SUMMER", credits: 6, cat: "taught", desc: "Dedicated hash function architectures, preimage resistance, collision resistance, and cryptanalytic techniques.", slots: [] },
+      { id: "c17", name: "Complexity Theory", sem: "SUMMER", credits: 6, cat: "taught", desc: "Computability theory, Turing reductions, polynomial hierarchy, and space complexity.", slots: [] },
+      { id: "c18", name: "Randomized Algorithms", sem: "SUMMER", credits: 6, cat: "taught", desc: "Probabilistic algorithm analysis, Markov chains, random walks, and hashing applications.", slots: [] },
+      { id: "c19", name: "Search Algorithms", sem: "SUMMER", credits: 6, cat: "taught", desc: "Heuristic search, combinatorial problem-solving, A*, and constraint satisfaction techniques.", slots: [] },
+      { id: "c20", name: "Web Search and Information Retrieval", sem: "SUMMER", credits: 6, cat: "taught", desc: "Inverted index architectures, vector space models, PageRank, evaluation metrics, and query processing.", slots: [] },
+      { id: "c21", name: "Computer Graphics II: Animation", sem: "SUMMER", credits: 6, cat: "taught", desc: "Kinematics, particle dynamics, physically-based modeling, and character animation algorithms.", slots: [] },
+      { id: "c22", name: "Computer Graphics II: Fundamentals", sem: "SUMMER", credits: 6, cat: "taught", desc: "Advanced illumination models, ray tracing, Monte Carlo rendering, and modern GPU shader pipelines.", slots: [] },
+      { id: "c23", name: "Image Analysis & Object Recognition", sem: "SUMMER", credits: 6, cat: "taught", desc: "Feature representations, statistical image recognition, and modern object detection pipelines.", slots: [] },
+      { id: "c24", name: "Visualization", sem: "SUMMER", credits: 6, cat: "taught", desc: "Information visualization principles, visual analytics, multidimensional visual mapping, and human visual perception.", slots: [] },
+      { id: "c25", name: "Usability Engineering", sem: "SUMMER", credits: 6, cat: "taught", desc: "User-centered design methodologies, heuristic inspection, and laboratory usability evaluation.", slots: [] },
+      { id: "c26", name: "Physiological Computing", sem: "SUMMER", credits: 6, cat: "taught", desc: "Bio-signal processing (EEG, ECG, eye tracking) for real-time adaptive human-computer interaction.", slots: [] },
+      { 
+        id: "e1", 
+        name: "Academic English Part One", 
+        sem: "WINTER", 
+        credits: 2, 
+        cat: "english",
+        desc: "Academic writing styles, research paper composition, literature review methodology, and formal scientific rhetoric.",
+        slots: [{ day: "Wed", time: "17:00–18:30", title: "Academic English I", loc: "Coudraystr. 13A", color: "blue" }] 
+      },
+      { id: "e2", name: "Academic English Part Two", sem: "SUMMER", credits: 2, cat: "english", desc: "Oral presentation techniques, scientific discourse, and research defense preparation.", slots: [] },
+      { id: "l2", name: "German Language Course (DaF A2.1)", sem: "SUMMER", credits: 3, cat: "otherlang", desc: "German language level A2.1 emphasizing conversational fluency and academic interactions.", slots: [] },
+      { id: "p1", name: "Research Project 1", sem: "WINTER", credits: 12, cat: "research", desc: "First major guided team research project yielding a scientific software artifact and written paper.", slots: [] },
+      { id: "p2", name: "Research Project 2", sem: "SUMMER", credits: 12, cat: "research", desc: "Second major research project in another field to deepen scientific competence.", slots: [] },
+      { id: "th", name: "Master's Thesis & Presentation", sem: "SUMMER", credits: 30, cat: "research", desc: "Individual master's thesis module: 6 ECTS preparatory research, 21 ECTS thesis, and 3 ECTS colloquium defense.", slots: [] }
     ];
 
     const LIMITS = { sds: 18, gis: 18, spec: 12, elec: 18, eng: 4, rp1: 12, rp2: 12, thesis: 30, lang: 6 };
-    const DEFAULT_PLACED = { "c11": "gis", "c12": "gis" };
+    const DEFAULT_PLACED = {
+      "c11": "gis",
+      "c12": "gis",
+      "c5": "gis",
+      "c2": "sds",
+      "l1": "elec"
+    };
 
     let userState = null;
-    let targetTotal = localStorage.getItem("darvin_target_val_v5") ? parseInt(localStorage.getItem("darvin_target_val_v5"), 10) : 120;
+    let targetTotal = localStorage.getItem("darvin_target_val_v10") ? parseInt(localStorage.getItem("darvin_target_val_v10"), 10) : 120;
     let activeSem = "ALL";
+    let selectedCourseId = null;
 
     try {
-      const stored = localStorage.getItem("darvin_theme_state");
+      const stored = localStorage.getItem("darvin_state_v10");
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (parsed && typeof parsed === "object" && Object.keys(parsed).length > 0) {
-          userState = parsed;
-        }
+        if (parsed && typeof parsed === "object" && Object.keys(parsed).length > 0) userState = parsed;
       }
     } catch (e) {
       userState = null;
     }
 
-    if (!userState) {
-      userState = { ...DEFAULT_PLACED };
-    }
+    if (!userState) userState = { ...DEFAULT_PLACED };
 
     function save() {
-      localStorage.setItem("darvin_theme_state", JSON.stringify(userState));
-      localStorage.setItem("darvin_target_val_v5", targetTotal);
+      localStorage.setItem("darvin_state_v10", JSON.stringify(userState));
+      localStorage.setItem("darvin_target_val_v10", targetTotal);
       render();
     }
 
@@ -772,9 +629,43 @@
     }
 
     function resetState() {
-      if (confirm("Reset to default enrolled courses?")) {
+      if (confirm("Reset to your current enrolled courses?")) {
         userState = { ...DEFAULT_PLACED };
         save();
+      }
+    }
+
+    function copyLiveUrl() {
+      const url = document.getElementById("liveUrlLink").href;
+      navigator.clipboard.writeText(url).then(() => {
+        alert("Link copied: " + url);
+      });
+    }
+
+    function switchMainView(view) {
+      document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
+      if (view === 'board') {
+        document.getElementById("btnViewBoard").classList.add("active");
+        document.getElementById("boardView").style.display = "grid";
+        document.getElementById("notebookView").style.display = "none";
+      } else {
+        document.getElementById("btnViewNotebook").classList.add("active");
+        document.getElementById("boardView").style.display = "none";
+        document.getElementById("notebookView").style.display = "flex";
+        renderNotebookTable();
+        loadScratchpad();
+      }
+    }
+
+    function saveScratchpad() {
+      const val = document.getElementById("scratchpadInput").value;
+      localStorage.setItem("darvin_scratchpad", val);
+    }
+
+    function loadScratchpad() {
+      const saved = localStorage.getItem("darvin_scratchpad");
+      if (saved !== null) {
+        document.getElementById("scratchpadInput").value = saved;
       }
     }
 
@@ -784,6 +675,64 @@
       const target = document.getElementById(sem === "ALL" ? "tabAll" : sem === "WINTER" ? "tabWinter" : "tabSummer");
       if (target) target.classList.add("active");
       render();
+    }
+
+    function openOverview(courseId) {
+      selectedCourseId = courseId;
+      const c = CATALOGUE.find(x => x.id === courseId);
+      if (!c) return;
+
+      document.getElementById("ovTitle").textContent = c.name;
+      document.getElementById("ovSemBadge").textContent = c.sem === 'WINTER' ? '❄️ Winter Term' : '☀️ Summer Term';
+      document.getElementById("ovCreditsBadge").textContent = `${c.credits} ECTS`;
+      
+      const isEnrolled = !!userState[c.id];
+      const statusBadge = document.getElementById("ovStatusBadge");
+      const removeBtn = document.getElementById("ovRemoveBtn");
+
+      if (isEnrolled) {
+        statusBadge.textContent = `Enrolled: ${userState[c.id].toUpperCase()}`;
+        statusBadge.style.color = "var(--gis)";
+        statusBadge.style.background = "rgba(52,211,153,0.15)";
+        removeBtn.style.display = "inline-block";
+        document.getElementById("quickAssignSelect").value = userState[c.id];
+      } else {
+        statusBadge.textContent = "Unassigned";
+        statusBadge.style.color = "var(--text-muted)";
+        statusBadge.style.background = "rgba(255,255,255,0.08)";
+        removeBtn.style.display = "none";
+      }
+
+      document.getElementById("ovDesc").textContent = c.desc || "Course details in catalogue.";
+
+      const slotsContainer = document.getElementById("ovSlots");
+      if (c.slots && c.slots.length > 0) {
+        slotsContainer.innerHTML = c.slots.map(s => `• <b>${s.day} ${s.time}</b> — ${s.title} (${s.loc})`).join("<br>");
+      } else {
+        slotsContainer.innerHTML = "No fixed scheduled slots or arranged individually.";
+      }
+
+      document.getElementById("overviewModal").style.display = "flex";
+    }
+
+    function closeOverview() {
+      document.getElementById("overviewModal").style.display = "none";
+      selectedCourseId = null;
+    }
+
+    function applyQuickAssign() {
+      if (!selectedCourseId) return;
+      const mod = document.getElementById("quickAssignSelect").value;
+      userState[selectedCourseId] = mod;
+      save();
+      closeOverview();
+    }
+
+    function applyQuickRemove() {
+      if (!selectedCourseId) return;
+      delete userState[selectedCourseId];
+      save();
+      closeOverview();
     }
 
     function dragStart(e, id) { e.dataTransfer.setData("text/plain", id); e.currentTarget.classList.add("dragging"); }
@@ -800,7 +749,11 @@
       const id = e.dataTransfer.getData("text/plain");
       if (id && userState[id]) { delete userState[id]; save(); }
     }
-    function removeCourse(id) { delete userState[id]; save(); }
+    function removeCourse(id, ev) { 
+      if (ev) ev.stopPropagation();
+      delete userState[id]; 
+      save(); 
+    }
 
     function promptAddCourse() {
       const name = prompt("Course Name:");
@@ -808,7 +761,8 @@
       const credits = parseInt(prompt("Credits (e.g. 6):", "6") || "6", 10);
       const sem = (prompt("Term (WINTER or SUMMER):", "WINTER") || "WINTER").toUpperCase();
       const cat = (prompt("Section (taught, english, research, otherlang):", "taught") || "taught").toLowerCase();
-      CATALOGUE.push({ id: "custom_" + Date.now(), name, sem, credits, cat, slots: [] });
+      const desc = prompt("Overview / Description:", "Custom added course module.") || "Custom course.";
+      CATALOGUE.push({ id: "custom_" + Date.now(), name, sem, credits, cat, desc, slots: [] });
       render();
     }
 
@@ -818,14 +772,23 @@
     const TIME_PERIODS = ["09:15–10:45", "11:00–12:30", "13:30–15:00", "15:15–16:45", "17:00–18:30"];
     const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
+    function getActiveSlots() {
+      const placedIds = Object.keys(userState);
+      const activeCourses = CATALOGUE.filter(c => placedIds.includes(c.id));
+      const activeSlots = [];
+      activeCourses.forEach(c => {
+        if (c.slots) {
+          c.slots.forEach(s => activeSlots.push({ ...s, courseName: c.name }));
+        }
+      });
+      return activeSlots;
+    }
+
     function renderTimetable() {
       const tbody = document.getElementById("timetableBody");
       if (!tbody) return;
       tbody.innerHTML = "";
-      const placedIds = Object.keys(userState);
-      const activeCourses = CATALOGUE.filter(c => placedIds.includes(c.id));
-      const activeSlots = [];
-      activeCourses.forEach(c => { if (c.slots) c.slots.forEach(s => activeSlots.push(s)); });
+      const activeSlots = getActiveSlots();
 
       TIME_PERIODS.forEach(time => {
         const tr = document.createElement("tr");
@@ -838,10 +801,19 @@
           const matching = activeSlots.filter(s => s.day === day && s.time === time);
           if (matching.length === 0) {
             tdDay.innerHTML = `<span class="empty-cell">—</span>`;
+          } else if (matching.length === 1) {
+            const s = matching[0];
+            const pill = document.createElement("div");
+            pill.className = `slot-pill ${s.color || 'blue'}`;
+            pill.innerHTML = `<b>${s.title}</b><small>📍 ${s.loc}</small>`;
+            tdDay.appendChild(pill);
           } else {
+            tdDay.className = "conflict-cell";
+            tdDay.innerHTML = `<span class="conflict-tag">⚠️ OVERLAP DETECTED</span>`;
             matching.forEach(s => {
               const pill = document.createElement("div");
-              pill.className = `slot-pill ${s.color || 'blue'}`;
+              pill.className = `slot-pill danger`;
+              pill.style.borderLeftColor = "#ef4444";
               pill.innerHTML = `<b>${s.title}</b><small>📍 ${s.loc}</small>`;
               tdDay.appendChild(pill);
             });
@@ -852,12 +824,93 @@
       });
     }
 
+    function renderNotebookTable() {
+      const tbody = document.getElementById("notebookTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      const placedIds = Object.keys(userState);
+      const activeCourses = CATALOGUE.filter(c => placedIds.includes(c.id));
+
+      if (activeCourses.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No enrolled courses in your curriculum tracker yet.</td></tr>`;
+        return;
+      }
+
+      activeCourses.forEach(c => {
+        const moduleName = userState[c.id].toUpperCase();
+        if (c.slots && c.slots.length > 0) {
+          c.slots.forEach((s, idx) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td><b>${idx === 0 ? c.name : ''}</b></td>
+              <td>${s.title}</td>
+              <td><b>${s.day}</b> ${s.time}</td>
+              <td>📍 ${s.loc}</td>
+              <td>${idx === 0 ? c.credits + ' ECTS' : ''}</td>
+              <td><span class="ov-badge" style="background:rgba(255,255,255,0.06);">${idx === 0 ? moduleName : ''}</span></td>
+            `;
+            tbody.appendChild(tr);
+          });
+        } else {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><b>${c.name}</b></td>
+            <td>Seminar / Project</td>
+            <td>Individual scheduling</td>
+            <td>Arranged by Chair</td>
+            <td>${c.credits} ECTS</td>
+            <td><span class="ov-badge" style="background:rgba(255,255,255,0.06);">${moduleName}</span></td>
+          `;
+          tbody.appendChild(tr);
+        }
+      });
+    }
+
+    function exportICalendar() {
+      const activeSlots = getActiveSlots();
+      if (activeSlots.length === 0) {
+        alert("No scheduled courses to export!");
+        return;
+      }
+
+      const dayMap = { "Mon": "MO", "Tue": "TU", "Wed": "WE", "Thu": "TH", "Fri": "FR" };
+      let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Darvin Academic Tracker//EN\nCALSCALE:GREGORIAN\n";
+
+      activeSlots.forEach(s => {
+        const times = s.time.split("–");
+        const startTime = times[0].replace(":", "") + "00";
+        const endTime = times[1].replace(":", "") + "00";
+        const byDay = dayMap[s.day] || "MO";
+
+        icsContent += "BEGIN:VEVENT\n";
+        icsContent += `SUMMARY:${s.title}\n`;
+        icsContent += `LOCATION:${s.loc}\n`;
+        icsContent += `DESCRIPTION:CS4DM Master Course at Bauhaus-Universität Weimar\\nTracker: https://dasfarg.github.io/CS4DM-tracker/\n`;
+        icsContent += `RRULE:FREQ=WEEKLY;BYDAY=${byDay}\n`;
+        icsContent += `DTSTART;TZID=Europe/Berlin:20261019T${startTime}\n`;
+        icsContent += `DTEND;TZID=Europe/Berlin:20261019T${endTime}\n`;
+        icsContent += "END:VEVENT\n";
+      });
+
+      icsContent += "END:VCALENDAR";
+
+      const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "CS4DM_WiSe2026_Schedule.ics";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
     function createCardElement(c) {
       const card = document.createElement("div");
       card.className = "card";
       card.draggable = true;
       card.ondragstart = (e) => dragStart(e, c.id);
       card.ondragend = dragEnd;
+      card.onclick = () => openOverview(c.id);
       card.innerHTML = `
         <div class="card-info">
           <span class="card-title">${c.name}</span>
@@ -866,6 +919,18 @@
         <span class="cr-tag">${c.credits} ECTS</span>
       `;
       return card;
+    }
+
+    function checkTotalConflicts() {
+      const activeSlots = getActiveSlots();
+      let conflictCount = 0;
+      DAYS.forEach(day => {
+        TIME_PERIODS.forEach(time => {
+          const matching = activeSlots.filter(s => s.day === day && s.time === time);
+          if (matching.length > 1) conflictCount++;
+        });
+      });
+      return conflictCount;
     }
 
     function render() {
@@ -922,7 +987,6 @@
             if (!course) return;
 
             currentCredits += course.credits;
-            
             if (targetTotal === 90) {
               if (mod !== "thesis") totalAssigned += course.credits;
             } else {
@@ -936,11 +1000,12 @@
             item.draggable = true;
             item.ondragstart = (e) => dragStart(e, course.id);
             item.ondragend = dragEnd;
+            item.onclick = () => openOverview(course.id);
             item.innerHTML = `
               <span>${course.name}</span>
               <div style="display:flex; align-items:center;">
                 <span class="cr-tag" style="background:rgba(255,255,255,0.12);">${course.credits} ECTS</span>
-                <span class="remove-btn" onclick="removeCourse('${course.id}')">&times;</span>
+                <span class="remove-btn" onclick="removeCourse('${course.id}', event)">&times;</span>
               </div>
             `;
             zone.appendChild(item);
@@ -950,6 +1015,18 @@
         counter.textContent = `${currentCredits}/${LIMITS[mod]} ECTS`;
         if (currentCredits >= LIMITS[mod]) counter.classList.add("met");
         else counter.classList.remove("met");
+      }
+
+      const conflicts = checkTotalConflicts();
+      const conflictPill = document.getElementById("conflictPill");
+      if (conflictPill) {
+        if (conflicts > 0) {
+          conflictPill.className = "conflict-pill has-conflict";
+          conflictPill.innerHTML = `⚠️ ${conflicts} Overlap${conflicts > 1 ? 's' : ''} Detected`;
+        } else {
+          conflictPill.className = "conflict-pill";
+          conflictPill.innerHTML = `✓ No Conflicts`;
+        }
       }
 
       const targetBtn = document.getElementById("targetBtn");
