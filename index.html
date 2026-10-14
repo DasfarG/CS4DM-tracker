@@ -11,7 +11,6 @@
       --border: rgba(255, 255, 255, 0.08);
       --text: #f3f4f6;
       --text-muted: #9ca3af;
-
       --blue: #38bdf8;
       --green: #34d399;
       --purple: #c084fc;
@@ -21,340 +20,59 @@
       --cyan: #22d3ee;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: radial-gradient(circle at 15% 15%, #171c32 0%, #090d16 65%, #05070c 100%); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
 
-    body {
-      background: radial-gradient(circle at 15% 15%, #171c32 0%, #090d16 65%, #05070c 100%);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Header */
     header {
-      background: rgba(14, 20, 35, 0.85);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      background: rgba(14, 20, 35, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);
+      padding: 12px 28px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
     }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-badge { background: linear-gradient(135deg, #6366f1, #a855f7); padding: 4px 10px; border-radius: 10px; font-size: 0.78rem; font-weight: 800; color: #fff; }
+    .brand-title h1 { font-size: 1.08rem; font-weight: 700; color: #ffffff; }
+    .brand-title p { font-size: 0.73rem; color: var(--text-muted); }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand-badge {
-      background: linear-gradient(135deg, #6366f1, #a855f7);
-      padding: 4px 10px;
-      border-radius: 10px;
-      font-size: 0.78rem;
-      font-weight: 800;
-      color: #fff;
-    }
-
-    .brand-title h1 {
-      font-size: 1.08rem;
-      font-weight: 700;
-      color: #ffffff;
-    }
-
-    .brand-title p {
-      font-size: 0.73rem;
-      color: var(--text-muted);
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .pill-counter {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border);
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      display: flex;
-      gap: 6px;
-    }
-
-    .pill-counter .val {
-      color: var(--blue);
-    }
-
-    .btn {
-      padding: 6px 12px;
-      border-radius: 7px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.06);
-      color: #fff;
-      transition: all 0.15s ease;
-    }
-
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+    .pill-counter { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; display: flex; gap: 6px; }
+    .pill-counter .val { color: var(--blue); }
+    .btn { padding: 6px 12px; border-radius: 7px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: rgba(255, 255, 255, 0.06); color: #fff; transition: all 0.15s ease; }
     .btn:hover { background: rgba(255, 255, 255, 0.14); }
+    .btn-gradient { background: linear-gradient(135deg, #6366f1, #a855f7); border: none; }
 
-    .btn-gradient {
-      background: linear-gradient(135deg, #6366f1, #a855f7);
-      border: none;
-    }
+    .app-layout { display: grid; grid-template-columns: 310px 1fr; gap: 20px; padding: 18px 24px; flex: 1; }
+    .sidebar { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 12px; height: calc(100vh - 85px); position: sticky; top: 68px; }
+    .search-box { width: 100%; background: rgba(10, 15, 28, 0.7); border: 1px solid var(--border); color: #fff; padding: 7px 12px; border-radius: 8px; font-size: 0.8rem; outline: none; }
+    .tabs { display: flex; gap: 4px; background: rgba(10, 15, 28, 0.6); padding: 3px; border-radius: 8px; }
+    .tab-btn { flex: 1; border: none; background: transparent; color: var(--text-muted); padding: 5px 0; font-size: 0.73rem; font-weight: 700; cursor: pointer; border-radius: 6px; }
+    .tab-btn.active { background: rgba(255, 255, 255, 0.12); color: #fff; }
 
-    /* Layout */
-    .app-layout {
-      display: grid;
-      grid-template-columns: 310px 1fr;
-      gap: 20px;
-      padding: 18px 24px;
-      flex: 1;
-    }
+    .sidebar-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-right: 4px; }
+    .sidebar-section-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; font-weight: 800; color: #94a3b8; letter-spacing: 0.5px; padding: 4px 2px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); margin-bottom: 6px; text-transform: uppercase; }
+    .section-counter { background: rgba(255, 255, 255, 0.08); color: #cbd5e1; padding: 1px 6px; border-radius: 10px; font-size: 0.68rem; }
+    .section-group { display: flex; flex-direction: column; gap: 7px; min-height: 10px; }
 
-    /* Sidebar Pool */
-    .sidebar {
-      background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      height: calc(100vh - 85px);
-      position: sticky;
-      top: 68px;
-    }
+    .card { background: #141c2e; border: 1px solid var(--border); border-radius: 8px; padding: 8px 11px; display: flex; justify-content: space-between; align-items: center; cursor: grab; user-select: none; transition: all 0.15s; }
+    .card:hover { border-color: rgba(255, 255, 255, 0.25); transform: translateY(-1px); }
+    .card.dragging { opacity: 0.3; cursor: grabbing; }
+    .card-info { display: flex; flex-direction: column; gap: 2px; max-width: 190px; }
+    .card-title { font-size: 0.78rem; font-weight: 600; color: #f3f4f6; line-height: 1.25; }
+    .card-sub { font-size: 0.68rem; color: var(--text-muted); font-weight: 500; }
+    .cr-tag { font-size: 0.72rem; font-weight: 800; background: rgba(255, 255, 255, 0.08); color: #e5e7eb; padding: 2px 7px; border-radius: 6px; white-space: nowrap; }
 
-    .search-box {
-      width: 100%;
-      background: rgba(10, 15, 28, 0.7);
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: 7px 12px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      outline: none;
-    }
+    .dashboard { display: flex; flex-direction: column; gap: 16px; }
+    .group-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: -6px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .grid-split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
-    .tabs {
-      display: flex;
-      gap: 4px;
-      background: rgba(10, 15, 28, 0.6);
-      padding: 3px;
-      border-radius: 8px;
-    }
+    .module-box { background: var(--card-bg); border: 1px solid var(--border); border-top-width: 3px; border-radius: 12px; padding: 12px; min-height: 170px; display: flex; flex-direction: column; transition: all 0.15s ease; }
+    .module-box.drag-over { background: rgba(30, 41, 59, 0.85); border-style: dashed; }
+    .mod-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .mod-title { font-size: 0.8rem; font-weight: 700; }
+    .mod-cr { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); }
+    .mod-cr.met { color: var(--green); }
+    .drop-zone { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .empty-prompt { height: 100%; min-height: 100px; border: 1px dashed rgba(255, 255, 255, 0.08); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: rgba(156, 163, 175, 0.4); font-size: 0.74rem; }
 
-    .tab-btn {
-      flex: 1;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      padding: 5px 0;
-      font-size: 0.73rem;
-      font-weight: 700;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-
-    .tab-btn.active {
-      background: rgba(255, 255, 255, 0.12);
-      color: #fff;
-    }
-
-    .sidebar-scroll {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      padding-right: 4px;
-    }
-
-    .sidebar-section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.74rem;
-      font-weight: 800;
-      color: #94a3b8;
-      letter-spacing: 0.5px;
-      padding: 4px 2px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-    }
-
-    .section-counter {
-      background: rgba(255, 255, 255, 0.08);
-      color: #cbd5e1;
-      padding: 1px 6px;
-      border-radius: 10px;
-      font-size: 0.68rem;
-    }
-
-    .section-group {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      min-height: 20px;
-    }
-
-    /* Course Cards */
-    .card {
-      background: #141c2e;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 11px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: grab;
-      user-select: none;
-      transition: all 0.15s;
-    }
-
-    .card:hover {
-      border-color: rgba(255, 255, 255, 0.25);
-      transform: translateY(-1px);
-    }
-
-    .card.dragging {
-      opacity: 0.3;
-      cursor: grabbing;
-    }
-
-    .card-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      max-width: 190px;
-    }
-
-    .card-title {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: #f3f4f6;
-      line-height: 1.25;
-    }
-
-    .card-sub {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .cr-tag {
-      font-size: 0.72rem;
-      font-weight: 800;
-      background: rgba(255, 255, 255, 0.08);
-      color: #e5e7eb;
-      padding: 2px 7px;
-      border-radius: 6px;
-      white-space: nowrap;
-    }
-
-    /* Dashboard Modules */
-    .dashboard {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .group-label {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: -6px;
-    }
-
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-    }
-
-    .grid-split-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .module-box {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-top-width: 3px;
-      border-radius: 12px;
-      padding: 12px;
-      min-height: 170px;
-      display: flex;
-      flex-direction: column;
-      transition: all 0.15s ease;
-    }
-
-    .module-box.drag-over {
-      background: rgba(30, 41, 59, 0.85);
-      border-style: dashed;
-    }
-
-    .mod-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 8px;
-    }
-
-    .mod-title {
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    .mod-cr {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .mod-cr.met {
-      color: var(--green);
-    }
-
-    .drop-zone {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .empty-prompt {
-      height: 100%;
-      min-height: 100px;
-      border: 1px dashed rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(156, 163, 175, 0.4);
-      font-size: 0.74rem;
-    }
-
-    /* Colors */
     .c-blue { border-top-color: var(--blue); }
     .c-green { border-top-color: var(--green); }
     .c-purple { border-top-color: var(--purple); }
@@ -369,146 +87,29 @@
     .t-pink { color: var(--pink); }
     .t-rose { color: var(--rose); }
 
-    .placed-item {
-      background: rgba(10, 15, 28, 0.8);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 7px 10px;
-      font-size: 0.76rem;
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: grab;
-    }
-
-    .placed-item .remove-btn {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      cursor: pointer;
-      margin-left: 6px;
-    }
+    .placed-item { background: rgba(10, 15, 28, 0.8); border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; font-size: 0.76rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center; cursor: grab; }
+    .placed-item .remove-btn { color: var(--text-muted); font-size: 0.85rem; cursor: pointer; margin-left: 6px; }
     .placed-item .remove-btn:hover { color: #f87171; }
 
-    /* Collapsible University Credit References */
-    details.credit-reference {
-      background: rgba(17, 24, 39, 0.6);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      line-height: 1.45;
-      margin-top: 10px;
-      cursor: pointer;
-    }
+    details.credit-reference { background: rgba(17, 24, 39, 0.6); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 0.72rem; color: var(--text-muted); line-height: 1.45; margin-top: 10px; cursor: pointer; }
+    details.credit-reference summary { list-style: none; font-weight: 700; color: #cbd5e1; outline: none; user-select: none; }
+    details.credit-reference summary::-webkit-details-marker { display: none; }
+    details.credit-reference[open] summary { margin-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 6px; }
+    .ref-content p { margin-top: 4px; }
+    .ref-content a { color: var(--blue); text-decoration: underline; }
 
-    details.credit-reference summary {
-      list-style: none;
-      font-weight: 700;
-      color: #cbd5e1;
-      outline: none;
-      user-select: none;
-    }
-
-    details.credit-reference summary::-webkit-details-marker {
-      display: none;
-    }
-
-    details.credit-reference[open] summary {
-      margin-bottom: 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-bottom: 6px;
-    }
-
-    .ref-content p {
-      margin-top: 4px;
-    }
-
-    .ref-content a {
-      color: var(--blue);
-      text-decoration: underline;
-    }
-
-    /* Timetable Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 200;
-    }
-
-    .modal-box {
-      background: #111827;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 22px;
-      width: 92%;
-      max-width: 840px;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-
-    .modal-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.78rem;
-    }
-
-    th, td {
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 10px;
-      text-align: left;
-      vertical-align: top;
-      width: 17%;
-    }
-
-    th:first-child, td:first-child {
-      width: 15%;
-      font-weight: 700;
-      color: #94a3b8;
-    }
-
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 200; }
+    .modal-box { background: #111827; border: 1px solid var(--border); border-radius: 14px; padding: 22px; width: 92%; max-width: 840px; max-height: 90vh; overflow-y: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    th, td { border: 1px solid rgba(255, 255, 255, 0.08); padding: 10px; text-align: left; vertical-align: top; width: 17%; }
+    th:first-child, td:first-child { width: 15%; font-weight: 700; color: #94a3b8; }
     th { background: rgba(255, 255, 255, 0.05); color: #cbd5e1; }
-
-    .slot-pill {
-      background: rgba(255, 255, 255, 0.06);
-      border-left: 3px solid var(--blue);
-      border-radius: 4px;
-      padding: 4px 6px;
-      font-size: 0.74rem;
-      line-height: 1.3;
-      margin-bottom: 4px;
-    }
+    .slot-pill { background: rgba(255, 255, 255, 0.06); border-left: 3px solid var(--blue); border-radius: 4px; padding: 4px 6px; font-size: 0.74rem; line-height: 1.3; margin-bottom: 4px; }
     .slot-pill.green { border-left-color: var(--green); }
     .slot-pill.amber { border-left-color: var(--amber); }
     .slot-pill.blue { border-left-color: var(--blue); }
     .slot-pill small { display: block; color: var(--text-muted); font-size: 0.68rem; margin-top: 2px; }
-
-    .empty-cell {
-      color: rgba(255, 255, 255, 0.15);
-      font-size: 0.75rem;
-      text-align: center;
-    }
-
-    @media print {
-      header, .sidebar, .btn, .modal-overlay, details { display: none !important; }
-      .app-layout { grid-template-columns: 1fr; padding: 0; }
-      body { background: #fff !important; color: #000 !important; }
-      .module-box { background: #fff; border: 1px solid #ccc; break-inside: avoid; }
-      .placed-item { background: #f8fafc; border: 1px solid #ddd; color: #000; }
-    }
+    .empty-cell { color: rgba(255, 255, 255, 0.15); font-size: 0.75rem; text-align: center; }
   </style>
 </head>
 <body>
@@ -523,11 +124,12 @@
     </div>
 
     <div class="header-actions">
+      <button class="btn" id="targetBtn" onclick="toggleTarget()">🎯 Mode: 120 ECTS (Degree)</button>
       <div class="pill-counter">
         <span>Progress:</span>
-        <span class="val" id="progressVal">0 / 90 ECTS</span>
+        <span class="val" id="progressVal">12 / 120 ECTS</span>
       </div>
-      <button class="btn" onclick="openTimetable()">📅 View WiSe Timetable (<span id="ttCount">0</span>)</button>
+      <button class="btn" onclick="openTimetable()">📅 View WiSe Timetable (<span id="ttCount">2</span>)</button>
       <button class="btn" onclick="promptAddCourse()">+ Add Course</button>
       <button class="btn" onclick="resetState()">Reset</button>
       <button class="btn btn-gradient" onclick="window.print()">Export Plan (PDF)</button>
@@ -535,7 +137,6 @@
   </header>
 
   <div class="app-layout">
-    <!-- Categorized Left Sidebar -->
     <aside class="sidebar" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="dropBack(event)">
       <input type="text" id="search" class="search-box" placeholder="🔍 Search catalogue..." oninput="render()" />
 
@@ -545,8 +146,7 @@
         <button class="tab-btn" id="tabSummer" onclick="setSem('SUMMER')">☀️ Summer</button>
       </div>
 
-      <div class="sidebar-scroll" id="sidebarContainer">
-        <!-- Taught Courses Pool -->
+      <div class="sidebar-scroll">
         <div>
           <div class="sidebar-section-header">
             <span>Courses</span>
@@ -555,7 +155,6 @@
           <div class="section-group" id="pool-taught"></div>
         </div>
 
-        <!-- Academic English Pool -->
         <div>
           <div class="sidebar-section-header">
             <span>Academic English</span>
@@ -564,7 +163,6 @@
           <div class="section-group" id="pool-english"></div>
         </div>
 
-        <!-- Research & Thesis Pool -->
         <div>
           <div class="sidebar-section-header">
             <span>Research & Thesis</span>
@@ -573,7 +171,6 @@
           <div class="section-group" id="pool-research"></div>
         </div>
 
-        <!-- Other Languages Pool -->
         <div>
           <div class="sidebar-section-header">
             <span>Other Languages</span>
@@ -584,9 +181,7 @@
       </div>
     </aside>
 
-    <!-- Master Dashboard Modules -->
     <main class="dashboard">
-      <!-- Courses Row -->
       <div class="group-label">Courses</div>
       <div class="grid-4">
         <div class="module-box c-blue" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'sds')">
@@ -594,7 +189,7 @@
           <div class="drop-zone" id="zone-sds"></div>
         </div>
         <div class="module-box c-green" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'gis')">
-          <div class="mod-head"><span class="mod-title t-green">Graphical & Interactive</span><span class="mod-cr" id="cr-gis">0/18 ECTS</span></div>
+          <div class="mod-head"><span class="mod-title t-green">Graphical & Interactive</span><span class="mod-cr" id="cr-gis">12/18 ECTS</span></div>
           <div class="drop-zone" id="zone-gis"></div>
         </div>
         <div class="module-box c-purple" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'spec')">
@@ -607,7 +202,6 @@
         </div>
       </div>
 
-      <!-- Academic English & Research Row -->
       <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 14px;">
         <div>
           <div class="group-label">Academic English</div>
@@ -632,7 +226,6 @@
         </div>
       </div>
 
-      <!-- Master Thesis & Other Languages Row -->
       <div class="grid-split-2">
         <div>
           <div class="group-label">Master's Thesis</div>
@@ -651,32 +244,25 @@
         </div>
       </div>
 
-      <!-- Working Collapsible References Accordion -->
-      <details class="credit-reference">
+      <details class="credit-reference" open>
         <summary><b>▼ University credit references · checked 14 October 2026</b></summary>
         <div class="ref-content">
-          Academic English Part One and Part Two carry 2 ECTS each (4 ECTS combined). The German semester course carries 3 ECTS; other German course formats have different credits.<br>
-          CS4DM taught modules carry 6 ECTS, research projects carry 12 ECTS each, and the master's module carries 30 ECTS according to the 2020 study regulations.<br>
-          <p>Sources: <a href="https://www.uni-weimar.de" target="_blank">English Part One</a> · <a href="https://www.uni-weimar.de" target="_blank">English Part Two</a> · <a href="https://www.uni-weimar.de" target="_blank">German semester courses</a> · <a href="https://www.uni-weimar.de" target="_blank">CS4DM study regulations</a></p>
-          <p>Your 90-ECTS planning target reflects completed taught coursework and projects; the published degree totals 120 ECTS.</p>
+          Total published degree programme requires <b>120 ECTS</b> (90 ECTS taught coursework & projects + 30 ECTS Master's thesis module).<br>
+          CS4DM taught modules carry 6 ECTS, research projects carry 12 ECTS each, and the master's module carries 30 ECTS (6 preparatory research + 21 thesis + 3 defence), according to the 2020 study regulations.<br>
+          <p>Academic English Part One and Part Two carry 2 ECTS each (4 ECTS combined). The German semester course carries 3 ECTS.</p>
         </div>
       </details>
     </main>
   </div>
 
-  <!-- Dynamic Timetable Modal -->
   <div class="modal-overlay" id="timetableModal" onclick="closeTimetable()">
     <div class="modal-box" onclick="event.stopPropagation()">
-      <div class="modal-head">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <h3 style="color:#fff;">📅 Darvin’s Enrolled Weekly Timetable (Syncs Live)</h3>
         <span style="cursor:pointer; font-size:1.3rem;" onclick="closeTimetable()">&times;</span>
       </div>
       <table id="dynamicTimetable">
-        <thead>
-          <tr>
-            <th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th>
-          </tr>
-        </thead>
+        <thead><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr></thead>
         <tbody id="timetableBody"></tbody>
       </table>
     </div>
@@ -684,60 +270,11 @@
 
   <script>
     const CATALOGUE = [
-      { 
-        id: "c11", 
-        name: "Virtual Reality", 
-        sem: "WINTER", 
-        credits: 6, 
-        cat: "taught",
-        slots: [
-          { day: "Tue", time: "15:15–16:45", title: "Virtual Reality (L)", loc: "SR H, B11", color: "green" },
-          { day: "Fri", time: "09:15–10:45", title: "VR Lab (Group A)", loc: "VR Lab, B11", color: "green" }
-        ]
-      },
-      { 
-        id: "c12", 
-        name: "Ubiquitous Computing", 
-        sem: "WINTER", 
-        credits: 6, 
-        cat: "taught",
-        slots: [
-          { day: "Mon", time: "15:15–16:45", title: "Ubicomp (L)", loc: "LH, Haußknechtstr. 7", color: "green" },
-          { day: "Tue", time: "13:30–15:00", title: "Ubicomp (L/E)", loc: "SR H, B11", color: "green" }
-        ]
-      },
-      { 
-        id: "c2", 
-        name: "Digital Watermarking & Steganography", 
-        sem: "WINTER", 
-        credits: 6, 
-        cat: "taught",
-        slots: [
-          { day: "Thu", time: "15:15–16:45", title: "Watermarking (L)", loc: "SR H, B11", color: "blue" },
-          { day: "Tue", time: "17:00–18:30", title: "Watermarking (E)", loc: "SR H, B11", color: "blue" }
-        ]
-      },
-      { 
-        id: "c5", 
-        name: "Spatial Information Systems (GIS)", 
-        sem: "WINTER", 
-        credits: 6, 
-        cat: "taught",
-        slots: [
-          { day: "Wed", time: "09:15–10:45", title: "Spatial Info / GIS (L)", loc: "LH B, C13C", color: "green" },
-          { day: "Fri", time: "13:30–15:00", title: "Spatial Info / GIS (E)", loc: "LH B, C13C (fn)", color: "green" }
-        ]
-      },
-      { 
-        id: "c1", 
-        name: "Introduction to Machine Learning", 
-        sem: "WINTER", 
-        credits: 6, 
-        cat: "taught",
-        slots: [
-          { day: "Wed", time: "11:00–12:30", title: "Intro to ML (L)", loc: "LH A, Haußknechtstr.", color: "blue" }
-        ]
-      },
+      { id: "c11", name: "Virtual Reality", sem: "WINTER", credits: 6, cat: "taught", slots: [{ day: "Tue", time: "15:15–16:45", title: "Virtual Reality (L)", loc: "SR H, B11", color: "green" }, { day: "Fri", time: "09:15–10:45", title: "VR Lab (Group A)", loc: "VR Lab, B11", color: "green" }] },
+      { id: "c12", name: "Ubiquitous Computing", sem: "WINTER", credits: 6, cat: "taught", slots: [{ day: "Mon", time: "15:15–16:45", title: "Ubicomp (L)", loc: "LH, Haußknechtstr. 7", color: "green" }, { day: "Tue", time: "13:30–15:00", title: "Ubicomp (L/E)", loc: "SR H, B11", color: "green" }] },
+      { id: "c2", name: "Digital Watermarking & Steganography", sem: "WINTER", credits: 6, cat: "taught", slots: [{ day: "Thu", time: "15:15–16:45", title: "Watermarking (L)", loc: "SR H, B11", color: "blue" }, { day: "Tue", time: "17:00–18:30", title: "Watermarking (E)", loc: "SR H, B11", color: "blue" }] },
+      { id: "c5", name: "Spatial Information Systems (GIS)", sem: "WINTER", credits: 6, cat: "taught", slots: [{ day: "Wed", time: "09:15–10:45", title: "Spatial Info / GIS (L)", loc: "LH B, C13C", color: "green" }, { day: "Fri", time: "13:30–15:00", title: "Spatial Info / GIS (E)", loc: "LH B, C13C (fn)", color: "green" }] },
+      { id: "c1", name: "Introduction to Machine Learning", sem: "WINTER", credits: 6, cat: "taught", slots: [{ day: "Wed", time: "11:00–12:30", title: "Intro to ML (L)", loc: "LH A, Haußknechtstr.", color: "blue" }] },
       { id: "c3", name: "Discrete Optimization", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
       { id: "c4", name: "Advanced Cryptography: Secure Channels", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
       { id: "c6", name: "Photogrammetric Computer Vision", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
@@ -747,8 +284,6 @@
       { id: "c10", name: "Computational Social Science", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
       { id: "c13", name: "Online Computation", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
       { id: "c14", name: "HCI Theory and Research Methods", sem: "WINTER", credits: 6, cat: "taught", slots: [] },
-
-      // Summer Courses
       { id: "c15", name: "Introduction to Modern Cryptography", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
       { id: "c16", name: "Cryptographic Hash Functions", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
       { id: "c17", name: "Complexity Theory", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
@@ -761,34 +296,10 @@
       { id: "c24", name: "Visualization", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
       { id: "c25", name: "Usability Engineering", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
       { id: "c26", name: "Physiological Computing", sem: "SUMMER", credits: 6, cat: "taught", slots: [] },
-
-      // Academic English
-      { 
-        id: "e1", 
-        name: "Academic English Part One", 
-        sem: "WINTER", 
-        credits: 2, 
-        cat: "english",
-        slots: [
-          { day: "Wed", time: "17:00–18:30", title: "Academic English I", loc: "Coudraystr. 13A", color: "blue" }
-        ]
-      },
+      { id: "e1", name: "Academic English Part One", sem: "WINTER", credits: 2, cat: "english", slots: [{ day: "Wed", time: "17:00–18:30", title: "Academic English I", loc: "Coudraystr. 13A", color: "blue" }] },
       { id: "e2", name: "Academic English Part Two", sem: "SUMMER", credits: 2, cat: "english", slots: [] },
-
-      // Other Languages
-      { 
-        id: "l1", 
-        name: "German Language Course (DaF A1.2)", 
-        sem: "WINTER", 
-        credits: 3, 
-        cat: "otherlang",
-        slots: [
-          { day: "Mon", time: "09:15–10:45", title: "German DaF A1.2", loc: "C13A, Room 201", color: "amber" }
-        ]
-      },
+      { id: "l1", name: "German Language Course (DaF A1.2)", sem: "WINTER", credits: 3, cat: "otherlang", slots: [{ day: "Mon", time: "09:15–10:45", title: "German DaF A1.2", loc: "C13A, Room 201", color: "amber" }] },
       { id: "l2", name: "German Language Course (DaF A2.1)", sem: "SUMMER", credits: 3, cat: "otherlang", slots: [] },
-
-      // Research & Thesis
       { id: "p1", name: "Research Project 1", sem: "WINTER", credits: 12, cat: "research", slots: [] },
       { id: "p2", name: "Research Project 2", sem: "SUMMER", credits: 12, cat: "research", slots: [] },
       { id: "th", name: "Master's Thesis & Presentation", sem: "SUMMER", credits: 30, cat: "research", slots: [] }
@@ -798,25 +309,38 @@
     const DEFAULT_PLACED = { "c11": "gis", "c12": "gis" };
 
     let userState = null;
+    let targetTotal = localStorage.getItem("darvin_target_val") ? parseInt(localStorage.getItem("darvin_target_val"), 10) : 120;
     let activeSem = "ALL";
 
     try {
-      userState = JSON.parse(localStorage.getItem("darvin_sync_tracker_v3"));
+      const stored = localStorage.getItem("darvin_state_v4");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && typeof parsed === "object" && Object.keys(parsed).length > 0) {
+          userState = parsed;
+        }
+      }
     } catch (e) {
       userState = null;
     }
 
-    if (!userState || Object.keys(userState).length === 0) {
+    if (!userState) {
       userState = { ...DEFAULT_PLACED };
     }
 
     function save() {
-      localStorage.setItem("darvin_sync_tracker_v3", JSON.stringify(userState));
+      localStorage.setItem("darvin_state_v4", JSON.stringify(userState));
+      localStorage.setItem("darvin_target_val", targetTotal);
       render();
     }
 
+    function toggleTarget() {
+      targetTotal = (targetTotal === 120) ? 90 : 120;
+      save();
+    }
+
     function resetState() {
-      if (confirm("Reset to default screenshot courses?")) {
+      if (confirm("Reset to default enrolled courses?")) {
         userState = { ...DEFAULT_PLACED };
         save();
       }
@@ -825,54 +349,26 @@
     function setSem(sem) {
       activeSem = sem;
       document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      const targetTab = document.getElementById(sem === "ALL" ? "tabAll" : sem === "WINTER" ? "tabWinter" : "tabSummer");
-      if (targetTab) targetTab.classList.add("active");
+      const target = document.getElementById(sem === "ALL" ? "tabAll" : sem === "WINTER" ? "tabWinter" : "tabSummer");
+      if (target) target.classList.add("active");
       render();
     }
 
-    /* Drag & Drop */
-    function dragStart(e, id) {
-      e.dataTransfer.setData("text/plain", id);
-      e.currentTarget.classList.add("dragging");
-    }
-
-    function dragEnd(e) {
-      e.currentTarget.classList.remove("dragging");
-    }
-
-    function allowDrop(e) {
-      e.preventDefault();
-      e.currentTarget.classList.add("drag-over");
-    }
-
-    function leaveDrop(e) {
-      e.currentTarget.classList.remove("drag-over");
-    }
-
+    function dragStart(e, id) { e.dataTransfer.setData("text/plain", id); e.currentTarget.classList.add("dragging"); }
+    function dragEnd(e) { e.currentTarget.classList.remove("dragging"); }
+    function allowDrop(e) { e.preventDefault(); e.currentTarget.classList.add("drag-over"); }
+    function leaveDrop(e) { e.currentTarget.classList.remove("drag-over"); }
     function handleDrop(e, modId) {
-      e.preventDefault();
-      e.currentTarget.classList.remove("drag-over");
+      e.preventDefault(); e.currentTarget.classList.remove("drag-over");
       const id = e.dataTransfer.getData("text/plain");
-      if (id) {
-        userState[id] = modId;
-        save();
-      }
+      if (id) { userState[id] = modId; save(); }
     }
-
     function dropBack(e) {
-      e.preventDefault();
-      e.currentTarget.classList.remove("drag-over");
+      e.preventDefault(); e.currentTarget.classList.remove("drag-over");
       const id = e.dataTransfer.getData("text/plain");
-      if (id && userState[id]) {
-        delete userState[id];
-        save();
-      }
+      if (id && userState[id]) { delete userState[id]; save(); }
     }
-
-    function removeCourse(id) {
-      delete userState[id];
-      save();
-    }
+    function removeCourse(id) { delete userState[id]; save(); }
 
     function promptAddCourse() {
       const name = prompt("Course Name:");
@@ -884,14 +380,8 @@
       render();
     }
 
-    function openTimetable() {
-      renderTimetable();
-      document.getElementById("timetableModal").style.display = "flex";
-    }
-
-    function closeTimetable() {
-      document.getElementById("timetableModal").style.display = "none";
-    }
+    function openTimetable() { renderTimetable(); document.getElementById("timetableModal").style.display = "flex"; }
+    function closeTimetable() { document.getElementById("timetableModal").style.display = "none"; }
 
     const TIME_PERIODS = ["09:15–10:45", "11:00–12:30", "13:30–15:00", "15:15–16:45", "17:00–18:30"];
     const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
@@ -900,16 +390,10 @@
       const tbody = document.getElementById("timetableBody");
       if (!tbody) return;
       tbody.innerHTML = "";
-
-      const placedCourseIds = Object.keys(userState);
-      const activeCourses = CATALOGUE.filter(c => placedCourseIds.includes(c.id));
-
+      const placedIds = Object.keys(userState);
+      const activeCourses = CATALOGUE.filter(c => placedIds.includes(c.id));
       const activeSlots = [];
-      activeCourses.forEach(course => {
-        if (course.slots && course.slots.length > 0) {
-          course.slots.forEach(s => activeSlots.push(s));
-        }
-      });
+      activeCourses.forEach(c => { if (c.slots) c.slots.forEach(s => activeSlots.push(s)); });
 
       TIME_PERIODS.forEach(time => {
         const tr = document.createElement("tr");
@@ -919,12 +403,11 @@
 
         DAYS.forEach(day => {
           const tdDay = document.createElement("td");
-          const matchingSlots = activeSlots.filter(s => s.day === day && s.time === time);
-
-          if (matchingSlots.length === 0) {
+          const matching = activeSlots.filter(s => s.day === day && s.time === time);
+          if (matching.length === 0) {
             tdDay.innerHTML = `<span class="empty-cell">—</span>`;
           } else {
-            matchingSlots.forEach(s => {
+            matching.forEach(s => {
               const pill = document.createElement("div");
               pill.className = `slot-pill ${s.color || 'blue'}`;
               pill.innerHTML = `<b>${s.title}</b><small>📍 ${s.loc}</small>`;
@@ -964,10 +447,7 @@
         otherlang: document.getElementById("pool-otherlang")
       };
 
-      for (let key in pools) {
-        if (pools[key]) pools[key].innerHTML = "";
-      }
-
+      for (let key in pools) { if (pools[key]) pools[key].innerHTML = ""; }
       const counts = { taught: 0, english: 0, research: 0, otherlang: 0 };
 
       const unassigned = CATALOGUE.filter(c => !userState[c.id]);
@@ -981,19 +461,14 @@
         const catKey = pools[c.cat] ? c.cat : "taught";
         if (pools[catKey]) {
           pools[catKey].appendChild(createCardElement(c));
-          counts[catKey] = (counts[catKey] || 0) + 1;
+          counts[catKey]++;
         }
       });
 
-      const elCountTaught = document.getElementById("count-taught");
-      const elCountEnglish = document.getElementById("count-english");
-      const elCountResearch = document.getElementById("count-research");
-      const elCountOtherlang = document.getElementById("count-otherlang");
-
-      if (elCountTaught) elCountTaught.textContent = counts.taught;
-      if (elCountEnglish) elCountEnglish.textContent = counts.english;
-      if (elCountResearch) elCountResearch.textContent = counts.research;
-      if (elCountOtherlang) elCountOtherlang.textContent = counts.otherlang;
+      if (document.getElementById("count-taught")) document.getElementById("count-taught").textContent = counts.taught;
+      if (document.getElementById("count-english")) document.getElementById("count-english").textContent = counts.english;
+      if (document.getElementById("count-research")) document.getElementById("count-research").textContent = counts.research;
+      if (document.getElementById("count-otherlang")) document.getElementById("count-otherlang").textContent = counts.otherlang;
 
       let totalAssigned = 0;
       let scheduledCount = 0;
@@ -1015,7 +490,14 @@
             if (!course) return;
 
             currentCredits += course.credits;
-            if (mod !== "thesis") totalAssigned += course.credits;
+            
+            // In 90-ECTS mode, exclude thesis from the counter; in 120-ECTS mode, count everything
+            if (targetTotal === 90) {
+              if (mod !== "thesis") totalAssigned += course.credits;
+            } else {
+              totalAssigned += course.credits;
+            }
+
             if (course.slots && course.slots.length > 0) scheduledCount++;
 
             const item = document.createElement("div");
@@ -1039,19 +521,22 @@
         else counter.classList.remove("met");
       }
 
-      const progressEl = document.getElementById("progressVal");
-      const ttCountEl = document.getElementById("ttCount");
+      const targetBtn = document.getElementById("targetBtn");
+      if (targetBtn) {
+        targetBtn.textContent = targetTotal === 120 ? "🎯 Mode: 120 ECTS (Degree)" : "🎯 Mode: 90 ECTS (Coursework)";
+      }
 
-      if (progressEl) progressEl.textContent = `${totalAssigned} / 90 ECTS`;
-      if (ttCountEl) ttCountEl.textContent = scheduledCount;
+      if (document.getElementById("progressVal")) {
+        document.getElementById("progressVal").textContent = `${totalAssigned} / ${targetTotal} ECTS`;
+      }
+      if (document.getElementById("ttCount")) {
+        document.getElementById("ttCount").textContent = scheduledCount;
+      }
 
       const modal = document.getElementById("timetableModal");
-      if (modal && modal.style.display === "flex") {
-        renderTimetable();
-      }
+      if (modal && modal.style.display === "flex") renderTimetable();
     }
 
-    // Run render safely once the entire document is ready
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", render);
     } else {
