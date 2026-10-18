@@ -294,7 +294,7 @@
       <button class="btn" id="targetBtn" onclick="toggleTarget()">🎯 Mode: 120 ECTS (Degree)</button>
       <div class="pill-counter">
         <span>Progress:</span>
-        <span class="val" id="progressVal">30 / 120 ECTS</span>
+        <span class="val" id="progressVal">27 / 120 ECTS</span>
       </div>
       <button class="btn" onclick="openTimetable()">📅 View WiSe Timetable (<span id="ttCount">5</span>)</button>
       <button class="btn" onclick="exportICalendar()">📥 Export .ics</button>
@@ -601,12 +601,12 @@
     };
 
     let userState = null;
-    let targetTotal = localStorage.getItem("darvin_target_val_v10") ? parseInt(localStorage.getItem("darvin_target_val_v10"), 10) : 120;
+    let targetTotal = localStorage.getItem("darvin_target_val_v11") ? parseInt(localStorage.getItem("darvin_target_val_v11"), 10) : 120;
     let activeSem = "ALL";
     let selectedCourseId = null;
 
     try {
-      const stored = localStorage.getItem("darvin_state_v10");
+      const stored = localStorage.getItem("darvin_state_v11");
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed && typeof parsed === "object" && Object.keys(parsed).length > 0) userState = parsed;
@@ -618,8 +618,8 @@
     if (!userState) userState = { ...DEFAULT_PLACED };
 
     function save() {
-      localStorage.setItem("darvin_state_v10", JSON.stringify(userState));
-      localStorage.setItem("darvin_target_val_v10", targetTotal);
+      localStorage.setItem("darvin_state_v11", JSON.stringify(userState));
+      localStorage.setItem("darvin_target_val_v11", targetTotal);
       render();
     }
 
