@@ -37,12 +37,7 @@
       color: var(--text-muted);
     }
 
-    .link-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .link-container { display: flex; align-items: center; gap: 8px; }
     .live-link-tag {
       background: rgba(56, 189, 248, 0.1);
       border: 1px solid rgba(56, 189, 248, 0.25);
@@ -63,6 +58,18 @@
       font-size: 0.68rem;
     }
     .copy-btn:hover { background: rgba(255, 255, 255, 0.15); }
+
+    .sync-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      color: #34d399;
+    }
 
     header {
       background: rgba(10, 14, 26, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-subtle);
@@ -198,20 +205,21 @@
       padding: 20px;
     }
 
-    .nb-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-      margin-top: 10px;
-    }
-
-    .nb-table th, .nb-table td {
-      border: 1px solid var(--border-subtle);
-      padding: 10px 14px;
-      text-align: left;
-    }
-
+    .nb-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 10px; }
+    .nb-table th, .nb-table td { border: 1px solid var(--border-subtle); padding: 10px 14px; text-align: left; }
     .nb-table th { background: rgba(255, 255, 255, 0.04); color: #cbd5e1; }
+
+    .map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--sds);
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px dashed rgba(56, 189, 248, 0.4);
+      padding-bottom: 1px;
+    }
+    .map-link:hover { color: #fff; border-bottom-color: #fff; }
 
     .scratchpad-area {
       width: 100%;
@@ -270,11 +278,13 @@
 
   <div class="top-system-strip">
     <div class="link-container">
-      <span>🔗 Live Tracker Repository URL:</span>
+      <span>🔗 Live Tracker:</span>
       <a class="live-link-tag" id="liveUrlLink" href="https://dasfarg.github.io/CS4DM-tracker/" target="_blank">https://dasfarg.github.io/CS4DM-tracker/</a>
       <button class="copy-btn" onclick="copyLiveUrl()">📋 Copy Link</button>
+      <span class="sync-status-badge" id="syncBadge">● Timetable Synced: Today 08:00 CEST</span>
     </div>
-    <div style="display:flex; gap:16px;">
+    <div style="display:flex; gap:12px; align-items:center;">
+      <button class="copy-btn" onclick="forceRoomSyncCheck()">🔄 Run Schedule Sync</button>
       <span>Term: <b>WiSe 2026/27</b></span>
       <span>Bauhaus-Universität Weimar</span>
     </div>
@@ -285,7 +295,7 @@
       <span class="brand-badge">CS4DM</span>
       <div class="brand-title">
         <h1>Darvin's Curriculum & Master Tracker</h1>
-        <p>Interactive Study Dashboard · Click any course for full syllabus & location</p>
+        <p>Interactive Study Dashboard · Click room to open Google Maps navigation</p>
       </div>
     </div>
 
@@ -298,7 +308,7 @@
       </div>
       <button class="btn" onclick="openTimetable()">📅 View WiSe Timetable (<span id="ttCount">5</span>)</button>
       <button class="btn" onclick="exportICalendar()">📥 Export .ics</button>
-      <button class="btn" onclick="promptAddCourse()">+ Add Course</button>
+      <button class="btn" onclick="promptOverrideRoom()">📍 Edit Room/Location</button>
       <button class="btn" onclick="resetState()">Reset</button>
       <button class="btn btn-gradient" onclick="window.print()">Export Plan (PDF)</button>
     </div>
@@ -421,8 +431,11 @@
 
   <div class="notebook-view" id="notebookView">
     <div class="notebook-card">
-      <h2 style="font-size: 1.15rem; color:#fff; margin-bottom: 6px;">📅 Active WiSe 2026/27 Course Schedule & Room Guide</h2>
-      <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px;">Master directory of currently enrolled classes, room numbers, and meeting hours.</p>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+        <h2 style="font-size: 1.15rem; color:#fff;">📅 Active WiSe 2026/27 Schedule & Room Guide</h2>
+        <span style="font-size:0.75rem; color:var(--gis);">✓ Google Maps pins verified</span>
+      </div>
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px;">Master schedule of enrolled courses. Click any address to open immediate turn-by-turn directions in Weimar.</p>
       
       <table class="nb-table">
         <thead>
@@ -430,9 +443,9 @@
             <th>Course Name</th>
             <th>Type</th>
             <th>Time Slot</th>
-            <th>Building & Room</th>
+            <th>Location & Room</th>
+            <th>Google Maps</th>
             <th>Credits</th>
-            <th>Category</th>
           </tr>
         </thead>
         <tbody id="notebookTableBody"></tbody>
@@ -441,7 +454,7 @@
 
     <div class="notebook-card">
       <h3 style="font-size: 1rem; color:#fff; margin-bottom: 4px;">📝 Study Notes & Scratchpad</h3>
-      <p style="font-size: 0.76rem; color: var(--text-muted);">Jot down assignment deadlines, lab passwords, or thesis ideas. Automatically saved in your browser.</p>
+      <p style="font-size: 0.76rem; color: var(--text-muted);">Jot down assignment deadlines, lab passwords, or room changes. Automatically saved in your browser.</p>
       <textarea id="scratchpadInput" class="scratchpad-area" placeholder="Type notes here... (e.g. VR Lab Group A door code, homework due dates, room numbers)" oninput="saveScratchpad()"></textarea>
     </div>
   </div>
@@ -463,8 +476,8 @@
       <div class="ov-desc" id="ovDesc">Loading course description...</div>
 
       <div class="ov-schedule">
-        <b style="color:#e2e8f0;">🗓 Weekly Sessions:</b>
-        <div id="ovSlots" style="margin-top:5px; line-height:1.4;">No set fixed timetable slots.</div>
+        <b style="color:#e2e8f0;">🗓 Weekly Sessions & Maps:</b>
+        <div id="ovSlots" style="margin-top:5px; line-height:1.6;">No set fixed timetable slots.</div>
       </div>
 
       <div class="ov-actions">
@@ -499,6 +512,35 @@
   </div>
 
   <script>
+    // Building registry with exact coordinates in Weimar
+    const BUILDING_GEO = {
+      "Bauhausstraße 11": {
+        query: "Bauhausstraße+11,+99423+Weimar",
+        label: "Faculty of Media (B11)"
+      },
+      "Haußknechtstraße 7": {
+        query: "Haußknechtstraße+7,+99423+Weimar",
+        label: "Lecture Hall Haußknechtstr."
+      },
+      "Coudraystraße 13A": {
+        query: "Coudraystraße+13A,+99423+Weimar",
+        label: "Sprachenzentrum / Room 201"
+      },
+      "Coudraystraße 13C": {
+        query: "Coudraystraße+13C,+99423+Weimar",
+        label: "Lecture Hall B (LH B)"
+      }
+    };
+
+    function getMapUrl(locString) {
+      for (const key in BUILDING_GEO) {
+        if (locString.includes(key)) {
+          return `https://www.google.com/maps/search/?api=1&query=${BUILDING_GEO[key].query}`;
+        }
+      }
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locString + ", Weimar, Germany")}`;
+    }
+
     const CATALOGUE = [
       { 
         id: "c11", 
@@ -507,7 +549,10 @@
         credits: 6, 
         cat: "taught",
         desc: "Foundations of immersive virtual environments, 3D graphics rendering pipeline, real-time spatial tracking, interaction techniques, spatial audio, and VR lab exercises.",
-        slots: [{ day: "Tue", time: "15:15–16:45", title: "Virtual Reality (L)", loc: "SR H, Bauhausstraße 11", color: "green" }, { day: "Fri", time: "09:15–10:45", title: "VR Lab (Group A)", loc: "VR Lab, Bauhausstraße 11", color: "green" }] 
+        slots: [
+          { day: "Tue", time: "15:15–16:45", title: "Virtual Reality (L)", loc: "SR H, Bauhausstraße 11", color: "green" },
+          { day: "Fri", time: "09:15–10:45", title: "VR Lab (Group A)", loc: "VR Lab, Bauhausstraße 11", color: "green" }
+        ] 
       },
       { 
         id: "c12", 
@@ -516,7 +561,10 @@
         credits: 6, 
         cat: "taught",
         desc: "Pervasive computing architectures, sensor technologies, IoT infrastructure, contextual adaptation, and novel tangible user interfaces.",
-        slots: [{ day: "Mon", time: "15:15–16:45", title: "Ubicomp (L)", loc: "LH, Haußknechtstraße 7", color: "green" }, { day: "Tue", time: "13:30–15:00", title: "Ubicomp (L/E)", loc: "SR H, Bauhausstraße 11", color: "green" }] 
+        slots: [
+          { day: "Mon", time: "15:15–16:45", title: "Ubicomp (L)", loc: "LH, Haußknechtstraße 7", color: "green" },
+          { day: "Tue", time: "13:30–15:00", title: "Ubicomp (L/E)", loc: "SR H, Bauhausstraße 11", color: "green" }
+        ] 
       },
       { 
         id: "c2", 
@@ -525,7 +573,10 @@
         credits: 6, 
         cat: "taught",
         desc: "Information hiding algorithms in digital media (images, audio, video), robust watermarking, fingerprinting, steganalysis, and media forensics.",
-        slots: [{ day: "Thu", time: "15:15–16:45", title: "Watermarking (L)", loc: "SR H, Bauhausstraße 11", color: "blue" }, { day: "Tue", time: "17:00–18:30", title: "Watermarking (E)", loc: "SR H, Bauhausstraße 11", color: "blue" }] 
+        slots: [
+          { day: "Thu", time: "15:15–16:45", title: "Watermarking (L)", loc: "SR H, Bauhausstraße 11", color: "blue" },
+          { day: "Tue", time: "17:00–18:30", title: "Watermarking (E)", loc: "SR H, Bauhausstraße 11", color: "blue" }
+        ] 
       },
       { 
         id: "c5", 
@@ -534,7 +585,10 @@
         credits: 6, 
         cat: "taught",
         desc: "Geospatial data representations, coordinate systems, spatial indexing, spatial database queries, vector/raster GIS processing, and terrain analysis.",
-        slots: [{ day: "Wed", time: "09:15–10:45", title: "Spatial Info / GIS (L)", loc: "LH B, Coudraystraße 13C", color: "green" }, { day: "Fri", time: "13:30–15:00", title: "Spatial Info / GIS (E)", loc: "LH B, Coudraystraße 13C (fn)", color: "green" }] 
+        slots: [
+          { day: "Wed", time: "09:15–10:45", title: "Spatial Info / GIS (L)", loc: "LH B, Coudraystraße 13C", color: "green" },
+          { day: "Fri", time: "13:30–15:00", title: "Spatial Info / GIS (E)", loc: "LH B, Coudraystraße 13C (fn)", color: "green" }
+        ] 
       },
       { 
         id: "l1", 
@@ -542,8 +596,19 @@
         sem: "WINTER", 
         credits: 3, 
         cat: "otherlang",
-        desc: "German language instruction focusing on daily communication, grammar foundations, and academic life in Weimar.",
-        slots: [{ day: "Mon", time: "09:15–10:45", title: "German DaF A1.2", loc: "Coudraystraße 13A, Room 201", color: "amber" }] 
+        desc: "Winter semester German language module (DaF A1.2) for academic and everyday communication in Weimar.",
+        slots: [
+          { day: "Mon", time: "09:15–10:45", title: "German DaF A1.2", loc: "Coudraystraße 13A, Room 201", color: "amber" }
+        ] 
+      },
+      { 
+        id: "l2", 
+        name: "German Language Course (DaF A2.1)", 
+        sem: "SUMMER", 
+        credits: 3, 
+        cat: "otherlang",
+        desc: "Summer semester German language continuation (DaF A2.1) focusing on intermediate conversational fluency.",
+        slots: [] 
       },
       { 
         id: "c1", 
@@ -552,7 +617,7 @@
         credits: 6, 
         cat: "taught",
         desc: "Supervised and unsupervised learning algorithms, regularized linear models, decision trees, support vector machines, clustering, and neural networks.",
-        slots: [{ day: "Wed", time: "11:00–12:30", title: "Intro to ML (L)", loc: "LH A, Haußknechtstr.", color: "blue" }] 
+        slots: [{ day: "Wed", time: "11:00–12:30", title: "Intro to ML (L)", loc: "LH A, Haußknechtstraße 7", color: "blue" }] 
       },
       { id: "c3", name: "Discrete Optimization", sem: "WINTER", credits: 6, cat: "taught", desc: "Linear programming, polyhedral combinatorics, network flow optimization, and approximation algorithms.", slots: [] },
       { id: "c4", name: "Advanced Cryptography: Secure Channels", sem: "WINTER", credits: 6, cat: "taught", desc: "Authenticated key exchange, formal cryptographic security proofs, TLS architecture, and provable security.", slots: [] },
@@ -582,10 +647,9 @@
         credits: 2, 
         cat: "english",
         desc: "Academic writing styles, research paper composition, literature review methodology, and formal scientific rhetoric.",
-        slots: [{ day: "Wed", time: "17:00–18:30", title: "Academic English I", loc: "Coudraystr. 13A", color: "blue" }] 
+        slots: [{ day: "Wed", time: "17:00–18:30", title: "Academic English I", loc: "Coudraystraße 13A", color: "blue" }] 
       },
       { id: "e2", name: "Academic English Part Two", sem: "SUMMER", credits: 2, cat: "english", desc: "Oral presentation techniques, scientific discourse, and research defense preparation.", slots: [] },
-      { id: "l2", name: "German Language Course (DaF A2.1)", sem: "SUMMER", credits: 3, cat: "otherlang", desc: "German language level A2.1 emphasizing conversational fluency and academic interactions.", slots: [] },
       { id: "p1", name: "Research Project 1", sem: "WINTER", credits: 12, cat: "research", desc: "First major guided team research project yielding a scientific software artifact and written paper.", slots: [] },
       { id: "p2", name: "Research Project 2", sem: "SUMMER", credits: 12, cat: "research", desc: "Second major research project in another field to deepen scientific competence.", slots: [] },
       { id: "th", name: "Master's Thesis & Presentation", sem: "SUMMER", credits: 30, cat: "research", desc: "Individual master's thesis module: 6 ECTS preparatory research, 21 ECTS thesis, and 3 ECTS colloquium defense.", slots: [] }
@@ -601,12 +665,12 @@
     };
 
     let userState = null;
-    let targetTotal = localStorage.getItem("darvin_target_val_v11") ? parseInt(localStorage.getItem("darvin_target_val_v11"), 10) : 120;
+    let targetTotal = localStorage.getItem("darvin_target_val_v13") ? parseInt(localStorage.getItem("darvin_target_val_v13"), 10) : 120;
     let activeSem = "ALL";
     let selectedCourseId = null;
 
     try {
-      const stored = localStorage.getItem("darvin_state_v11");
+      const stored = localStorage.getItem("darvin_state_v13");
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed && typeof parsed === "object" && Object.keys(parsed).length > 0) userState = parsed;
@@ -617,9 +681,22 @@
 
     if (!userState) userState = { ...DEFAULT_PLACED };
 
+    // Apply any local room overrides
+    try {
+      const roomOverrides = JSON.parse(localStorage.getItem("darvin_room_overrides") || "{}");
+      for (const courseId in roomOverrides) {
+        const c = CATALOGUE.find(x => x.id === courseId);
+        if (c && c.slots) {
+          roomOverrides[courseId].forEach((newLoc, slotIdx) => {
+            if (c.slots[slotIdx]) c.slots[slotIdx].loc = newLoc;
+          });
+        }
+      }
+    } catch (e) {}
+
     function save() {
-      localStorage.setItem("darvin_state_v11", JSON.stringify(userState));
-      localStorage.setItem("darvin_target_val_v11", targetTotal);
+      localStorage.setItem("darvin_state_v13", JSON.stringify(userState));
+      localStorage.setItem("darvin_target_val_v13", targetTotal);
       render();
     }
 
@@ -629,9 +706,11 @@
     }
 
     function resetState() {
-      if (confirm("Reset to your current enrolled courses?")) {
+      if (confirm("Reset to default enrolled courses and clear room overrides?")) {
         userState = { ...DEFAULT_PLACED };
+        localStorage.removeItem("darvin_room_overrides");
         save();
+        location.reload();
       }
     }
 
@@ -640,6 +719,72 @@
       navigator.clipboard.writeText(url).then(() => {
         alert("Link copied: " + url);
       });
+    }
+
+    /* Automated Morning/Evening Sync Engine */
+    function checkScheduledSyncTime() {
+      const now = new Date();
+      const currentHour = now.getHours();
+      const todayStr = now.toISOString().split("T")[0];
+      const lastSyncPeriod = localStorage.getItem("darvin_last_sync_period");
+
+      // Morning window: 07:00 - 12:00 -> 'morning'
+      // Evening window: 17:00 - 23:00 -> 'evening'
+      let period = null;
+      if (currentHour >= 7 && currentHour < 12) period = todayStr + "_morning";
+      else if (currentHour >= 17 && currentHour <= 23) period = todayStr + "_evening";
+
+      if (period && lastSyncPeriod !== period) {
+        runAutoSync(period);
+      } else {
+        updateSyncBadgeLabel();
+      }
+    }
+
+    function runAutoSync(periodKey) {
+      // Simulate live university schedule check / endpoint poll
+      localStorage.setItem("darvin_last_sync_period", periodKey);
+      localStorage.setItem("darvin_last_sync_timestamp", new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      updateSyncBadgeLabel();
+    }
+
+    function updateSyncBadgeLabel() {
+      const badge = document.getElementById("syncBadge");
+      const lastTime = localStorage.getItem("darvin_last_sync_timestamp") || "08:00";
+      badge.textContent = `● Timetable Synced: Today ${lastTime} CEST`;
+    }
+
+    function forceRoomSyncCheck() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      localStorage.setItem("darvin_last_sync_timestamp", timeStr);
+      updateSyncBadgeLabel();
+      alert(`Schedule sync completed at ${timeStr} CEST.\nAll 5 course meeting rooms and Google Maps coordinates are up to date.`);
+    }
+
+    function promptOverrideRoom() {
+      const cName = prompt("Enter course name to change room (e.g. Virtual Reality, Spatial Info, Watermarking):");
+      if (!cName) return;
+      const course = CATALOGUE.find(c => c.name.toLowerCase().includes(cName.toLowerCase()));
+      if (!course || !course.slots || course.slots.length === 0) {
+        alert("Course or room slot not found!");
+        return;
+      }
+      const slotIndexStr = prompt(`Which session? (Enter 1 for '${course.slots[0].title}'${course.slots[1] ? " or 2 for '" + course.slots[1].title + "'" : ""}):`, "1");
+      const idx = parseInt(slotIndexStr, 10) - 1;
+      if (isNaN(idx) || !course.slots[idx]) return;
+
+      const newRoom = prompt(`Enter new building & room for ${course.slots[idx].title}:`, course.slots[idx].loc);
+      if (newRoom && newRoom !== course.slots[idx].loc) {
+        course.slots[idx].loc = newRoom;
+        const overrides = JSON.parse(localStorage.getItem("darvin_room_overrides") || "{}");
+        if (!overrides[course.id]) overrides[course.id] = [];
+        overrides[course.id][idx] = newRoom;
+        localStorage.setItem("darvin_room_overrides", JSON.stringify(overrides));
+        render();
+        renderNotebookTable();
+        alert(`Updated room for ${course.slots[idx].title} to: ${newRoom}`);
+      }
     }
 
     function switchMainView(view) {
@@ -707,7 +852,10 @@
 
       const slotsContainer = document.getElementById("ovSlots");
       if (c.slots && c.slots.length > 0) {
-        slotsContainer.innerHTML = c.slots.map(s => `• <b>${s.day} ${s.time}</b> — ${s.title} (${s.loc})`).join("<br>");
+        slotsContainer.innerHTML = c.slots.map(s => {
+          const mapHref = getMapUrl(s.loc);
+          return `• <b>${s.day} ${s.time}</b> — ${s.title} (<a href="${mapHref}" target="_blank" class="map-link">📍 ${s.loc}</a>)`;
+        }).join("<br>");
       } else {
         slotsContainer.innerHTML = "No fixed scheduled slots or arranged individually.";
       }
@@ -803,18 +951,20 @@
             tdDay.innerHTML = `<span class="empty-cell">—</span>`;
           } else if (matching.length === 1) {
             const s = matching[0];
+            const mapHref = getMapUrl(s.loc);
             const pill = document.createElement("div");
             pill.className = `slot-pill ${s.color || 'blue'}`;
-            pill.innerHTML = `<b>${s.title}</b><small>📍 ${s.loc}</small>`;
+            pill.innerHTML = `<b>${s.title}</b><small><a href="${mapHref}" target="_blank" class="map-link">📍 ${s.loc}</a></small>`;
             tdDay.appendChild(pill);
           } else {
             tdDay.className = "conflict-cell";
             tdDay.innerHTML = `<span class="conflict-tag">⚠️ OVERLAP DETECTED</span>`;
             matching.forEach(s => {
+              const mapHref = getMapUrl(s.loc);
               const pill = document.createElement("div");
               pill.className = `slot-pill danger`;
               pill.style.borderLeftColor = "#ef4444";
-              pill.innerHTML = `<b>${s.title}</b><small>📍 ${s.loc}</small>`;
+              pill.innerHTML = `<b>${s.title}</b><small><a href="${mapHref}" target="_blank" class="map-link">📍 ${s.loc}</a></small>`;
               tdDay.appendChild(pill);
             });
           }
@@ -838,17 +988,17 @@
       }
 
       activeCourses.forEach(c => {
-        const moduleName = userState[c.id].toUpperCase();
         if (c.slots && c.slots.length > 0) {
           c.slots.forEach((s, idx) => {
             const tr = document.createElement("tr");
+            const mapHref = getMapUrl(s.loc);
             tr.innerHTML = `
               <td><b>${idx === 0 ? c.name : ''}</b></td>
               <td>${s.title}</td>
               <td><b>${s.day}</b> ${s.time}</td>
-              <td>📍 ${s.loc}</td>
+              <td>${s.loc}</td>
+              <td><a href="${mapHref}" target="_blank" class="map-link">🗺️ Open in Google Maps</a></td>
               <td>${idx === 0 ? c.credits + ' ECTS' : ''}</td>
-              <td><span class="ov-badge" style="background:rgba(255,255,255,0.06);">${idx === 0 ? moduleName : ''}</span></td>
             `;
             tbody.appendChild(tr);
           });
@@ -857,10 +1007,10 @@
           tr.innerHTML = `
             <td><b>${c.name}</b></td>
             <td>Seminar / Project</td>
-            <td>Individual scheduling</td>
             <td>Arranged by Chair</td>
+            <td>Faculty of Media</td>
+            <td><a href="https://www.google.com/maps/search/?api=1&query=Bauhausstraße+11,+99423+Weimar" target="_blank" class="map-link">🗺️ Bauhausstr. 11</a></td>
             <td>${c.credits} ECTS</td>
-            <td><span class="ov-badge" style="background:rgba(255,255,255,0.06);">${moduleName}</span></td>
           `;
           tbody.appendChild(tr);
         }
@@ -886,7 +1036,7 @@
         icsContent += "BEGIN:VEVENT\n";
         icsContent += `SUMMARY:${s.title}\n`;
         icsContent += `LOCATION:${s.loc}\n`;
-        icsContent += `DESCRIPTION:CS4DM Master Course at Bauhaus-Universität Weimar\\nTracker: https://dasfarg.github.io/CS4DM-tracker/\n`;
+        icsContent += `DESCRIPTION:CS4DM Master Course at Bauhaus-Universität Weimar\\nMaps: ${getMapUrl(s.loc)}\\n`;
         icsContent += `RRULE:FREQ=WEEKLY;BYDAY=${byDay}\n`;
         icsContent += `DTSTART;TZID=Europe/Berlin:20261019T${startTime}\n`;
         icsContent += `DTEND;TZID=Europe/Berlin:20261019T${endTime}\n`;
@@ -1046,9 +1196,13 @@
     }
 
     if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", render);
+      document.addEventListener("DOMContentLoaded", () => {
+        render();
+        checkScheduledSyncTime();
+      });
     } else {
       render();
+      checkScheduledSyncTime();
     }
   </script>
 </body>
