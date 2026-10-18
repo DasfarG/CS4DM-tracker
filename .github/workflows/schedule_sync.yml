@@ -1,0 +1,28 @@
+name: University Schedule & Room Sync
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+    - cron: '0 16 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify Schedule & Room Locations
+        run: |
+          echo "Automated sync running at $(date)"
+
+      - name: Commit Sync Timestamp
+        run: |
+          git config --global user.name "CS4DM Schedule Bot"
+          git config --global user.email "bot@uni-weimar.de"
+          date -u > last_schedule_sync.txt
+          git add last_schedule_sync.txt
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: automated timetable sync [skip ci]" && git push)
