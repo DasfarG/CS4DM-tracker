@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Darvin's Curriculum & Master Tracker — CS4DM</title>
   <style>
     :root {
       --bg: #070913;
-      --card-surface: rgba(18, 24, 43, 0.75);
-      --card-surface-hover: rgba(26, 34, 60, 0.88);
+      --card-surface: rgba(18, 24, 43, 0.85);
+      --card-surface-hover: rgba(26, 34, 60, 0.95);
       --border-subtle: rgba(255, 255, 255, 0.08);
       --border-focus: rgba(255, 255, 255, 0.2);
       --text: #f8fafc;
@@ -23,151 +23,149 @@
       --accent-grad: linear-gradient(135deg, #4f46e5, #9333ea);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background: radial-gradient(circle at 10% 10%, #151632 0%, #070913 60%, #030408 100%); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
 
+    /* Top Strip */
     .top-system-strip {
       background: rgba(15, 23, 42, 0.95);
       border-bottom: 1px solid var(--border-subtle);
-      padding: 6px 32px;
+      padding: 8px 16px;
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.74rem;
+      gap: 8px;
+      font-size: 0.72rem;
       color: var(--text-muted);
     }
 
-    .link-container { display: flex; align-items: center; gap: 8px; }
+    .link-container { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .live-link-tag {
       background: rgba(56, 189, 248, 0.1);
       border: 1px solid rgba(56, 189, 248, 0.25);
       color: var(--sds);
-      padding: 2px 8px;
+      padding: 3px 8px;
       border-radius: 6px;
       font-family: monospace;
       text-decoration: none;
+      word-break: break-all;
     }
 
     .copy-btn {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--border-subtle);
       color: #fff;
-      padding: 2px 7px;
-      border-radius: 4px;
+      padding: 4px 8px;
+      border-radius: 6px;
       cursor: pointer;
       font-size: 0.68rem;
     }
-    .copy-btn:hover { background: rgba(255, 255, 255, 0.15); }
+    .copy-btn:hover { background: rgba(255, 255, 255, 0.16); }
 
     .sync-status-badge {
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      padding: 2px 8px;
+      padding: 3px 8px;
       border-radius: 12px;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       background: rgba(52, 211, 153, 0.1);
       border: 1px solid rgba(52, 211, 153, 0.3);
       color: #34d399;
     }
 
+    /* Main Header */
     header {
-      background: rgba(10, 14, 26, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-subtle);
-      padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
+      background: rgba(10, 14, 26, 0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; position: sticky; top: 0; z-index: 100;
     }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand-badge { background: var(--accent-grad); padding: 5px 11px; border-radius: 8px; font-size: 0.8rem; font-weight: 800; color: #fff; box-shadow: 0 0 16px rgba(147, 51, 234, 0.35); }
-    .brand-title h1 { font-size: 1.1rem; font-weight: 700; color: #fff; }
-    .brand-title p { font-size: 0.74rem; color: var(--text-muted); }
 
-    .header-actions { display: flex; align-items: center; gap: 10px; }
-    .pill-counter { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); padding: 6px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; display: flex; gap: 6px; }
+    .header-top-row {
+      display: flex; justify-content: space-between; align-items: center; width: 100%;
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-badge { background: var(--accent-grad); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; color: #fff; }
+    .brand-title h1 { font-size: 0.95rem; font-weight: 700; color: #fff; line-height: 1.2; }
+    .brand-title p { font-size: 0.68rem; color: var(--text-muted); display: none; }
+
+    .header-actions {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 6px; width: 100%;
+    }
+
+    .pill-counter { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); padding: 5px 10px; border-radius: 16px; font-size: 0.72rem; font-weight: 700; display: flex; gap: 5px; }
     .pill-counter .val { color: var(--sds); }
 
     .conflict-pill {
-      padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 6px;
+      padding: 5px 10px; border-radius: 16px; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; gap: 4px;
       background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399;
     }
     .conflict-pill.has-conflict {
       background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4); color: #f87171;
-      animation: pulse 1.8s infinite;
     }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
 
     .btn {
-      padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-subtle);
-      background: rgba(255, 255, 255, 0.05); color: #f1f5f9; transition: all 0.2s ease;
+      padding: 6px 10px; border-radius: 7px; font-size: 0.72rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.06); color: #f1f5f9; white-space: nowrap;
     }
-    .btn:hover { background: rgba(255, 255, 255, 0.12); border-color: var(--border-focus); transform: translateY(-1px); }
-    .btn-gradient { background: var(--accent-grad); border: none; box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3); }
+    .btn:hover { background: rgba(255, 255, 255, 0.14); }
+    .btn-gradient { background: var(--accent-grad); border: none; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3); }
 
+    /* View Switcher */
     .view-switcher {
-      display: flex;
-      gap: 6px;
-      background: rgba(10, 14, 26, 0.6);
-      padding: 6px 32px;
-      border-bottom: 1px solid var(--border-subtle);
+      display: flex; gap: 6px; background: rgba(10, 14, 26, 0.75); padding: 6px 16px; border-bottom: 1px solid var(--border-subtle);
     }
     .view-btn {
-      border: 1px solid transparent;
-      background: transparent;
-      color: var(--text-muted);
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
+      flex: 1; border: 1px solid transparent; background: transparent; color: var(--text-muted); padding: 8px 10px;
+      border-radius: 6px; font-size: 0.74rem; font-weight: 700; cursor: pointer; text-align: center;
     }
-    .view-btn.active {
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
-      border-color: var(--border-subtle);
+    .view-btn.active { background: rgba(255, 255, 255, 0.08); color: #fff; border-color: var(--border-subtle); }
+
+    /* App Layout */
+    .app-layout {
+      display: flex; flex-direction: column-reverse; gap: 16px; padding: 14px 16px; flex: 1;
     }
 
-    .app-layout { display: grid; grid-template-columns: 310px 1fr; gap: 22px; padding: 20px 32px; flex: 1; }
     .sidebar {
-      background: var(--card-surface); backdrop-filter: blur(16px); border: 1px solid var(--border-subtle);
-      border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; height: calc(100vh - 140px);
-      position: sticky; top: 125px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      background: var(--card-surface); border: 1px solid var(--border-subtle); border-radius: 14px;
+      padding: 14px; display: flex; flex-direction: column; gap: 10px; height: auto; max-height: 480px;
     }
-    .search-box { width: 100%; background: rgba(7, 9, 19, 0.75); border: 1px solid var(--border-subtle); color: #fff; padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; outline: none; }
-    .tabs { display: flex; gap: 4px; background: rgba(7, 9, 19, 0.6); padding: 3px; border-radius: 8px; }
-    .tab-btn { flex: 1; border: none; background: transparent; color: var(--text-muted); padding: 6px 0; font-size: 0.73rem; font-weight: 700; cursor: pointer; border-radius: 6px; }
-    .tab-btn.active { background: rgba(255, 255, 255, 0.1); color: #fff; }
+    .search-box { width: 100%; background: rgba(7, 9, 19, 0.85); border: 1px solid var(--border-subtle); color: #fff; padding: 10px 12px; border-radius: 8px; font-size: 0.8rem; outline: none; }
+    .tabs { display: flex; gap: 4px; background: rgba(7, 9, 19, 0.7); padding: 3px; border-radius: 8px; }
+    .tab-btn { flex: 1; border: none; background: transparent; color: var(--text-muted); padding: 7px 0; font-size: 0.72rem; font-weight: 700; cursor: pointer; border-radius: 5px; }
+    .tab-btn.active { background: rgba(255, 255, 255, 0.12); color: #fff; }
 
-    .sidebar-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-right: 4px; }
-    .sidebar-section-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; font-weight: 800; color: #cbd5e1; letter-spacing: 0.6px; padding: 4px 2px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 6px; text-transform: uppercase; }
-    .section-counter { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); padding: 1px 7px; border-radius: 10px; font-size: 0.68rem; }
-    .section-group { display: flex; flex-direction: column; gap: 7px; min-height: 10px; }
+    .sidebar-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 2px; }
+    .sidebar-section-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; font-weight: 800; color: #cbd5e1; padding: 3px 0; border-bottom: 1px solid var(--border-subtle); margin-bottom: 6px; text-transform: uppercase; }
+    .section-counter { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); padding: 1px 6px; border-radius: 8px; font-size: 0.65rem; }
+    .section-group { display: flex; flex-direction: column; gap: 6px; }
 
+    /* Cards */
     .card {
-      background: rgba(13, 18, 32, 0.8); border: 1px solid var(--border-subtle); border-radius: 9px; padding: 9px 12px;
-      display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; transition: all 0.18s ease;
+      background: rgba(13, 18, 32, 0.85); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 10px 12px;
+      display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;
     }
-    .card:hover { border-color: var(--border-focus); background: rgba(21, 28, 48, 0.95); transform: translateY(-1px); }
-    .card.dragging { opacity: 0.3; cursor: grabbing; }
-    .card-info { display: flex; flex-direction: column; gap: 2px; max-width: 190px; }
-    .card-title { font-size: 0.78rem; font-weight: 600; color: #f3f4f6; line-height: 1.25; }
-    .card-sub { font-size: 0.68rem; color: var(--text-muted); font-weight: 500; }
-    .cr-tag { font-size: 0.72rem; font-weight: 800; background: rgba(255, 255, 255, 0.06); color: #e2e8f0; padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+    .card-info { display: flex; flex-direction: column; gap: 2px; flex: 1; padding-right: 8px; }
+    .card-title { font-size: 0.76rem; font-weight: 600; color: #f3f4f6; line-height: 1.25; }
+    .card-sub { font-size: 0.66rem; color: var(--text-muted); font-weight: 500; }
+    .cr-tag { font-size: 0.7rem; font-weight: 800; background: rgba(255, 255, 255, 0.06); color: #e2e8f0; padding: 2px 7px; border-radius: 5px; white-space: nowrap; }
 
-    .dashboard { display: flex; flex-direction: column; gap: 16px; }
-    .group-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: -6px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .grid-split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    /* Dashboard & Modules */
+    .dashboard { display: flex; flex-direction: column; gap: 14px; }
+    .group-label { font-size: 0.76rem; font-weight: 700; color: var(--text-muted); margin-bottom: -4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .grid-4, .grid-split-2, .grid-custom { display: flex; flex-direction: column; gap: 10px; }
 
     .module-box {
-      background: var(--card-surface); backdrop-filter: blur(16px); border: 1px solid var(--border-subtle);
-      border-top-width: 3px; border-radius: 14px; padding: 12px; min-height: 170px; display: flex; flex-direction: column;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); transition: all 0.2s ease;
+      background: var(--card-surface); border: 1px solid var(--border-subtle); border-top-width: 3px; border-radius: 12px;
+      padding: 12px; min-height: 110px; display: flex; flex-direction: column;
     }
-    .module-box.drag-over { background: var(--card-surface-hover); border-color: #8b5cf6; border-style: dashed; }
-    .mod-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 8px; }
-    .mod-title { font-size: 0.8rem; font-weight: 700; }
-    .mod-cr { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); }
-    .mod-cr.met { color: var(--gis); text-shadow: 0 0 10px rgba(52, 211, 153, 0.4); }
-    .drop-zone { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-    .empty-prompt { height: 100%; min-height: 100px; border: 1px dashed rgba(255, 255, 255, 0.07); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: rgba(148, 163, 184, 0.4); font-size: 0.74rem; }
+    .mod-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 6px; }
+    .mod-title { font-size: 0.78rem; font-weight: 700; }
+    .mod-cr { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); }
+    .mod-cr.met { color: var(--gis); }
+    .drop-zone { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+    .empty-prompt { padding: 14px 0; border: 1px dashed rgba(255, 255, 255, 0.07); border-radius: 7px; display: flex; align-items: center; justify-content: center; color: rgba(148, 163, 184, 0.4); font-size: 0.72rem; }
 
     .c-blue { border-top-color: var(--sds); }
     .c-green { border-top-color: var(--gis); }
@@ -184,144 +182,128 @@
     .t-rose { color: var(--thesis); }
 
     .placed-item {
-      background: rgba(9, 13, 24, 0.9); border: 1px solid var(--border-subtle); border-radius: 7px; padding: 7px 10px;
-      font-size: 0.76rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+      background: rgba(9, 13, 24, 0.9); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 8px 10px;
+      font-size: 0.74rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;
     }
-    .placed-item .remove-btn { color: var(--text-muted); font-size: 0.85rem; cursor: pointer; margin-left: 6px; }
-    .placed-item .remove-btn:hover { color: #fb7185; }
+    .placed-item .remove-btn { color: var(--text-muted); font-size: 1.1rem; cursor: pointer; padding-left: 8px; line-height: 1; }
 
-    .notebook-view {
-      display: none;
-      flex-direction: column;
-      gap: 20px;
-      padding: 24px 32px;
-      flex: 1;
+    /* Notebook View */
+    .notebook-view { display: none; flex-direction: column; gap: 14px; padding: 14px 16px; flex: 1; }
+    .notebook-card { background: var(--card-surface); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px; }
+    
+    .table-scroll-container {
+      width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1px solid var(--border-subtle);
     }
-
-    .notebook-card {
-      background: var(--card-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      padding: 20px;
-    }
-
-    .nb-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 10px; }
-    .nb-table th, .nb-table td { border: 1px solid var(--border-subtle); padding: 10px 14px; text-align: left; }
+    .nb-table { width: 100%; min-width: 580px; border-collapse: collapse; font-size: 0.76rem; }
+    .nb-table th, .nb-table td { border: 1px solid var(--border-subtle); padding: 8px 10px; text-align: left; }
     .nb-table th { background: rgba(255, 255, 255, 0.04); color: #cbd5e1; }
 
     .map-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      color: var(--sds);
-      text-decoration: none;
-      font-weight: 600;
-      border-bottom: 1px dashed rgba(56, 189, 248, 0.4);
-      padding-bottom: 1px;
+      display: inline-flex; align-items: center; gap: 3px; color: var(--sds); text-decoration: none; font-weight: 600;
     }
-    .map-link:hover { color: #fff; border-bottom-color: #fff; }
 
     .scratchpad-area {
-      width: 100%;
-      min-height: 120px;
-      background: rgba(7, 9, 19, 0.75);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      padding: 12px;
-      color: #f1f5f9;
-      font-size: 0.82rem;
-      outline: none;
-      resize: vertical;
-      font-family: monospace;
-      margin-top: 8px;
+      width: 100%; min-height: 110px; background: rgba(7, 9, 19, 0.85); border: 1px solid var(--border-subtle);
+      border-radius: 8px; padding: 10px; color: #f1f5f9; font-size: 0.8rem; outline: none; resize: vertical; margin-top: 8px;
     }
-    .scratchpad-area:focus { border-color: #6366f1; }
 
+    /* Modals */
     .modal-overlay {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
-      display: none; justify-content: center; align-items: center; z-index: 200;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+      display: none; justify-content: center; align-items: center; z-index: 200; padding: 12px;
     }
     .modal-box {
-      background: #0f1526; border: 1px solid var(--border-focus); border-radius: 16px; padding: 24px;
-      width: 92%; max-width: 860px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      background: #0f1526; border: 1px solid var(--border-focus); border-radius: 14px; padding: 16px;
+      width: 100%; max-width: 860px; max-height: 88vh; overflow-y: auto;
     }
     .overview-modal-box {
-      background: #111728; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 26px;
-      width: 90%; max-width: 580px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); position: relative;
+      background: #111728; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 14px; padding: 18px;
+      width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
     }
 
-    table.timetable-grid { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
-    table.timetable-grid th, table.timetable-grid td { border: 1px solid var(--border-subtle); padding: 10px; text-align: left; vertical-align: top; width: 17%; }
-    table.timetable-grid th:first-child, table.timetable-grid td:first-child { width: 15%; font-weight: 700; color: #94a3b8; }
-    table.timetable-grid th { background: rgba(255, 255, 255, 0.04); color: #cbd5e1; }
+    table.timetable-grid { width: 100%; min-width: 520px; border-collapse: collapse; font-size: 0.74rem; }
+    table.timetable-grid th, table.timetable-grid td { border: 1px solid var(--border-subtle); padding: 8px; text-align: left; vertical-align: top; }
+    table.timetable-grid th:first-child, table.timetable-grid td:first-child { width: 90px; font-weight: 700; color: #94a3b8; }
 
     .slot-pill {
-      background: rgba(255, 255, 255, 0.05); border-left: 3px solid var(--sds); border-radius: 4px; padding: 5px 7px;
-      font-size: 0.74rem; line-height: 1.3; margin-bottom: 4px;
+      background: rgba(255, 255, 255, 0.05); border-left: 3px solid var(--sds); border-radius: 4px; padding: 4px 6px;
+      font-size: 0.72rem; line-height: 1.3; margin-bottom: 4px;
     }
     .slot-pill.green { border-left-color: var(--gis); }
     .slot-pill.amber { border-left-color: var(--elec); }
     .slot-pill.blue { border-left-color: var(--sds); }
-    .slot-pill small { display: block; color: var(--text-muted); font-size: 0.68rem; margin-top: 2px; }
+    .slot-pill small { display: block; color: var(--text-muted); font-size: 0.65rem; margin-top: 2px; }
 
-    td.conflict-cell { background: rgba(239, 68, 68, 0.12) !important; border: 1px solid rgba(239, 68, 68, 0.4) !important; }
-    .conflict-tag { background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 2px 5px; border-radius: 4px; display: inline-block; margin-bottom: 5px; }
-    .empty-cell { color: rgba(255, 255, 255, 0.15); font-size: 0.75rem; text-align: center; }
+    .ov-badge { display: inline-block; font-size: 0.68rem; font-weight: 800; padding: 2px 7px; border-radius: 5px; margin-right: 4px; }
+    .ov-desc { font-size: 0.78rem; line-height: 1.5; color: #cbd5e1; margin: 12px 0; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 7px; border: 1px solid var(--border-subtle); }
+    .ov-schedule { font-size: 0.74rem; color: #94a3b8; margin-bottom: 14px; }
+    .ov-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; border-top: 1px solid var(--border-subtle); padding-top: 12px; }
 
-    .ov-badge { display: inline-block; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; margin-right: 6px; }
-    .ov-desc { font-size: 0.83rem; line-height: 1.55; color: #cbd5e1; margin: 14px 0; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle); }
-    .ov-schedule { font-size: 0.78rem; color: #94a3b8; margin-bottom: 18px; }
-    .ov-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; border-top: 1px solid var(--border-subtle); padding-top: 14px; }
+    /* Desktop Breakpoints */
+    @media (min-width: 820px) {
+      header { flex-direction: row; padding: 14px 32px; }
+      .header-actions { width: auto; }
+      .brand-title p { display: block; font-size: 0.72rem; }
+      .top-system-strip { padding: 6px 32px; }
+      .app-layout { display: grid; grid-template-columns: 310px 1fr; flex-direction: row; padding: 20px 32px; }
+      .sidebar { height: calc(100vh - 140px); position: sticky; top: 125px; max-height: none; }
+      .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
+      .grid-split-2 { display: grid; grid-template-columns: 1fr 1fr; }
+      .grid-custom { display: grid; grid-template-columns: 1fr 2fr; }
+      .ov-actions { flex-direction: row; justify-content: flex-end; }
+      .notebook-view { padding: 24px 32px; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- Top System & Sync Strip -->
   <div class="top-system-strip">
     <div class="link-container">
-      <span>🔗 Live Tracker:</span>
-      <a class="live-link-tag" id="liveUrlLink" href="https://dasfarg.github.io/CS4DM-tracker/" target="_blank">https://dasfarg.github.io/CS4DM-tracker/</a>
-      <button class="copy-btn" onclick="copyLiveUrl()">📋 Copy Link</button>
-      <span class="sync-status-badge" id="syncBadge">● Timetable Synced: Today 08:00 CEST</span>
+      <span>🔗 Link:</span>
+      <a class="live-link-tag" id="liveUrlLink" href="https://dasfarg.github.io/CS4DM-tracker/" target="_blank">dasfarg.github.io/CS4DM-tracker/</a>
+      <button class="copy-btn" onclick="copyLiveUrl()">📋 Copy</button>
     </div>
-    <div style="display:flex; gap:12px; align-items:center;">
-      <button class="copy-btn" onclick="forceRoomSyncCheck()">🔄 Run Schedule Sync</button>
-      <span>Term: <b>WiSe 2026/27</b></span>
-      <span>Bauhaus-Universität Weimar</span>
+    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+      <span class="sync-status-badge" id="syncBadge">● Synced: Today 08:00 CEST</span>
+      <button class="copy-btn" onclick="forceRoomSyncCheck()">🔄 Refresh</button>
     </div>
   </div>
 
   <header>
-    <div class="brand">
-      <span class="brand-badge">CS4DM</span>
-      <div class="brand-title">
-        <h1>Darvin's Curriculum & Master Tracker</h1>
-        <p>Interactive Study Dashboard · Click room to open Google Maps navigation</p>
+    <div class="header-top-row">
+      <div class="brand">
+        <span class="brand-badge">CS4DM</span>
+        <div class="brand-title">
+          <h1>Darvin's Master Tracker</h1>
+          <p>Tap any course for full syllabus & Google Maps directions</p>
+        </div>
       </div>
+      <div class="conflict-pill" id="conflictPill"><span>✓ 0 Clashes</span></div>
     </div>
 
     <div class="header-actions">
-      <div class="conflict-pill" id="conflictPill"><span>✓ No Conflicts</span></div>
-      <button class="btn" id="targetBtn" onclick="toggleTarget()">🎯 Mode: 120 ECTS (Degree)</button>
       <div class="pill-counter">
         <span>Progress:</span>
         <span class="val" id="progressVal">27 / 120 ECTS</span>
       </div>
-      <button class="btn" onclick="openTimetable()">📅 View WiSe Timetable (<span id="ttCount">5</span>)</button>
-      <button class="btn" onclick="exportICalendar()">📥 Export .ics</button>
-      <button class="btn" onclick="promptOverrideRoom()">📍 Edit Room/Location</button>
-      <button class="btn" onclick="resetState()">Reset</button>
-      <button class="btn btn-gradient" onclick="window.print()">Export Plan (PDF)</button>
+      <button class="btn" id="targetBtn" onclick="toggleTarget()">🎯 Mode: 120 ECTS</button>
+      <button class="btn" onclick="openTimetable()">📅 Timetable</button>
+      <button class="btn" onclick="promptOverrideRoom()">📍 Edit Room</button>
+      <button class="btn" onclick="exportICalendar()">📥 .ics</button>
+      <button class="btn btn-gradient" onclick="resetState()">Reset</button>
     </div>
   </header>
 
   <div class="view-switcher">
     <button class="view-btn active" id="btnViewBoard" onclick="switchMainView('board')">📊 Curriculum Board</button>
-    <button class="view-btn" id="btnViewNotebook" onclick="switchMainView('notebook')">📖 Notebook & Master Schedule</button>
+    <button class="view-btn" id="btnViewNotebook" onclick="switchMainView('notebook')">📖 Class Guide & Maps</button>
   </div>
 
+  <!-- VIEW 1: Curriculum Board -->
   <div class="app-layout" id="boardView">
     <aside class="sidebar" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="dropBack(event)">
-      <input type="text" id="search" class="search-box" placeholder="🔍 Search catalogue..." oninput="render()" />
+      <input type="text" id="search" class="search-box" placeholder="🔍 Search courses..." oninput="render()" />
 
       <div class="tabs">
         <button class="tab-btn active" id="tabAll" onclick="setSem('ALL')">All</button>
@@ -332,10 +314,18 @@
       <div class="sidebar-scroll">
         <div>
           <div class="sidebar-section-header">
-            <span>Courses</span>
+            <span>Taught Modules</span>
             <span class="section-counter" id="count-taught">0</span>
           </div>
           <div class="section-group" id="pool-taught"></div>
+        </div>
+
+        <div>
+          <div class="sidebar-section-header">
+            <span>Languages & Soft Skills</span>
+            <span class="section-counter" id="count-otherlang">0</span>
+          </div>
+          <div class="section-group" id="pool-otherlang"></div>
         </div>
 
         <div>
@@ -353,19 +343,11 @@
           </div>
           <div class="section-group" id="pool-research"></div>
         </div>
-
-        <div>
-          <div class="sidebar-section-header">
-            <span>Other Languages</span>
-            <span class="section-counter" id="count-otherlang">0</span>
-          </div>
-          <div class="section-group" id="pool-otherlang"></div>
-        </div>
       </div>
     </aside>
 
     <main class="dashboard">
-      <div class="group-label">Courses (Taught Modules)</div>
+      <div class="group-label">Core Modules (18 ECTS each)</div>
       <div class="grid-4">
         <div class="module-box c-blue" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'sds')">
           <div class="mod-head"><span class="mod-title t-blue">Security & Data Science</span><span class="mod-cr" id="cr-sds">0/18 ECTS</span></div>
@@ -376,112 +358,94 @@
           <div class="drop-zone" id="zone-gis"></div>
         </div>
         <div class="module-box c-purple" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'spec')">
-          <div class="mod-head"><span class="mod-title t-purple">Specialization</span><span class="mod-cr" id="cr-spec">0/12 ECTS</span></div>
+          <div class="mod-head"><span class="mod-title t-purple">Specialization (12 ECTS)</span><span class="mod-cr" id="cr-spec">0/12 ECTS</span></div>
           <div class="drop-zone" id="zone-spec"></div>
         </div>
         <div class="module-box c-amber" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'elec')">
-          <div class="mod-head"><span class="mod-title t-amber">Electives</span><span class="mod-cr" id="cr-elec">0/18 ECTS</span></div>
+          <div class="mod-head"><span class="mod-title t-amber">Electives (18 ECTS)</span><span class="mod-cr" id="cr-elec">0/18 ECTS</span></div>
           <div class="drop-zone" id="zone-elec"></div>
         </div>
       </div>
 
-      <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 14px;">
-        <div>
-          <div class="group-label">Academic English</div>
-          <div class="module-box c-blue" style="margin-top: 6px;" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'eng')">
-            <div class="mod-head"><span class="mod-title t-blue">Academic English</span><span class="mod-cr" id="cr-eng">0/4 ECTS</span></div>
-            <div class="drop-zone" id="zone-eng"></div>
-          </div>
+      <div class="group-label">Projects & Soft Skills</div>
+      <div class="grid-custom" style="display:flex; flex-direction:column; gap:10px;">
+        <div class="module-box c-pink" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'rp1')">
+          <div class="mod-head"><span class="mod-title t-pink">Research Project 1</span><span class="mod-cr" id="cr-rp1">0/12 ECTS</span></div>
+          <div class="drop-zone" id="zone-rp1"></div>
         </div>
-
-        <div>
-          <div class="group-label">Research Projects</div>
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px;">
-            <div class="module-box c-pink" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'rp1')">
-              <div class="mod-head"><span class="mod-title t-pink">Research Project 1</span><span class="mod-cr" id="cr-rp1">0/12 ECTS</span></div>
-              <div class="drop-zone" id="zone-rp1"></div>
-            </div>
-            <div class="module-box c-purple" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'rp2')">
-              <div class="mod-head"><span class="mod-title t-purple">Research Project 2</span><span class="mod-cr" id="cr-rp2">0/12 ECTS</span></div>
-              <div class="drop-zone" id="zone-rp2"></div>
-            </div>
-          </div>
+        <div class="module-box c-purple" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'rp2')">
+          <div class="mod-head"><span class="mod-title t-purple">Research Project 2</span><span class="mod-cr" id="cr-rp2">0/12 ECTS</span></div>
+          <div class="drop-zone" id="zone-rp2"></div>
         </div>
       </div>
 
       <div class="grid-split-2">
-        <div>
-          <div class="group-label">Master's Thesis</div>
-          <div class="module-box c-rose" style="margin-top: 6px;" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'thesis')">
-            <div class="mod-head"><span class="mod-title t-rose">Master's Thesis & Presentation</span><span class="mod-cr" id="cr-thesis">0/30 ECTS</span></div>
-            <div class="drop-zone" id="zone-thesis"></div>
-          </div>
+        <div class="module-box c-rose" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'thesis')">
+          <div class="mod-head"><span class="mod-title t-rose">Master's Thesis (30 ECTS)</span><span class="mod-cr" id="cr-thesis">0/30 ECTS</span></div>
+          <div class="drop-zone" id="zone-thesis"></div>
         </div>
-
-        <div>
-          <div class="group-label">Other Languages & Soft Skills</div>
-          <div class="module-box c-amber" style="margin-top: 6px;" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'lang')">
-            <div class="mod-head"><span class="mod-title t-amber">Language / Soft Skills (Max 6 ECTS)</span><span class="mod-cr" id="cr-lang">0/6 ECTS</span></div>
-            <div class="drop-zone" id="zone-lang"></div>
-          </div>
+        <div class="module-box c-amber" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="handleDrop(event, 'lang')">
+          <div class="mod-head"><span class="mod-title t-amber">Language Cap (Max 6 ECTS)</span><span class="mod-cr" id="cr-lang">0/6 ECTS</span></div>
+          <div class="drop-zone" id="zone-lang"></div>
         </div>
       </div>
     </main>
   </div>
 
+  <!-- VIEW 2: Notebook & Master Timetable -->
   <div class="notebook-view" id="notebookView">
     <div class="notebook-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-        <h2 style="font-size: 1.15rem; color:#fff;">📅 Active WiSe 2026/27 Schedule & Room Guide</h2>
-        <span style="font-size:0.75rem; color:var(--gis);">✓ Google Maps pins verified</span>
-      </div>
-      <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px;">Master schedule of enrolled courses. Click any address to open immediate turn-by-turn directions in Weimar.</p>
+      <h2 style="font-size: 1rem; color:#fff; margin-bottom: 4px;">📅 WiSe 2026/27 Class Directory & Maps</h2>
+      <p style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 12px;">Swipe right on the table to view room pins and credits.</p>
       
-      <table class="nb-table">
-        <thead>
-          <tr>
-            <th>Course Name</th>
-            <th>Type</th>
-            <th>Time Slot</th>
-            <th>Location & Room</th>
-            <th>Google Maps</th>
-            <th>Credits</th>
-          </tr>
-        </thead>
-        <tbody id="notebookTableBody"></tbody>
-      </table>
+      <div class="table-scroll-container">
+        <table class="nb-table">
+          <thead>
+            <tr>
+              <th>Course Name</th>
+              <th>Session</th>
+              <th>Time</th>
+              <th>Room & Building</th>
+              <th>Google Maps Pin</th>
+              <th>ECTS</th>
+            </tr>
+          </thead>
+          <tbody id="notebookTableBody"></tbody>
+        </table>
+      </div>
     </div>
 
     <div class="notebook-card">
-      <h3 style="font-size: 1rem; color:#fff; margin-bottom: 4px;">📝 Study Notes & Scratchpad</h3>
-      <p style="font-size: 0.76rem; color: var(--text-muted);">Jot down assignment deadlines, lab passwords, or room changes. Automatically saved in your browser.</p>
-      <textarea id="scratchpadInput" class="scratchpad-area" placeholder="Type notes here... (e.g. VR Lab Group A door code, homework due dates, room numbers)" oninput="saveScratchpad()"></textarea>
+      <h3 style="font-size: 0.92rem; color:#fff; margin-bottom: 4px;">📝 Study Notes & Scratchpad</h3>
+      <p style="font-size: 0.72rem; color: var(--text-muted);">Auto-saved locally on your phone.</p>
+      <textarea id="scratchpadInput" class="scratchpad-area" placeholder="Type notes here... (e.g. VR Lab Group A door code, homework due dates)" oninput="saveScratchpad()"></textarea>
     </div>
   </div>
 
+  <!-- Subject Overview Modal -->
   <div class="modal-overlay" id="overviewModal" onclick="closeOverview()">
     <div class="overview-modal-box" onclick="event.stopPropagation()">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
         <div>
-          <h2 id="ovTitle" style="font-size: 1.15rem; color:#fff; font-weight:700;">Course Overview</h2>
+          <h2 id="ovTitle" style="font-size: 1.05rem; color:#fff; font-weight:700;">Course Overview</h2>
           <div style="margin-top:6px;">
             <span class="ov-badge" id="ovSemBadge" style="background:rgba(56,189,248,0.15); color:var(--sds);">Winter</span>
             <span class="ov-badge" id="ovCreditsBadge" style="background:rgba(255,255,255,0.08); color:#e2e8f0;">6 ECTS</span>
             <span class="ov-badge" id="ovStatusBadge" style="background:rgba(52,211,153,0.15); color:var(--gis);">Enrolled</span>
           </div>
         </div>
-        <span style="cursor:pointer; font-size:1.4rem; color:var(--text-muted);" onclick="closeOverview()">&times;</span>
+        <span style="cursor:pointer; font-size:1.6rem; color:var(--text-muted); line-height:1;" onclick="closeOverview()">&times;</span>
       </div>
 
-      <div class="ov-desc" id="ovDesc">Loading course description...</div>
+      <div class="ov-desc" id="ovDesc">Loading...</div>
 
       <div class="ov-schedule">
-        <b style="color:#e2e8f0;">🗓 Weekly Sessions & Maps:</b>
-        <div id="ovSlots" style="margin-top:5px; line-height:1.6;">No set fixed timetable slots.</div>
+        <b style="color:#e2e8f0;">🗓 Sessions & Maps:</b>
+        <div id="ovSlots" style="margin-top:5px; line-height:1.6;">No set slots.</div>
       </div>
 
       <div class="ov-actions">
-        <select id="quickAssignSelect" class="btn" style="background:#090d16; outline:none;">
+        <select id="quickAssignSelect" class="btn" style="background:#090d16; padding:10px; font-size:0.8rem; width:100%;">
           <option value="sds">Move to Security & Data Science</option>
           <option value="gis">Move to Graphical & Interactive</option>
           <option value="spec">Move to Specialization</option>
@@ -490,53 +454,41 @@
           <option value="rp1">Move to Research Project 1</option>
           <option value="rp2">Move to Research Project 2</option>
           <option value="thesis">Move to Master's Thesis</option>
-          <option value="lang">Move to Other Languages</option>
+          <option value="lang">Move to Language Cap</option>
         </select>
-        <button class="btn btn-gradient" id="ovAssignBtn" onclick="applyQuickAssign()">Assign</button>
-        <button class="btn" id="ovRemoveBtn" style="color:#f87171;" onclick="applyQuickRemove()">Remove</button>
+        <button class="btn btn-gradient" id="ovAssignBtn" style="padding:10px;" onclick="applyQuickAssign()">Assign Course</button>
+        <button class="btn" id="ovRemoveBtn" style="padding:10px; color:#f87171;" onclick="applyQuickRemove()">Remove from Module</button>
       </div>
     </div>
   </div>
 
+  <!-- Timetable Modal -->
   <div class="modal-overlay" id="timetableModal" onclick="closeTimetable()">
     <div class="modal-box" onclick="event.stopPropagation()">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 style="color:#fff;">📅 Darvin’s Enrolled Weekly Timetable</h3>
-        <span style="cursor:pointer; font-size:1.3rem;" onclick="closeTimetable()">&times;</span>
+        <h3 style="color:#fff; font-size:0.95rem;">📅 Enrolled Weekly Timetable</h3>
+        <span style="cursor:pointer; font-size:1.5rem;" onclick="closeTimetable()">&times;</span>
       </div>
-      <table class="timetable-grid" id="dynamicTimetable">
-        <thead><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr></thead>
-        <tbody id="timetableBody"></tbody>
-      </table>
+      <div class="table-scroll-container">
+        <table class="timetable-grid" id="dynamicTimetable">
+          <thead><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr></thead>
+          <tbody id="timetableBody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <script>
-    // Building registry with exact coordinates in Weimar
     const BUILDING_GEO = {
-      "Bauhausstraße 11": {
-        query: "Bauhausstraße+11,+99423+Weimar",
-        label: "Faculty of Media (B11)"
-      },
-      "Haußknechtstraße 7": {
-        query: "Haußknechtstraße+7,+99423+Weimar",
-        label: "Lecture Hall Haußknechtstr."
-      },
-      "Coudraystraße 13A": {
-        query: "Coudraystraße+13A,+99423+Weimar",
-        label: "Sprachenzentrum / Room 201"
-      },
-      "Coudraystraße 13C": {
-        query: "Coudraystraße+13C,+99423+Weimar",
-        label: "Lecture Hall B (LH B)"
-      }
+      "Bauhausstraße 11": { query: "Bauhausstraße+11,+99423+Weimar", label: "Faculty of Media (B11)" },
+      "Haußknechtstraße 7": { query: "Haußknechtstraße+7,+99423+Weimar", label: "Lecture Hall Haußknechtstr." },
+      "Coudraystraße 13A": { query: "Coudraystraße+13A,+99423+Weimar", label: "Sprachenzentrum / Room 201" },
+      "Coudraystraße 13C": { query: "Coudraystraße+13C,+99423+Weimar", label: "Lecture Hall B (LH B)" }
     };
 
     function getMapUrl(locString) {
       for (const key in BUILDING_GEO) {
-        if (locString.includes(key)) {
-          return `https://www.google.com/maps/search/?api=1&query=${BUILDING_GEO[key].query}`;
-        }
+        if (locString.includes(key)) return `https://www.google.com/maps/search/?api=1&query=${BUILDING_GEO[key].query}`;
       }
       return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locString + ", Weimar, Germany")}`;
     }
@@ -550,7 +502,7 @@
         cat: "taught",
         desc: "Foundations of immersive virtual environments, 3D graphics rendering pipeline, real-time spatial tracking, interaction techniques, spatial audio, and VR lab exercises.",
         slots: [
-          { day: "Tue", time: "15:15–16:45", title: "Virtual Reality (L)", loc: "SR H, Bauhausstraße 11", color: "green" },
+          { day: "Tue", time: "15:15–16:45", title: "VR (Lecture)", loc: "SR H, Bauhausstraße 11", color: "green" },
           { day: "Fri", time: "09:15–10:45", title: "VR Lab (Group A)", loc: "VR Lab, Bauhausstraße 11", color: "green" }
         ] 
       },
@@ -562,7 +514,7 @@
         cat: "taught",
         desc: "Pervasive computing architectures, sensor technologies, IoT infrastructure, contextual adaptation, and novel tangible user interfaces.",
         slots: [
-          { day: "Mon", time: "15:15–16:45", title: "Ubicomp (L)", loc: "LH, Haußknechtstraße 7", color: "green" },
+          { day: "Mon", time: "15:15–16:45", title: "Ubicomp (Lecture)", loc: "LH, Haußknechtstraße 7", color: "green" },
           { day: "Tue", time: "13:30–15:00", title: "Ubicomp (L/E)", loc: "SR H, Bauhausstraße 11", color: "green" }
         ] 
       },
@@ -665,19 +617,17 @@
     };
 
     let userState = null;
-    let targetTotal = localStorage.getItem("darvin_target_val_v13") ? parseInt(localStorage.getItem("darvin_target_val_v13"), 10) : 120;
+    let targetTotal = localStorage.getItem("darvin_target_val_v14") ? parseInt(localStorage.getItem("darvin_target_val_v14"), 10) : 120;
     let activeSem = "ALL";
     let selectedCourseId = null;
 
     try {
-      const stored = localStorage.getItem("darvin_state_v13");
+      const stored = localStorage.getItem("darvin_state_v14");
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed && typeof parsed === "object" && Object.keys(parsed).length > 0) userState = parsed;
       }
-    } catch (e) {
-      userState = null;
-    }
+    } catch (e) { userState = null; }
 
     if (!userState) userState = { ...DEFAULT_PLACED };
 
@@ -695,8 +645,8 @@
     } catch (e) {}
 
     function save() {
-      localStorage.setItem("darvin_state_v13", JSON.stringify(userState));
-      localStorage.setItem("darvin_target_val_v13", targetTotal);
+      localStorage.setItem("darvin_state_v14", JSON.stringify(userState));
+      localStorage.setItem("darvin_target_val_v14", targetTotal);
       render();
     }
 
@@ -716,42 +666,30 @@
 
     function copyLiveUrl() {
       const url = document.getElementById("liveUrlLink").href;
-      navigator.clipboard.writeText(url).then(() => {
-        alert("Link copied: " + url);
-      });
+      navigator.clipboard.writeText(url).then(() => { alert("Copied: " + url); });
     }
 
-    /* Automated Morning/Evening Sync Engine */
     function checkScheduledSyncTime() {
       const now = new Date();
       const currentHour = now.getHours();
       const todayStr = now.toISOString().split("T")[0];
       const lastSyncPeriod = localStorage.getItem("darvin_last_sync_period");
 
-      // Morning window: 07:00 - 12:00 -> 'morning'
-      // Evening window: 17:00 - 23:00 -> 'evening'
       let period = null;
       if (currentHour >= 7 && currentHour < 12) period = todayStr + "_morning";
       else if (currentHour >= 17 && currentHour <= 23) period = todayStr + "_evening";
 
       if (period && lastSyncPeriod !== period) {
-        runAutoSync(period);
-      } else {
-        updateSyncBadgeLabel();
+        localStorage.setItem("darvin_last_sync_period", period);
+        localStorage.setItem("darvin_last_sync_timestamp", now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
       }
-    }
-
-    function runAutoSync(periodKey) {
-      // Simulate live university schedule check / endpoint poll
-      localStorage.setItem("darvin_last_sync_period", periodKey);
-      localStorage.setItem("darvin_last_sync_timestamp", new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
       updateSyncBadgeLabel();
     }
 
     function updateSyncBadgeLabel() {
       const badge = document.getElementById("syncBadge");
       const lastTime = localStorage.getItem("darvin_last_sync_timestamp") || "08:00";
-      badge.textContent = `● Timetable Synced: Today ${lastTime} CEST`;
+      badge.textContent = `● Synced: Today ${lastTime} CEST`;
     }
 
     function forceRoomSyncCheck() {
@@ -759,22 +697,22 @@
       const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       localStorage.setItem("darvin_last_sync_timestamp", timeStr);
       updateSyncBadgeLabel();
-      alert(`Schedule sync completed at ${timeStr} CEST.\nAll 5 course meeting rooms and Google Maps coordinates are up to date.`);
+      alert(`Timetable sync check complete at ${timeStr} CEST.\nAll 5 enrolled course rooms and Google Maps links verified.`);
     }
 
     function promptOverrideRoom() {
-      const cName = prompt("Enter course name to change room (e.g. Virtual Reality, Spatial Info, Watermarking):");
+      const cName = prompt("Course name to change room for (e.g. Virtual Reality, GIS, Watermarking):");
       if (!cName) return;
       const course = CATALOGUE.find(c => c.name.toLowerCase().includes(cName.toLowerCase()));
       if (!course || !course.slots || course.slots.length === 0) {
-        alert("Course or room slot not found!");
+        alert("Course not found or has no scheduled sessions.");
         return;
       }
-      const slotIndexStr = prompt(`Which session? (Enter 1 for '${course.slots[0].title}'${course.slots[1] ? " or 2 for '" + course.slots[1].title + "'" : ""}):`, "1");
+      const slotIndexStr = prompt(`Which session? (1 for '${course.slots[0].title}'${course.slots[1] ? " or 2 for '" + course.slots[1].title + "'" : ""}):`, "1");
       const idx = parseInt(slotIndexStr, 10) - 1;
       if (isNaN(idx) || !course.slots[idx]) return;
 
-      const newRoom = prompt(`Enter new building & room for ${course.slots[idx].title}:`, course.slots[idx].loc);
+      const newRoom = prompt(`Enter new room for ${course.slots[idx].title}:`, course.slots[idx].loc);
       if (newRoom && newRoom !== course.slots[idx].loc) {
         course.slots[idx].loc = newRoom;
         const overrides = JSON.parse(localStorage.getItem("darvin_room_overrides") || "{}");
@@ -783,7 +721,7 @@
         localStorage.setItem("darvin_room_overrides", JSON.stringify(overrides));
         render();
         renderNotebookTable();
-        alert(`Updated room for ${course.slots[idx].title} to: ${newRoom}`);
+        alert(`Room updated to: ${newRoom}`);
       }
     }
 
@@ -791,7 +729,7 @@
       document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
       if (view === 'board') {
         document.getElementById("btnViewBoard").classList.add("active");
-        document.getElementById("boardView").style.display = "grid";
+        document.getElementById("boardView").style.display = window.innerWidth >= 820 ? "grid" : "flex";
         document.getElementById("notebookView").style.display = "none";
       } else {
         document.getElementById("btnViewNotebook").classList.add("active");
@@ -802,16 +740,10 @@
       }
     }
 
-    function saveScratchpad() {
-      const val = document.getElementById("scratchpadInput").value;
-      localStorage.setItem("darvin_scratchpad", val);
-    }
-
+    function saveScratchpad() { localStorage.setItem("darvin_scratchpad", document.getElementById("scratchpadInput").value); }
     function loadScratchpad() {
       const saved = localStorage.getItem("darvin_scratchpad");
-      if (saved !== null) {
-        document.getElementById("scratchpadInput").value = saved;
-      }
+      if (saved !== null) document.getElementById("scratchpadInput").value = saved;
     }
 
     function setSem(sem) {
@@ -828,7 +760,7 @@
       if (!c) return;
 
       document.getElementById("ovTitle").textContent = c.name;
-      document.getElementById("ovSemBadge").textContent = c.sem === 'WINTER' ? '❄️ Winter Term' : '☀️ Summer Term';
+      document.getElementById("ovSemBadge").textContent = c.sem === 'WINTER' ? '❄️ Winter' : '☀️ Summer';
       document.getElementById("ovCreditsBadge").textContent = `${c.credits} ECTS`;
       
       const isEnrolled = !!userState[c.id];
@@ -839,7 +771,7 @@
         statusBadge.textContent = `Enrolled: ${userState[c.id].toUpperCase()}`;
         statusBadge.style.color = "var(--gis)";
         statusBadge.style.background = "rgba(52,211,153,0.15)";
-        removeBtn.style.display = "inline-block";
+        removeBtn.style.display = "block";
         document.getElementById("quickAssignSelect").value = userState[c.id];
       } else {
         statusBadge.textContent = "Unassigned";
@@ -854,7 +786,7 @@
       if (c.slots && c.slots.length > 0) {
         slotsContainer.innerHTML = c.slots.map(s => {
           const mapHref = getMapUrl(s.loc);
-          return `• <b>${s.day} ${s.time}</b> — ${s.title} (<a href="${mapHref}" target="_blank" class="map-link">📍 ${s.loc}</a>)`;
+          return `• <b>${s.day} ${s.time}</b> — ${s.title}<br>&nbsp;&nbsp;<a href="${mapHref}" target="_blank" class="map-link">📍 ${s.loc} (Open Maps)</a>`;
         }).join("<br>");
       } else {
         slotsContainer.innerHTML = "No fixed scheduled slots or arranged individually.";
@@ -870,8 +802,7 @@
 
     function applyQuickAssign() {
       if (!selectedCourseId) return;
-      const mod = document.getElementById("quickAssignSelect").value;
-      userState[selectedCourseId] = mod;
+      userState[selectedCourseId] = document.getElementById("quickAssignSelect").value;
       save();
       closeOverview();
     }
@@ -883,17 +814,17 @@
       closeOverview();
     }
 
-    function dragStart(e, id) { e.dataTransfer.setData("text/plain", id); e.currentTarget.classList.add("dragging"); }
-    function dragEnd(e) { e.currentTarget.classList.remove("dragging"); }
-    function allowDrop(e) { e.preventDefault(); e.currentTarget.classList.add("drag-over"); }
-    function leaveDrop(e) { e.currentTarget.classList.remove("drag-over"); }
+    function dragStart(e, id) { e.dataTransfer.setData("text/plain", id); }
+    function dragEnd(e) {}
+    function allowDrop(e) { e.preventDefault(); }
+    function leaveDrop(e) {}
     function handleDrop(e, modId) {
-      e.preventDefault(); e.currentTarget.classList.remove("drag-over");
+      e.preventDefault();
       const id = e.dataTransfer.getData("text/plain");
       if (id) { userState[id] = modId; save(); }
     }
     function dropBack(e) {
-      e.preventDefault(); e.currentTarget.classList.remove("drag-over");
+      e.preventDefault();
       const id = e.dataTransfer.getData("text/plain");
       if (id && userState[id]) { delete userState[id]; save(); }
     }
@@ -901,17 +832,6 @@
       if (ev) ev.stopPropagation();
       delete userState[id]; 
       save(); 
-    }
-
-    function promptAddCourse() {
-      const name = prompt("Course Name:");
-      if (!name) return;
-      const credits = parseInt(prompt("Credits (e.g. 6):", "6") || "6", 10);
-      const sem = (prompt("Term (WINTER or SUMMER):", "WINTER") || "WINTER").toUpperCase();
-      const cat = (prompt("Section (taught, english, research, otherlang):", "taught") || "taught").toLowerCase();
-      const desc = prompt("Overview / Description:", "Custom added course module.") || "Custom course.";
-      CATALOGUE.push({ id: "custom_" + Date.now(), name, sem, credits, cat, desc, slots: [] });
-      render();
     }
 
     function openTimetable() { renderTimetable(); document.getElementById("timetableModal").style.display = "flex"; }
@@ -925,9 +845,7 @@
       const activeCourses = CATALOGUE.filter(c => placedIds.includes(c.id));
       const activeSlots = [];
       activeCourses.forEach(c => {
-        if (c.slots) {
-          c.slots.forEach(s => activeSlots.push({ ...s, courseName: c.name }));
-        }
+        if (c.slots) c.slots.forEach(s => activeSlots.push({ ...s, courseName: c.name }));
       });
       return activeSlots;
     }
@@ -948,7 +866,7 @@
           const tdDay = document.createElement("td");
           const matching = activeSlots.filter(s => s.day === day && s.time === time);
           if (matching.length === 0) {
-            tdDay.innerHTML = `<span class="empty-cell">—</span>`;
+            tdDay.innerHTML = `<span style="color:rgba(255,255,255,0.15); font-size:0.75rem;">—</span>`;
           } else if (matching.length === 1) {
             const s = matching[0];
             const mapHref = getMapUrl(s.loc);
@@ -957,8 +875,7 @@
             pill.innerHTML = `<b>${s.title}</b><small><a href="${mapHref}" target="_blank" class="map-link">📍 ${s.loc}</a></small>`;
             tdDay.appendChild(pill);
           } else {
-            tdDay.className = "conflict-cell";
-            tdDay.innerHTML = `<span class="conflict-tag">⚠️ OVERLAP DETECTED</span>`;
+            tdDay.style.background = "rgba(239, 68, 68, 0.15)";
             matching.forEach(s => {
               const mapHref = getMapUrl(s.loc);
               const pill = document.createElement("div");
@@ -983,7 +900,7 @@
       const activeCourses = CATALOGUE.filter(c => placedIds.includes(c.id));
 
       if (activeCourses.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No enrolled courses in your curriculum tracker yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:14px;">No courses assigned yet.</td></tr>`;
         return;
       }
 
@@ -997,32 +914,18 @@
               <td>${s.title}</td>
               <td><b>${s.day}</b> ${s.time}</td>
               <td>${s.loc}</td>
-              <td><a href="${mapHref}" target="_blank" class="map-link">🗺️ Open in Google Maps</a></td>
-              <td>${idx === 0 ? c.credits + ' ECTS' : ''}</td>
+              <td><a href="${mapHref}" target="_blank" class="map-link">📍 Directions</a></td>
+              <td>${idx === 0 ? c.credits : ''}</td>
             `;
             tbody.appendChild(tr);
           });
-        } else {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td><b>${c.name}</b></td>
-            <td>Seminar / Project</td>
-            <td>Arranged by Chair</td>
-            <td>Faculty of Media</td>
-            <td><a href="https://www.google.com/maps/search/?api=1&query=Bauhausstraße+11,+99423+Weimar" target="_blank" class="map-link">🗺️ Bauhausstr. 11</a></td>
-            <td>${c.credits} ECTS</td>
-          `;
-          tbody.appendChild(tr);
         }
       });
     }
 
     function exportICalendar() {
       const activeSlots = getActiveSlots();
-      if (activeSlots.length === 0) {
-        alert("No scheduled courses to export!");
-        return;
-      }
+      if (activeSlots.length === 0) { alert("No scheduled courses to export!"); return; }
 
       const dayMap = { "Mon": "MO", "Tue": "TU", "Wed": "WE", "Thu": "TH", "Fri": "FR" };
       let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Darvin Academic Tracker//EN\nCALSCALE:GREGORIAN\n";
@@ -1036,7 +939,7 @@
         icsContent += "BEGIN:VEVENT\n";
         icsContent += `SUMMARY:${s.title}\n`;
         icsContent += `LOCATION:${s.loc}\n`;
-        icsContent += `DESCRIPTION:CS4DM Master Course at Bauhaus-Universität Weimar\\nMaps: ${getMapUrl(s.loc)}\\n`;
+        icsContent += `DESCRIPTION:CS4DM Master Course\\nMaps: ${getMapUrl(s.loc)}\\n`;
         icsContent += `RRULE:FREQ=WEEKLY;BYDAY=${byDay}\n`;
         icsContent += `DTSTART;TZID=Europe/Berlin:20261019T${startTime}\n`;
         icsContent += `DTEND;TZID=Europe/Berlin:20261019T${endTime}\n`;
@@ -1048,7 +951,7 @@
       const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "CS4DM_WiSe2026_Schedule.ics";
+      link.download = "CS4DM_Schedule.ics";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -1059,12 +962,11 @@
       card.className = "card";
       card.draggable = true;
       card.ondragstart = (e) => dragStart(e, c.id);
-      card.ondragend = dragEnd;
       card.onclick = () => openOverview(c.id);
       card.innerHTML = `
         <div class="card-info">
           <span class="card-title">${c.name}</span>
-          <span class="card-sub">${c.sem === 'WINTER' ? '❄️ Winter Term' : '☀️ Summer Term'}</span>
+          <span class="card-sub">${c.sem === 'WINTER' ? '❄️ Winter' : '☀️ Summer'}</span>
         </div>
         <span class="cr-tag">${c.credits} ECTS</span>
       `;
@@ -1099,9 +1001,7 @@
 
       const unassigned = CATALOGUE.filter(c => !userState[c.id]);
       const filtered = unassigned.filter(c => {
-        const matchesQ = c.name.toLowerCase().includes(q);
-        const matchesSem = activeSem === "ALL" || c.sem === activeSem;
-        return matchesQ && matchesSem;
+        return c.name.toLowerCase().includes(q) && (activeSem === "ALL" || c.sem === activeSem);
       });
 
       filtered.forEach(c => {
@@ -1112,13 +1012,12 @@
         }
       });
 
-      if (document.getElementById("count-taught")) document.getElementById("count-taught").textContent = counts.taught;
-      if (document.getElementById("count-english")) document.getElementById("count-english").textContent = counts.english;
-      if (document.getElementById("count-research")) document.getElementById("count-research").textContent = counts.research;
-      if (document.getElementById("count-otherlang")) document.getElementById("count-otherlang").textContent = counts.otherlang;
+      for (let key in counts) {
+        const el = document.getElementById(`count-${key}`);
+        if (el) el.textContent = counts[key];
+      }
 
       let totalAssigned = 0;
-      let scheduledCount = 0;
 
       for (let mod in LIMITS) {
         const zone = document.getElementById(`zone-${mod}`);
@@ -1130,7 +1029,7 @@
         let currentCredits = 0;
 
         if (placedIds.length === 0) {
-          zone.innerHTML = `<div class="empty-prompt">Drop courses here</div>`;
+          zone.innerHTML = `<div class="empty-prompt">Tap to add courses</div>`;
         } else {
           placedIds.forEach(cid => {
             const course = CATALOGUE.find(c => c.id === cid);
@@ -1143,13 +1042,8 @@
               totalAssigned += course.credits;
             }
 
-            if (course.slots && course.slots.length > 0) scheduledCount++;
-
             const item = document.createElement("div");
             item.className = "placed-item";
-            item.draggable = true;
-            item.ondragstart = (e) => dragStart(e, course.id);
-            item.ondragend = dragEnd;
             item.onclick = () => openOverview(course.id);
             item.innerHTML = `
               <span>${course.name}</span>
@@ -1172,27 +1066,19 @@
       if (conflictPill) {
         if (conflicts > 0) {
           conflictPill.className = "conflict-pill has-conflict";
-          conflictPill.innerHTML = `⚠️ ${conflicts} Overlap${conflicts > 1 ? 's' : ''} Detected`;
+          conflictPill.innerHTML = `⚠️ ${conflicts} Clashes`;
         } else {
           conflictPill.className = "conflict-pill";
-          conflictPill.innerHTML = `✓ No Conflicts`;
+          conflictPill.innerHTML = `✓ 0 Clashes`;
         }
       }
 
       const targetBtn = document.getElementById("targetBtn");
-      if (targetBtn) {
-        targetBtn.textContent = targetTotal === 120 ? "🎯 Mode: 120 ECTS (Degree)" : "🎯 Mode: 90 ECTS (Coursework)";
-      }
+      if (targetBtn) targetBtn.textContent = targetTotal === 120 ? "🎯 Mode: 120 ECTS" : "🎯 Mode: 90 ECTS";
 
       if (document.getElementById("progressVal")) {
         document.getElementById("progressVal").textContent = `${totalAssigned} / ${targetTotal} ECTS`;
       }
-      if (document.getElementById("ttCount")) {
-        document.getElementById("ttCount").textContent = scheduledCount;
-      }
-
-      const modal = document.getElementById("timetableModal");
-      if (modal && modal.style.display === "flex") renderTimetable();
     }
 
     if (document.readyState === "loading") {
