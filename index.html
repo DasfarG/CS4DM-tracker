@@ -503,7 +503,9 @@
       "Bauhausstraße 11": { query: "Bauhausstraße+11,+99423+Weimar", label: "Faculty of Media (B11)" },
       "Haußknechtstraße 7": { query: "Haußknechtstraße+7,+99423+Weimar", label: "Lecture Hall Haußknechtstr." },
       "Coudraystraße 13A": { query: "Coudraystraße+13A,+99423+Weimar", label: "Sprachenzentrum / Room 201" },
-      "Coudraystraße 13C": { query: "Coudraystraße+13C,+99423+Weimar", label: "Lecture Hall B (LH B)" }
+      "Coudraystraße 13C": { query: "Coudraystraße+13C,+99423+Weimar", label: "Lecture Hall B (LH B)" },
+      "Steubenstraße 6": { query: "Steubenstraße+6,+99423+Weimar", label: "Maurice-Halbwachs-Auditorium (MHA)" },
+      "Marienstraße 13": { query: "Marienstraße+13,+99423+Weimar", label: "Lecture Halls B/C/D" }
     };
 
     function getMapUrl(locString) {
@@ -591,15 +593,109 @@
         desc: "Supervised and unsupervised learning algorithms, regularized linear models, decision trees, support vector machines, clustering, and neural networks.",
         slots: [{ day: "Wed", time: "11:00–12:30", title: "Intro to ML (L)", loc: "LH A, Haußknechtstraße 7", color: "blue" }] 
       },
-      { id: "c3", name: "Discrete Optimization", sem: "WINTER", credits: 6, cat: "taught", desc: "Linear programming, polyhedral combinatorics, network flow optimization, and approximation algorithms.", slots: [] },
-      { id: "c4", name: "Advanced Cryptography: Secure Channels", sem: "WINTER", credits: 6, cat: "taught", desc: "Authenticated key exchange, formal cryptographic security proofs, TLS architecture, and provable security.", slots: [] },
-      { id: "c6", name: "Photogrammetric Computer Vision", sem: "WINTER", credits: 6, cat: "taught", desc: "Epipolar geometry, bundle adjustment, multi-view stereo, and 3D dense scene reconstruction.", slots: [] },
-      { id: "c7", name: "Deep Learning for Computer Vision", sem: "WINTER", credits: 6, cat: "taught", desc: "Deep neural networks, CNNs, vision transformers, semantic segmentation, and generative models.", slots: [] },
-      { id: "c8", name: "Security Engineering", sem: "WINTER", credits: 6, cat: "taught", desc: "Threat modeling, secure software design principles, authentication protocols, and system defenses.", slots: [] },
-      { id: "c9", name: "Formal Methods of Software Engineering", sem: "WINTER", credits: 6, cat: "taught", desc: "Rigorous formal verification, model checking, and logic-based correctness proofs for critical software.", slots: [] },
-      { id: "c10", name: "Computational Social Science", sem: "WINTER", credits: 6, cat: "taught", desc: "Large-scale human behavior modeling, graph algorithms, and social network analysis.", slots: [] },
-      { id: "c13", name: "Online Computation", sem: "WINTER", credits: 6, cat: "taught", desc: "Competitive analysis and algorithm design for real-time problems with incomplete future input information.", slots: [] },
-      { id: "c14", name: "HCI Theory and Research Methods", sem: "WINTER", credits: 6, cat: "taught", desc: "Quantitative and qualitative research design, statistical hypothesis testing, and user testing in HCI.", slots: [] },
+      { 
+        id: "c3", 
+        name: "Discrete Optimization", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught", 
+        desc: "Linear programming, polyhedral combinatorics, network flow optimization, and approximation algorithms.", 
+        slots: [
+          { day: "Tue", time: "09:15–10:45", title: "Discrete Opt (L)", loc: "LH A, Haußknechtstraße 7", color: "blue" },
+          { day: "Wed", time: "13:30–15:00", title: "Discrete Opt (E)", loc: "SR 013, Bauhausstraße 11", color: "blue" }
+        ] 
+      },
+      { 
+        id: "c4", 
+        name: "Advanced Cryptography: Secure Channels", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught", 
+        desc: "Authenticated key exchange, formal cryptographic security proofs, TLS architecture, and provable security.", 
+        slots: [
+          { day: "Mon", time: "13:30–15:00", title: "Adv Crypto (L)", loc: "SR 013, Bauhausstraße 11", color: "blue" },
+          { day: "Thu", time: "17:00–18:30", title: "Adv Crypto (E)", loc: "SR 013, Bauhausstraße 11", color: "blue" }
+        ] 
+      },
+      { 
+        id: "c6", 
+        name: "Photogrammetric Computer Vision", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught", 
+        desc: "Epipolar geometry, bundle adjustment, multi-view stereo, and 3D dense scene reconstruction.", 
+        slots: [
+          { day: "Thu", time: "13:30–15:00", title: "PCV (Lecture)", loc: "LH B, Coudraystraße 13C", color: "green" },
+          { day: "Fri", time: "09:15–10:45", title: "PCV (Exercise)", loc: "SR 009, Bauhausstraße 11", color: "green" }
+        ] 
+      },
+      { 
+        id: "c7", 
+        name: "Deep Learning for Computer Vision", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught", 
+        desc: "Deep neural networks, CNNs, vision transformers, semantic segmentation, and generative models.", 
+        slots: [
+          { day: "Thu", time: "09:15–10:45", title: "DLCV (Lecture)", loc: "MHA, Steubenstraße 6", color: "green" },
+          { day: "Thu", time: "11:00–12:30", title: "DLCV (Exercise)", loc: "SR H, Bauhausstraße 11", color: "green" }
+        ] 
+      },
+      { 
+        id: "c8", 
+        name: "Security Engineering", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught", 
+        desc: "Threat modeling, secure software design principles, authentication protocols, and system defenses.", 
+        slots: [
+          { day: "Wed", time: "15:15–16:45", title: "Security Eng (L)", loc: "SR 013, Bauhausstraße 11", color: "blue" }
+        ] 
+      },
+      { 
+        id: "c9", 
+        name: "Formal Methods of Software Engineering", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught", 
+        desc: "Rigorous formal verification, model checking, and logic-based correctness proofs for critical software.", 
+        slots: [
+          { day: "Mon", time: "11:00–12:30", title: "Formal Methods (L)", loc: "LH A, Haußknechtstraße 7", color: "blue" }
+        ] 
+      },
+      { 
+        id: "c10", 
+        name: "Computational Social Science", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught", 
+        desc: "Large-scale human behavior modeling, graph algorithms, and social network analysis.", 
+        slots: [
+          { day: "Wed", time: "13:30–15:00", title: "Comp Soc Sci (L)", loc: "SR H, Bauhausstraße 11", color: "blue" }
+        ] 
+      },
+      { 
+        id: "c13", 
+        name: "Online Computation", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught", 
+        desc: "Competitive analysis and algorithm design for real-time problems with incomplete future input information.", 
+        slots: [
+          { day: "Wed", time: "11:00–12:30", title: "Online Comp (L)", loc: "SR 013, Bauhausstraße 11", color: "blue" }
+        ] 
+      },
+      { 
+        id: "c14", 
+        name: "HCI Theory and Research Methods", 
+        sem: "WINTER", 
+        credits: 6, 
+        cat: "taught", 
+        desc: "Quantitative and qualitative research design, statistical hypothesis testing, and user testing in HCI.", 
+        slots: [
+          { day: "Tue", time: "11:00–12:30", title: "HCI Methods (L)", loc: "SR H, Bauhausstraße 11", color: "purple" }
+        ] 
+      },
       { id: "c15", name: "Introduction to Modern Cryptography", sem: "SUMMER", credits: 6, cat: "taught", desc: "Computational security definitions, public key cryptosystems (RSA, ECC), and zero-knowledge proofs.", slots: [] },
       { id: "c16", name: "Cryptographic Hash Functions", sem: "SUMMER", credits: 6, cat: "taught", desc: "Dedicated hash function architectures, preimage resistance, collision resistance, and cryptanalytic techniques.", slots: [] },
       { id: "c17", name: "Complexity Theory", sem: "SUMMER", credits: 6, cat: "taught", desc: "Computability theory, Turing reductions, polynomial hierarchy, and space complexity.", slots: [] },
@@ -617,9 +713,9 @@
         name: "Academic English Part One", 
         sem: "WINTER", 
         credits: 2, 
-        cat: "english",
-        desc: "Academic writing styles, research paper composition, literature review methodology, and formal scientific rhetoric.",
-        slots: [{ day: "Wed", time: "17:00–18:30", title: "Academic English I", loc: "Coudraystraße 13A", color: "blue" }] 
+        cat: "english", 
+        desc: "Academic writing styles, research paper composition, literature review methodology, and formal scientific rhetoric.", 
+        slots: [{ day: "Wed", time: "17:00–18:30", title: "Academic English I", loc: "Coudraystraße 13A, Room 201", color: "blue" }] 
       },
       { id: "e2", name: "Academic English Part Two", sem: "SUMMER", credits: 2, cat: "english", desc: "Oral presentation techniques, scientific discourse, and research defense preparation.", slots: [] },
       { id: "p1", name: "Research Project 1", sem: "WINTER", credits: 12, cat: "research", desc: "First major guided team research project yielding a scientific software artifact and written paper.", slots: [] },
@@ -637,12 +733,12 @@
     };
 
     let userState = null;
-    let targetTotal = localStorage.getItem("darvin_target_val_v17") ? parseInt(localStorage.getItem("darvin_target_val_v17"), 10) : 120;
+    let targetTotal = localStorage.getItem("darvin_target_val_v18") ? parseInt(localStorage.getItem("darvin_target_val_v18"), 10) : 120;
     let activeSem = "ALL";
     let selectedCourseId = null;
 
     try {
-      const stored = localStorage.getItem("darvin_state_v17");
+      const stored = localStorage.getItem("darvin_state_v18");
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed && typeof parsed === "object" && Object.keys(parsed).length > 0) userState = parsed;
@@ -666,12 +762,12 @@
 
     /* UNIFIED PERSISTENCE & RENDER PIPELINE */
     function save() {
-      localStorage.setItem("darvin_state_v17", JSON.stringify(userState));
-      localStorage.setItem("darvin_target_val_v17", targetTotal);
+      localStorage.setItem("darvin_state_v18", JSON.stringify(userState));
+      localStorage.setItem("darvin_target_val_v18", targetTotal);
       render();
-      renderNotebookTable(); // Synchronously syncs Class Guide & Maps
+      renderNotebookTable();
       if (document.getElementById("timetableModal") && document.getElementById("timetableModal").style.display === "flex") {
-        renderTimetable();   // Synchronously syncs Weekly Grid if open
+        renderTimetable();
       }
     }
 
@@ -722,11 +818,11 @@
       const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       localStorage.setItem("darvin_last_sync_timestamp", timeStr);
       updateSyncBadgeLabel();
-      alert(`Timetable sync check complete at ${timeStr} CEST.\nAll 5 enrolled course rooms and Google Maps links verified.`);
+      alert(`Timetable sync check complete at ${timeStr} CEST.\nAll courses and Google Maps links verified.`);
     }
 
     function promptOverrideRoom() {
-      const cName = prompt("Course name to change room for (e.g. Virtual Reality, GIS, Watermarking):");
+      const cName = prompt("Course name to change room for (e.g. Deep Learning, Virtual Reality, GIS):");
       if (!cName) return;
       const course = CATALOGUE.find(c => c.name.toLowerCase().includes(cName.toLowerCase()));
       if (!course || !course.slots || course.slots.length === 0) {
@@ -838,7 +934,7 @@
       closeOverview();
     }
 
-    /* DRAG AND DROP ENGINE (IN & OUT) */
+    /* DRAG AND DROP ENGINE */
     function dragStart(e, id) {
       e.dataTransfer.setData("text/plain", id);
       e.dataTransfer.effectAllowed = "move";
