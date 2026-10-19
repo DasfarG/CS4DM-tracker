@@ -130,6 +130,12 @@
     .sidebar {
       background: var(--card-surface); border: 1px solid var(--border-subtle); border-radius: 14px;
       padding: 14px; display: flex; flex-direction: column; gap: 10px; height: auto; max-height: 480px;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .sidebar.drag-over {
+      background: rgba(30, 41, 69, 0.95);
+      border-color: #38bdf8;
+      border-style: dashed;
     }
     .search-box { width: 100%; background: rgba(7, 9, 19, 0.85); border: 1px solid var(--border-subtle); color: #fff; padding: 10px 12px; border-radius: 8px; font-size: 0.8rem; outline: none; }
     .tabs { display: flex; gap: 4px; background: rgba(7, 9, 19, 0.7); padding: 3px; border-radius: 8px; }
@@ -144,8 +150,11 @@
     /* Cards */
     .card {
       background: rgba(13, 18, 32, 0.85); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 10px 12px;
-      display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;
+      display: flex; justify-content: space-between; align-items: center; cursor: grab; user-select: none;
+      transition: all 0.15s ease;
     }
+    .card:active { cursor: grabbing; }
+    .card.dragging { opacity: 0.4; }
     .card-info { display: flex; flex-direction: column; gap: 2px; flex: 1; padding-right: 8px; }
     .card-title { font-size: 0.76rem; font-weight: 600; color: #f3f4f6; line-height: 1.25; }
     .card-sub { font-size: 0.66rem; color: var(--text-muted); font-weight: 500; }
@@ -159,6 +168,12 @@
     .module-box {
       background: var(--card-surface); border: 1px solid var(--border-subtle); border-top-width: 3px; border-radius: 12px;
       padding: 12px; min-height: 110px; display: flex; flex-direction: column;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .module-box.drag-over {
+      background: rgba(30, 41, 69, 0.95);
+      border-color: #8b5cf6;
+      border-style: dashed;
     }
     .mod-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 6px; }
     .mod-title { font-size: 0.78rem; font-weight: 700; }
@@ -184,8 +199,12 @@
     .placed-item {
       background: rgba(9, 13, 24, 0.9); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 8px 10px;
       font-size: 0.74rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;
+      cursor: grab; user-select: none; transition: transform 0.15s ease, opacity 0.15s ease;
     }
+    .placed-item:active { cursor: grabbing; }
+    .placed-item.dragging { opacity: 0.3; }
     .placed-item .remove-btn { color: var(--text-muted); font-size: 1.1rem; cursor: pointer; padding-left: 8px; line-height: 1; }
+    .placed-item .remove-btn:hover { color: #fb7185; }
 
     /* Notebook View */
     .notebook-view { display: none; flex-direction: column; gap: 14px; padding: 14px 16px; flex: 1; }
@@ -201,6 +220,7 @@
     .map-link {
       display: inline-flex; align-items: center; gap: 3px; color: var(--sds); text-decoration: none; font-weight: 600;
     }
+    .map-link:hover { text-decoration: underline; }
 
     .scratchpad-area {
       width: 100%; min-height: 110px; background: rgba(7, 9, 19, 0.85); border: 1px solid var(--border-subtle);
@@ -255,7 +275,7 @@
     }
   </style>
 </head>
-<body>
+<body ondragover="allowDrop(event)" ondrop="dropBack(event)">
 
   <!-- Top System & Sync Strip -->
   <div class="top-system-strip">
@@ -617,12 +637,12 @@
     };
 
     let userState = null;
-    let targetTotal = localStorage.getItem("darvin_target_val_v14") ? parseInt(localStorage.getItem("darvin_target_val_v14"), 10) : 120;
+    let targetTotal = localStorage.getItem("darvin_target_val_v15") ? parseInt(localStorage.getItem("darvin_target_val_v15"), 10) : 120;
     let activeSem = "ALL";
     let selectedCourseId = null;
 
     try {
-      const stored = localStorage.getItem("darvin_state_v14");
+      const stored = localStorage.getItem("darvin_state_v15");
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed && typeof parsed === "object" && Object.keys(parsed).length > 0) userState = parsed;
@@ -645,8 +665,8 @@
     } catch (e) {}
 
     function save() {
-      localStorage.setItem("darvin_state_v14", JSON.stringify(userState));
-      localStorage.setItem("darvin_target_val_v14", targetTotal);
+      localStorage.setItem("darvin_state_v15", JSON.stringify(userState));
+      localStorage.setItem("darvin_target_val_v15", targetTotal);
       render();
     }
 
@@ -814,20 +834,52 @@
       closeOverview();
     }
 
-    function dragStart(e, id) { e.dataTransfer.setData("text/plain", id); }
-    function dragEnd(e) {}
-    function allowDrop(e) { e.preventDefault(); }
-    function leaveDrop(e) {}
+    /* DRAG AND DROP ENGINE (IN & OUT) */
+    function dragStart(e, id) {
+      e.dataTransfer.setData("text/plain", id);
+      e.dataTransfer.effectAllowed = "move";
+      const target = e.currentTarget;
+      setTimeout(() => target.classList.add("dragging"), 0);
+    }
+
+    function dragEnd(e) {
+      e.currentTarget.classList.remove("dragging");
+      document.querySelectorAll(".drag-over").forEach(el => el.classList.remove("drag-over"));
+    }
+
+    function allowDrop(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      if (e.currentTarget.classList) e.currentTarget.classList.add("drag-over");
+    }
+
+    function leaveDrop(e) {
+      if (e.currentTarget.classList) e.currentTarget.classList.remove("drag-over");
+    }
+
     function handleDrop(e, modId) {
       e.preventDefault();
+      e.stopPropagation();
+      if (e.currentTarget.classList) e.currentTarget.classList.remove("drag-over");
       const id = e.dataTransfer.getData("text/plain");
-      if (id) { userState[id] = modId; save(); }
+      if (id) {
+        userState[id] = modId;
+        save();
+      }
     }
+
+    // Handles dragging OUT: Dropping over sidebar or background removes course from assigned modules
     function dropBack(e) {
       e.preventDefault();
+      e.stopPropagation();
+      if (e.currentTarget.classList) e.currentTarget.classList.remove("drag-over");
       const id = e.dataTransfer.getData("text/plain");
-      if (id && userState[id]) { delete userState[id]; save(); }
+      if (id && userState[id]) {
+        delete userState[id];
+        save();
+      }
     }
+
     function removeCourse(id, ev) { 
       if (ev) ev.stopPropagation();
       delete userState[id]; 
@@ -962,6 +1014,7 @@
       card.className = "card";
       card.draggable = true;
       card.ondragstart = (e) => dragStart(e, c.id);
+      card.ondragend = dragEnd;
       card.onclick = () => openOverview(c.id);
       card.innerHTML = `
         <div class="card-info">
@@ -1029,7 +1082,7 @@
         let currentCredits = 0;
 
         if (placedIds.length === 0) {
-          zone.innerHTML = `<div class="empty-prompt">Tap to add courses</div>`;
+          zone.innerHTML = `<div class="empty-prompt">Drag courses here</div>`;
         } else {
           placedIds.forEach(cid => {
             const course = CATALOGUE.find(c => c.id === cid);
@@ -1044,6 +1097,9 @@
 
             const item = document.createElement("div");
             item.className = "placed-item";
+            item.draggable = true;
+            item.ondragstart = (e) => dragStart(e, course.id);
+            item.ondragend = dragEnd;
             item.onclick = () => openOverview(course.id);
             item.innerHTML = `
               <span>${course.name}</span>
