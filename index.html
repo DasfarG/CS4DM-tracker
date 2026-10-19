@@ -308,7 +308,7 @@
         <span class="val" id="progressVal">27 / 120 ECTS</span>
       </div>
       <button class="btn" id="targetBtn" onclick="toggleTarget()">🎯 Mode: 120 ECTS</button>
-      <button class="btn" onclick="openTimetable()">📅 Timetable</button>
+      <button class="btn" onclick="openTimetable()">📅 Timetable (<span id="ttCount">5</span>)</button>
       <button class="btn" onclick="promptOverrideRoom()">📍 Edit Room</button>
       <button class="btn" onclick="exportICalendar()">📥 .ics</button>
       <button class="btn btn-gradient" onclick="resetState()">Reset</button>
@@ -637,12 +637,12 @@
     };
 
     let userState = null;
-    let targetTotal = localStorage.getItem("darvin_target_val_v16") ? parseInt(localStorage.getItem("darvin_target_val_v16"), 10) : 120;
+    let targetTotal = localStorage.getItem("darvin_target_val_v17") ? parseInt(localStorage.getItem("darvin_target_val_v17"), 10) : 120;
     let activeSem = "ALL";
     let selectedCourseId = null;
 
     try {
-      const stored = localStorage.getItem("darvin_state_v16");
+      const stored = localStorage.getItem("darvin_state_v17");
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed && typeof parsed === "object" && Object.keys(parsed).length > 0) userState = parsed;
@@ -664,10 +664,15 @@
       }
     } catch (e) {}
 
+    /* UNIFIED PERSISTENCE & RENDER PIPELINE */
     function save() {
-      localStorage.setItem("darvin_state_v16", JSON.stringify(userState));
-      localStorage.setItem("darvin_target_val_v16", targetTotal);
+      localStorage.setItem("darvin_state_v17", JSON.stringify(userState));
+      localStorage.setItem("darvin_target_val_v17", targetTotal);
       render();
+      renderNotebookTable(); // Synchronously syncs Class Guide & Maps
+      if (document.getElementById("timetableModal") && document.getElementById("timetableModal").style.display === "flex") {
+        renderTimetable();   // Synchronously syncs Weekly Grid if open
+      }
     }
 
     function toggleTarget() {
@@ -739,8 +744,7 @@
         if (!overrides[course.id]) overrides[course.id] = [];
         overrides[course.id][idx] = newRoom;
         localStorage.setItem("darvin_room_overrides", JSON.stringify(overrides));
-        render();
-        renderNotebookTable();
+        save();
         alert(`Room updated to: ${newRoom}`);
       }
     }
@@ -1069,6 +1073,7 @@
       }
 
       let totalAssigned = 0;
+      let scheduledCount = 0;
 
       for (let mod in LIMITS) {
         const zone = document.getElementById(`zone-${mod}`);
@@ -1092,6 +1097,8 @@
             } else {
               totalAssigned += course.credits;
             }
+
+            if (course.slots && course.slots.length > 0) scheduledCount++;
 
             const item = document.createElement("div");
             item.className = "placed-item";
@@ -1133,15 +1140,18 @@
       if (document.getElementById("progressVal")) {
         document.getElementById("progressVal").textContent = `${totalAssigned} / ${targetTotal} ECTS`;
       }
+      if (document.getElementById("ttCount")) {
+        document.getElementById("ttCount").textContent = scheduledCount;
+      }
     }
 
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", () => {
-        render();
+        save();
         checkScheduledSyncTime();
       });
     } else {
-      render();
+      save();
       checkScheduledSyncTime();
     }
   </script>
